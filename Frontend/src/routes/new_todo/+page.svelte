@@ -1,9 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
-
 	let title = '';
 	let description = '';
-	let todo = '';
 
 	function handleSubmit(event) {
 		event.preventDefault();
@@ -21,35 +19,24 @@
 			body: JSON.stringify(newTodo)
 		})
 			.then((response) => {
-				// Handle response
-
 				goto('/');
 			})
-			.catch((error) => {
-				// Handle error
-			});
+			.catch((error) => {});
 	}
 </script>
 
 <div>Hello, this is where you can create a new To-Do!</div>
-
-<form on:submit={handleSubmit}>
-	Title:
-	<input type="text" bind:value={title} />
-
-	Description:
-	<input type="text" bind:value={description} />
-
-	<button type="submit">Create Todo</button>
-</form>
-
 <div>
-	<img
-		src="https://www.premiumsvg.com/img_thumb/U-Fr1tCc9wFU7pFi8a5HbqMMepCJTuGduvF6L_ur3116m1.jpg"
-		alt=""
-	/>
-</div>
+	<form on:submit={handleSubmit}>
+		Title:
+		<input type="text" bind:value={title} />
 
+		Description:
+		<input type="text" bind:value={description} />
+
+		<button type="submit">Create Todo</button>
+	</form>
+</div>
 <div>
 	<a href="/">Home</a>
 </div>
