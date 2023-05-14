@@ -3,9 +3,7 @@
 	let title = '';
 	let description = '';
 
-	function handleSubmit(event) {
-		event.preventDefault();
-
+	function handleSubmit() {
 		const newTodo = {
 			title,
 			description
@@ -27,7 +25,7 @@
 
 <div>Hello, this is where you can create a new To-Do!</div>
 <div>
-	<form on:submit={handleSubmit}>
+	<form on:submit|preventDefault={handleSubmit}>
 		Title:
 		<input type="text" bind:value={title} />
 
