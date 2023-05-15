@@ -8,7 +8,6 @@
 			title,
 			description
 		};
-
 		fetch('http://127.0.0.1:8000/api/todo/', {
 			method: 'POST',
 			headers: {

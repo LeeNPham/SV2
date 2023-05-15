@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { Alert } from 'flowbite-svelte';
 	export let data; // pulls information from our +page.js
 	let title = data.title;
 	let description = '';
-	let answer;
-	let toggleUpdate = false
-	let err = false
+	let answer: any;
+	let toggleUpdate = false;
+	let err = false;
 	async function getTodo() {
 		const response = await fetch(`http://127.0.0.1:8000/api/todo/${title}`);
 		const data = await response.json();
@@ -25,12 +25,12 @@
 				goto('/');
 			})
 			.catch((error) => {
-					err = !err
+				err = !err;
 			});
 	}
-function toggleUpdateForm() {
-	toggleUpdate= !toggleUpdate
-}
+	function toggleUpdateForm() {
+		toggleUpdate = !toggleUpdate;
+	}
 	function updateTodo() {
 		fetch(`http://127.0.0.1:8000/api/todo/${title}?desc=${description}`, {
 			method: 'PUT',
@@ -46,12 +46,11 @@ function toggleUpdateForm() {
 				goto('/');
 			})
 			.catch((error) => {
-				err = !err
+				err = !err;
 			});
 	}
 
-
-	onMount(() => {
+	onMount(async () => {
 		answer = await getTodo();
 		console.log(data); // only shows the title :[
 	});
@@ -59,7 +58,7 @@ function toggleUpdateForm() {
 
 <!-- Head -->
 <svelte:head>
-	<title>{data.title}</title>
+	<title>{title}</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 <!-- Alerts -->
