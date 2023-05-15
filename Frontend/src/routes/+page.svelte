@@ -33,6 +33,15 @@
 	{/each}
 </div>
 
+<div>
+	<div class="">
+		<p class="">New Todo</p>
+		<a class="px-2 py-1 bg-blue-500 hover:bg-blue-300 text-white rounded-xl" href="/new_todo"
+			>Create a new To-Do</a
+		>
+	</div>
+</div>
+
 <div class="flex flex-col justify-center content-center">
 	<button
 		on:click={clickMeForAlert}
