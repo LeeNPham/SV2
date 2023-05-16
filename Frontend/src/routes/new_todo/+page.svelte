@@ -1,5 +1,4 @@
 <script>
-	import { goto } from '$app/navigation';
 	let title = '';
 	let description = '';
 
@@ -16,9 +15,15 @@
 			body: JSON.stringify(newTodo)
 		})
 			.then((response) => {
-				goto('/');
+				// goto('/');
+				window.location = '/';
 			})
-			.catch((error) => {});
+			.catch((error) => {
+				return {
+					status: 301,
+					error: new Error('Could not create a new todo')
+				};
+			});
 	}
 </script>
 

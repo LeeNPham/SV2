@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 	import { Alert } from 'flowbite-svelte';
 	export let data; // pulls information from our +page.js
 	let title = data.title;
@@ -22,7 +21,7 @@
 			}
 		})
 			.then((response) => {
-				goto('/');
+				window.location = '/';
 			})
 			.catch((error) => {
 				err = !err;
