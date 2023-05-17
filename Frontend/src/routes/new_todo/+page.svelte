@@ -1,4 +1,6 @@
 <script>
+	// @ts-nocheck
+
 	let title = '';
 	let description = '';
 	function handleSubmit() {

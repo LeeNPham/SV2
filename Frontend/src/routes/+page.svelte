@@ -1,5 +1,6 @@
 <script>
 	import CircleIcon from '$lib/icons/CircleIcon.svelte';
+	// @ts-ignore
 	import CheckCircle from '$lib/icons/CheckCircle.svelte';
 	import CirclePlus from '$lib/icons/CirclePlus.svelte';
 	import { onMount } from 'svelte';
@@ -7,6 +8,7 @@
 	export let data; //grabs information from our +page.js
 
 	function showNewTodoModal() {
+		// @ts-ignore
 		window.location = '/new_todo';
 	}
 
@@ -68,7 +70,7 @@
 
 		<!-- Today's Tasks -->
 		<div class="grid grid-cols-1 justify-start pb-10">
-			<div class="text-palette-lightgray text-md font-semibold pb-3">Today's Tasks</div>
+			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 			<div class="grid grid-cols-1 w-full gap-4 overflow-scroll">
 				{#each Todos.items as todo}
 					<div
