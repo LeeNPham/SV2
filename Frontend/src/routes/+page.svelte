@@ -66,7 +66,7 @@
 						>
 							<div class="grid grid-cols-1 gap-1">
 								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Business</div>
+								<div class="text-white text-2xl font-bold">Personal</div>
 							</div>
 							<hr />
 						</div>
@@ -76,7 +76,7 @@
 						>
 							<div class="grid grid-cols-1 gap-1">
 								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Business</div>
+								<div class="text-white text-2xl font-bold">Side-Hustle</div>
 							</div>
 							<hr />
 						</div>
@@ -86,7 +86,7 @@
 						>
 							<div class="grid grid-cols-1 gap-1">
 								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Business</div>
+								<div class="text-white text-2xl font-bold">Reading List</div>
 							</div>
 							<hr />
 						</div>
@@ -96,7 +96,7 @@
 						>
 							<div class="grid grid-cols-1 gap-1">
 								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Business</div>
+								<div class="text-white text-2xl font-bold">SpankBank</div>
 							</div>
 							<hr />
 						</div>
@@ -106,7 +106,7 @@
 		</div>
 
 		<!-- Today's Tasks -->
-		<div class="grid grid-cols-1 justify-start pb-10">
+		<div class="grid grid-cols-1 justify-start">
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 			<div class="overflow-y-auto h-[450px]">
 				<div class="grid grid-cols-1 w-full gap-4">
