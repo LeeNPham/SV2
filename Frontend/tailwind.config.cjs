@@ -5,33 +5,17 @@ const config = {
 	],
 
 	theme: {
-		extend: {},
-		colors: {
-			blue: {
-				primary: '#0057AF',
-				dark: '#08429f',
-				verylight: '#ecfbff',
-				accessrequests: '#cdf6ff',
-				activity: '#6097b9'
-			},
-			gray: {
-				quickshare: '#f5f9fd',
-				groups: '#9baebc',
-				verylight: '#f3f7fd'
-			},
-			cyan: {
-				icon: '#00C3E7'
-			},
-			white: {
-				heading: '#f7fdff'
-			},
-			yellow: {
-				recentshares: '#ffebcc'
-			},
-			red: {
-				primary: '#FF0000',
-				dark: '#A10500',
-				activity: '#FF7777'
+		extend: {
+			colors: {
+				palette: {
+					dark: '#041955',
+					medium: '#3450a1',
+					pinkglow: '#eb06ff',
+					blueglow: '#1d68df',
+					checked: '183588',
+					gray: '#46598c',
+					lightgray: '#97b4ff'
+				}
 			}
 		}
 	},

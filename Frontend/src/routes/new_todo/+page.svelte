@@ -1,7 +1,6 @@
 <script>
 	let title = '';
 	let description = '';
-
 	function handleSubmit() {
 		const newTodo = {
 			title,
@@ -15,7 +14,6 @@
 			body: JSON.stringify(newTodo)
 		})
 			.then((response) => {
-				// goto('/');
 				window.location = '/';
 			})
 			.catch((error) => {
@@ -27,7 +25,7 @@
 	}
 </script>
 
-<h1 class="w-full h-auto bg-gray-500">Hello, this is where you can create a new To-Do!</h1>
+<h1 class="w-full h-auto bg-gray-500">Hello, create a new To-Do!</h1>
 <div class="grid grid-cols-1 w-full">
 	<form
 		class="flex flex-col w-auto justify-self-center gap-2 bg-white p-10 rounded-xl"

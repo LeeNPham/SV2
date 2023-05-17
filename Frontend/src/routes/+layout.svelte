@@ -1,47 +1,11 @@
 <script>
 	import '../app.postcss';
-	import './styles.css';
 </script>
-<div class="app">
-	<main>
-		<slot />
+
+<div class="app grid grid-cols-1 w-full min-h-screen content-center bg-palette-dark">
+	<main class="w-full h-full flex justify-center">
+		<div class="max-w-[414px] h-[896px] flex flex-col justify-center">
+			<slot />
+		</div>
 	</main>
-
-	<footer>
-		<p>This is the footer of my test app with Svelte for the front and fastAPI for the back</p>
-	</footer>
 </div>
-
-
-<style>
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
-
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		width: 100%;
-		max-width: 64rem;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
-	}
-</style>
