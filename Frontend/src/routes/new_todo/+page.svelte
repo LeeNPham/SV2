@@ -27,36 +27,43 @@
 	}
 </script>
 
-<h1 class="w-full h-auto bg-gray-500">Hello, create a new To-Do!</h1>
-<div class="grid grid-cols-1 w-full">
-	<form
-		class="flex flex-col w-auto justify-self-center gap-2 bg-white p-10 rounded-xl"
-		on:submit|preventDefault={handleSubmit}
-	>
-		<div class="text-md font-bold">Title:</div>
-		<input
-			class="rounded-xl py-0 placeholder:text-gray-400"
-			placeholder="New Title"
-			type="text"
-			bind:value={title}
-		/>
+<div class="bg-white h-full min-w-[414px] p-3">
+	<h1 class="text-center w-full h-auto text-lg font-semibold text-white pb-2">
+		Create a new Task!
+	</h1>
+	<div class="grid grid-cols-1 w-full">
+		<form
+			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl"
+			on:submit|preventDefault={handleSubmit}
+		>
+			<div class="text-md text-white font-bold">Title:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder="New Title"
+				type="text"
+				bind:value={title}
+			/>
 
-		<div class="text-md font-bold">Description:</div>
-		<input
-			class="rounded-xl py-0 placeholder:text-gray-400"
-			placeholder="New Description"
-			type="text"
-			bind:value={description}
-		/>
-		<div>
-			<button class="text-white py-1 px-2 bg-blue-500 hover:bg-blue-300 rounded-xl" type="submit"
-				>Create Todo</button
+			<div class="text-md text-white font-bold">Description:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder="New Description"
+				type="text"
+				bind:value={description}
+			/>
+			<div>
+				<button
+					class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
+					type="submit">Create Todo</button
+				>
+			</div>
+		</form>
+		<!-- Home Button -->
+		<div class="pt-2 flex flex-col w-auto justify-self-center">
+			<a
+				class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-gray-600 shadow-sm px-2 py-1 rounded-xl font-semibold"
+				href="/">Home</a
 			>
 		</div>
-	</form>
-</div>
-
-<!-- Home Button -->
-<div>
-	<a class="text-white bg-gray-700 hover:bg-gray-500 px-2 py-1 rounded-xl" href="/">Home</a>
+	</div>
 </div>
