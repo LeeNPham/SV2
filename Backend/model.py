@@ -28,7 +28,7 @@ class Todo(BaseModel):
     title: str
     description: str
     completion: bool
-    create_date:  Optional[str]
+    create_date: str
     due_date: Optional[str]
 
     class Config:
@@ -52,7 +52,7 @@ class UpdateTodoModel(BaseModel):
     title: Optional[str]
     description: Optional[str]
     completion: bool
-    create_date: Optional[str]
+    create_date: str
     due_date: Optional[str]
 
     class Config:

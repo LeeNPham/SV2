@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import CircleIcon from '$lib/icons/CircleIcon.svelte';
 	// @ts-ignore
 	import CheckCircle from '$lib/icons/CheckCircle.svelte';
@@ -7,13 +8,14 @@
 	import BellIcon from '$lib/icons/BellIcon.svelte';
 	import MagnifyingGlassIcon from '$lib/icons/MagnifyingGlassIcon.svelte';
 	import MenuIcon from '$lib/icons/MenuIcon.svelte';
-
 	export let data; //grabs information from our +page.js
 	let Todos = data;
+	let showModal = false;
 
 	function showNewTodoModal() {
+		showModal = true;
 		// @ts-ignore
-		window.location = '/new_todo';
+		// window.location = '/new_todo';
 	}
 
 	onMount(() => {
@@ -137,6 +139,22 @@
 </div>
 
 <!-- Modals -->
+<Modal Title="Create a New Todo" bind:showModal>
+	<ol class="definition-list">
+		<li>of or relating to modality in logic</li>
+		<li>
+			containing provisions as to the mode of procedure or the manner of taking effect —used of a
+			contract or legacy
+		</li>
+		<li>of or relating to a musical mode</li>
+		<li>of or relating to structure as opposed to substance</li>
+		<li>
+			of, relating to, or constituting a grammatical form or category characteristically indicating
+			predication
+		</li>
+		<li>of or relating to a statistical mode</li>
+	</ol>
+</Modal>
 
 <style>
 </style>
