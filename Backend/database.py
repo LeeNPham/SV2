@@ -17,31 +17,31 @@ async def fetch_all_todos():
     return todos
 
 
-async def fetch_one_todo(id):
-    document = await collection.find_one({"_id": id})
-    return document
-
-
 async def create_todo(todo):
     document = todo
     result = await collection.insert_one(document)
     return document
 
 
-async def update_todo(id, title, description, completion, create_date, due_date):
-    await collection.update_one({"_id": id}, {"$set": {
-        "title": title,
-        "description": description,
-        "completion": completion,
-        "create_date": create_date,
-        "due_date": due_date
+async def fetch_one_todo(id):
+    if (todo := await collection.find_one({"_id": id})) is not None:
+        return todo
+    # document = await collection.find_one({"_id": id})
+    # return document
 
-    }})
-    document = await collection.find_one({"id": id})
-    return document
+
+async def update_todo(id, todo):
+    update_result = await collection.update_one({"_id": id}, {"$set": todo})
+    if update_result.modified_count == 1:
+        if (
+            updated_todo := await collection.find_one({"_id": id})
+        ) is not None:
+            return updated_todo
+    if (existing_todo := await collection.find_one({"_id": id})) is not None:
+        return existing_todo
 
 
 async def remove_todo(id):
     # delete_one-MongoDB function
-    await collection.delete_one({"id": id})
+    await collection.delete_one({"_id": id})
     return True

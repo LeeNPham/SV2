@@ -1,8 +1,7 @@
 # from typing import Optional
 from pydantic import BaseModel, Field
 from bson.objectid import ObjectId
-from typing import List, Optional
-import datetime
+from typing import Optional
 from bson import ObjectId
 
 
@@ -28,7 +27,7 @@ class Todo(BaseModel):
     title: str
     description: str
     completion: bool
-    create_date: str
+    create_date:  Optional[str]
     due_date: Optional[str]
 
     class Config:
@@ -47,10 +46,10 @@ class Todo(BaseModel):
 
 
 class UpdateTodoModel(BaseModel):
-    title: str
-    description: str
+    title: Optional[str]
+    description: Optional[str]
     completion: bool
-    create_date: str
+    create_date: Optional[str]
     due_date: Optional[str]
 
     class Config:
