@@ -24,6 +24,7 @@ class PyObjectId(ObjectId):
 class Todo(BaseModel):
     # id:  ObjectId = Field(..., alias="_id")
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    category: Optional[str]
     title: str
     description: str
     completion: bool
@@ -36,6 +37,7 @@ class Todo(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
+                "category": "Business",
                 "title": "My Title",
                 "description": "This is a description",
                 "completion": "True",
@@ -46,6 +48,7 @@ class Todo(BaseModel):
 
 
 class UpdateTodoModel(BaseModel):
+    category: Optional[str]
     title: Optional[str]
     description: Optional[str]
     completion: bool
@@ -57,6 +60,7 @@ class UpdateTodoModel(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
+                "category": "Business",
                 "title": "My Title",
                 "description": "This is a description",
                 "completion": "True",

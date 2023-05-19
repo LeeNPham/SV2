@@ -18,6 +18,7 @@
 
 	onMount(() => {
 		console.log('hello, im onmount');
+		console.log(Todos);
 	});
 </script>
 
