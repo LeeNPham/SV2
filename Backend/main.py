@@ -1,11 +1,3 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from model import Todo
-
-# App object
-app = FastAPI()
-
-
 from database import (
     fetch_all_todos,
     fetch_one_todo,
@@ -13,6 +5,15 @@ from database import (
     update_todo,
     remove_todo,
 )
+from fastapi import FastAPI, HTTPException, Body
+from fastapi.encoders import jsonable_encoder
+from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
+from model import Todo
+
+# App object
+app = FastAPI()
+
 
 # Set up a settings.py file later to import these settings?
 # Consider creating one for routes as well?
@@ -20,71 +21,54 @@ origins = ['http://localhost:3000', 'http://localhost:5173']
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins= origins,
-    allow_credentials= True,
-    allow_methods= ["*"],
-    allow_headers= ["*"],
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # @app.get("/")
 # async def read_root():
 #     return {"message": "Hello World"}
 
+
 @app.get("/api/todo")
 async def get_todos():
     response = await fetch_all_todos()
     return response
 
-@app.get("/api/todo/{title}", response_model=Todo)
-async def get_todo_by_id(title):
-    response = await fetch_one_todo(title)
-    if response:
-        return response
-    raise HTTPException(404, f"There is no TODO item with this title: {title}")
 
-@app.post("/api/todo", response_model=Todo)
-async def post_todo(todo:Todo):
+@app.get("/api/todo/{id}", response_description="Get a single todo", response_model=Todo)
+async def get_todo_by_id(id: str):
+    response = await fetch_one_todo(id)
+    if response is not None:
+        return response
+    raise HTTPException(404, f"ID {id} not found")
+
+
+@app.post("/api/todo", response_description="Add a new todo", response_model=Todo)
+async def post_todo(todo: Todo = Body(...)):
     response = await create_todo(todo.dict())
     if response:
+        print(response)
         return response
-    raise HTTPException(400,"Something went wrong / Bad Request")
+    raise HTTPException(400, "Something went wrong / Bad Request")
 
-@app.put("/api/todo/{title}", response_model=Todo)
-async def put_todo(title:str, description:str):
-    response = await update_todo(title, description)
+
+@app.put("/api/todo/{id}", response_model=Todo)
+async def put_todo(id: str, title: str, description: str, completion: bool, create_date: str, due_date: str):
+    response = await update_todo(id, title, description, completion, create_date, due_date)
     if response:
         return response
     raise HTTPException(404, f"There is no TODO item with this title {title}")
 
-@app.delete("/api/todo/{title}")
-async def delete_todo(title):
-    response = await remove_todo(title)
+
+@app.delete("/api/todo/{id}")
+async def delete_todo(id: str, title: str):
+    response = await remove_todo(id)
     if response:
         return "Successfully deleted todo item"
     raise HTTPException(404, f"There is no TODO item with this title {title}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # ########################
