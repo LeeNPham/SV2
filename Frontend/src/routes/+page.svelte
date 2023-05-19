@@ -150,19 +150,29 @@
 			<div class="overflow-y-auto h-[450px]">
 				<div class="grid grid-cols-1 w-full gap-4">
 					{#each Todos.items as todo}
-						<pre>{todo.completion}</pre>
 						<div
 							class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4"
 						>
-							<!-- In the backend, make it allow for either complete or incomplete within the todo item data, if its complete, change svg to completed -->
-							<!-- If business, then pink circle if personal, then blue circle if side-hustle, then green circle -->
-							{#if todo.completion == true}
-								<button type="button"><CheckCircle Class="h-6 w-6 fill-palette-pinkglow" /></button>
-							{:else}
-								<button type="button"><CircleIcon Class="h-6 w-6 fill-palette-pinkglow" /></button>
-							{/if}
-							<div class="w-full px-2 text-white text-ellipsis truncate">
-								{todo.title}
+							<div class="flex gap-2">
+								<!-- If business, then pink circle if personal, then blue circle if side-hustle, then green circle -->
+								{#if todo.completion == true}
+									<button type="button"
+										><CheckCircle Class="h-6 w-6 fill-palette-pinkglow" /></button
+									>
+								{:else}
+									<button type="button"><CircleIcon Class="h-6 w-6 fill-palette-pinkglow" /></button
+									>
+								{/if}
+								<div class="grid grid-cols-1 px-2">
+									<div class="w-full text-white text-ellipsis truncate">
+										{todo.title}
+									</div>
+									{#if todo.due_date != 'null'}
+										<div class="w-full text-xs text-white/40 text-ellipsis truncate">
+											Due {todo.due_date}
+										</div>
+									{/if}
+								</div>
 							</div>
 							<a class="text-white" href={`/${todo.title}`}>Edit</a>
 						</div>
