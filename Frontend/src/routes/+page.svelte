@@ -18,6 +18,42 @@
 		// window.location = '/new_todo';
 	}
 
+	let category = '';
+	let title = '';
+	let description = '';
+	let completion = false;
+	let due_date: any;
+
+	function handleSubmit() {
+		const currentTime = new Date();
+		const create_date = currentTime.toISOString().split('T')[0].toString();
+		const newTodo = {
+			category,
+			title,
+			description,
+			completion,
+			create_date,
+			due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+		};
+
+		fetch('http://127.0.0.1:8000/api/todo/', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(newTodo)
+		})
+			.then((response) => {
+				// @ts-ignore
+				window.location = '/';
+			})
+			.catch((error) => {
+				return {
+					status: 301,
+					error: new Error('Could not create a new todo')
+				};
+			});
+	}
 	onMount(() => {
 		console.log('hello, im onmount');
 		console.log(Todos);
@@ -114,13 +150,17 @@
 			<div class="overflow-y-auto h-[450px]">
 				<div class="grid grid-cols-1 w-full gap-4">
 					{#each Todos.items as todo}
+						<pre>{todo.completion}</pre>
 						<div
 							class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4"
 						>
 							<!-- In the backend, make it allow for either complete or incomplete within the todo item data, if its complete, change svg to completed -->
 							<!-- If business, then pink circle if personal, then blue circle if side-hustle, then green circle -->
-							<CircleIcon Class="h-6 w-6 fill-palette-pinkglow" />
-
+							{#if todo.completion == true}
+								<button type="button"><CheckCircle Class="h-6 w-6 fill-palette-pinkglow" /></button>
+							{:else}
+								<button type="button"><CircleIcon Class="h-6 w-6 fill-palette-pinkglow" /></button>
+							{/if}
 							<div class="w-full px-2 text-white text-ellipsis truncate">
 								{todo.title}
 							</div>
@@ -140,20 +180,57 @@
 
 <!-- Modals -->
 <Modal Title="Create a New Todo" bind:showModal>
-	<ol class="definition-list">
-		<li>of or relating to modality in logic</li>
-		<li>
-			containing provisions as to the mode of procedure or the manner of taking effect —used of a
-			contract or legacy
-		</li>
-		<li>of or relating to a musical mode</li>
-		<li>of or relating to structure as opposed to substance</li>
-		<li>
-			of, relating to, or constituting a grammatical form or category characteristically indicating
-			predication
-		</li>
-		<li>of or relating to a statistical mode</li>
-	</ol>
+	<div class="grid grid-cols-1 w-full">
+		<form
+			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl"
+			on:submit|preventDefault={handleSubmit}
+		>
+			<div class="text-md text-white font-bold">Category:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder="New Description"
+				type="text"
+				bind:value={category}
+			/>
+
+			<div class="text-md text-white font-bold">Title:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder="New Title"
+				type="text"
+				bind:value={title}
+			/>
+
+			<div class="text-md text-white font-bold">Description:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder="New Description"
+				type="text"
+				bind:value={description}
+			/>
+
+			<div class="text-md text-white font-bold">Due Date:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder="New Description"
+				type="date"
+				bind:value={due_date}
+			/>
+			<div>
+				<button
+					class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
+					type="submit">Create Todo</button
+				>
+			</div>
+		</form>
+		<!-- Home Button -->
+		<div class="pt-2 flex flex-col w-auto justify-self-center">
+			<a
+				class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-gray-600 shadow-sm px-2 py-1 rounded-xl font-semibold"
+				href="/">Home</a
+			>
+		</div>
+	</div>
 </Modal>
 
 <style>
