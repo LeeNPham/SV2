@@ -8,10 +8,18 @@ async function getTodos() {
 	return data;
 }
 
-let values = getTodos();
+async function getCategories() {
+	const response = await fetch('http://127.0.0.1:8000/api/category');
+	const data = await response.json();
+	return data;
+}
+
+let todos = getTodos();
+let categories = getCategories();
 
 export function load() {
 	return {
-		items: values
+		items: todos,
+		categories: categories
 	};
 }

@@ -1,9 +1,14 @@
 <script>
-	export let Class = 'h-10 w-10 fill-white';
+	export let Class = 'h-8 w-8 fill-white';
 </script>
 
-<svg viewBox="0 0 512 512" role="img" class={Class}
-	><path
-		d="M0 256C0 114.6 114.6 0 256 0s256 114.6 256 256-114.6 256-256 256S0 397.4 0 256zm256 112c13.3 0 24-10.7 24-24v-64h64c13.3 0 24-10.7 24-24s-10.7-24-24-24h-64v-64c0-13.3-10.7-24-24-24s-24 10.7-24 24v64h-64c-13.3 0-24 10.7-24 24s10.7 24 24 24h64v64c0 13.3 10.7 24 24 24z"
+<svg
+	viewBox="0 0 16 16"
+	focusable="false"
+	role="img"
+	xmlns="http://www.w3.org/2000/svg"
+	class={Class}
+	><title>PlusCircleFill icon</title><path
+		d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"
 	/></svg
 >

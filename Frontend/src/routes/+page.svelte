@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import CircleIcon from '$lib/icons/CircleIcon.svelte';
+	import EllipsisIcon from '$lib/icons/EllipsisIcon.svelte';
 	// @ts-ignore
 	import CheckCircle from '$lib/icons/CheckCircle.svelte';
 	import CirclePlus from '$lib/icons/CirclePlus.svelte';
@@ -19,6 +20,16 @@
 	}
 
 	let category = '';
+	let tasksCount = 0;
+	let categoriesCount = 0;
+	let categoryColors = [
+		'border-category-pink shadow shadow-category-pink',
+		'border-category-blue shadow shadow-category-blue',
+		'border-category-green shadow shadow-category-green',
+		'border-category-yellow shadow shadow-category-yellow',
+		'border-category-orange shadow shadow-category-orange',
+		'border-category-purple shadow shadow-category-purple'
+	];
 	let title = '';
 	let description = '';
 	let completion = false;
@@ -55,8 +66,16 @@
 			});
 	}
 	onMount(() => {
-		console.log('hello, im onmount');
-		console.log(Todos);
+		// console.log(data);
+		// console.log(data.items);
+		tasksCount = data.items.length;
+		console.log({ tasksCount });
+		let categoriesCount = data.categories.length;
+		console.log({ categoriesCount });
+		// add a button to create and update a category
+		// create a mapper to reference between category and tasks
+		// look up map function in js
+		// console.log(Todos);
 	});
 </script>
 
@@ -70,14 +89,26 @@
 		<!-- Top Menu -->
 		<div class="h-[90px] w-full flex flex-row justify-between">
 			<div>
-				<MenuIcon Class="fill-palette-lightgray h-8 w-8" />
+				<button type="button">
+					<MenuIcon
+						Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-8 w-8"
+					/></button
+				>
 			</div>
 			<div class="flex flex-row gap-5">
 				<div>
-					<MagnifyingGlassIcon Class="fill-palette-lightgray h-7 w-7" />
+					<button type="button">
+						<MagnifyingGlassIcon
+							Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-7 w-7"
+						/></button
+					>
 				</div>
 				<div>
-					<BellIcon Class="fill-palette-lightgray h-7 w-7" />
+					<button type="button">
+						<BellIcon
+							Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-7 w-7"
+						/></button
+					>
 				</div>
 			</div>
 		</div>
@@ -88,56 +119,39 @@
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">CATEGORIES</div>
 			<div class="grid grid-cols-1 w-full">
 				<div class="flex overflow-scroll">
-					<div class="flex pb-10 gap-4">
+					<div class="flex pb-10 px-3 gap-3">
 						<!-- Category -->
 						<div
 							class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
 						>
 							<div class="grid grid-cols-1 gap-1">
-								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Business</div>
+								<div class="text-palette-lightgray text-sm">{tasksCount} tasks</div>
+								<div class="text-white text-2xl font-bold">All</div>
 							</div>
-							<hr />
-						</div>
 
+							<hr class="border-category-cyan shadow shadow-category-cyan" />
+						</div>
+						{#each Todos.categories as category, i}
+							<div
+								class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
+							>
+								<div class="grid grid-cols-1 gap-1">
+									<div class="text-palette-lightgray text-sm">{tasksCount} tasks</div>
+									<div class="text-white text-2xl font-bold">{category.title}</div>
+								</div>
+
+								<hr class={categoryColors[i]} />
+							</div>
+						{/each}
 						<div
 							class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
 						>
 							<div class="grid grid-cols-1 gap-1">
-								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Personal</div>
+								<div class="text-palette-lightgray text-sm">tasks</div>
+								<div class="text-white text-2xl font-bold">+ Category</div>
 							</div>
-							<hr />
-						</div>
 
-						<div
-							class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
-						>
-							<div class="grid grid-cols-1 gap-1">
-								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Side-Hustle</div>
-							</div>
-							<hr />
-						</div>
-
-						<div
-							class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
-						>
-							<div class="grid grid-cols-1 gap-1">
-								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">Reading List</div>
-							</div>
-							<hr />
-						</div>
-
-						<div
-							class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
-						>
-							<div class="grid grid-cols-1 gap-1">
-								<div class="text-palette-lightgray text-sm">40 tasks</div>
-								<div class="text-white text-2xl font-bold">SpankBank</div>
-							</div>
-							<hr />
+							<hr class="border-category-cyan shadow shadow-category-cyan" />
 						</div>
 					</div>
 				</div>
@@ -148,20 +162,21 @@
 		<div class="grid grid-cols-1 justify-start">
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 			<div class="overflow-y-auto h-[450px]">
-				<div class="grid grid-cols-1 w-full gap-4">
+				<div class="grid grid-cols-1 w-full gap-2 px-3">
 					{#each Todos.items as todo}
 						<div
-							class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4"
+							class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
 						>
 							<div class="flex gap-2">
 								<!-- If business, then pink circle if personal, then blue circle if side-hustle, then green circle -->
 								{#if todo.completion == true}
-									<button type="button"
-										><CheckCircle Class="h-6 w-6 fill-palette-pinkglow" /></button
-									>
+									<button type="button">
+										<CheckCircle Class="h-6 w-6 fill-palette-pinkglow" />
+									</button>
 								{:else}
-									<button type="button"><CircleIcon Class="h-6 w-6 fill-palette-pinkglow" /></button
-									>
+									<button type="button">
+										<CircleIcon Class="h-6 w-6 fill-palette-pinkglow" />
+									</button>
 								{/if}
 								<div class="grid grid-cols-1 px-2">
 									<div class="w-full text-white text-ellipsis truncate">
@@ -169,12 +184,14 @@
 									</div>
 									{#if todo.due_date != 'null'}
 										<div class="w-full text-xs text-white/40 text-ellipsis truncate">
-											Due {todo.due_date}
+											Due: {todo.due_date}
 										</div>
 									{/if}
 								</div>
 							</div>
-							<a class="text-white" href={`/${todo.title}`}>Edit</a>
+							<a class="text-white" href={`/${todo._id}`}>
+								<EllipsisIcon />
+							</a>
 						</div>
 					{/each}
 				</div>
@@ -184,7 +201,9 @@
 
 	<label class="absolute right-10 bottom-12" for="addNewTodo">
 		<button id="addNewTodo" class="hidden" type="button" on:click={showNewTodoModal} />
-		<CirclePlus Class="fill-palette-pinkglow h-16 w-16 bg-white rounded-full cursor-pointer" />
+		<CirclePlus
+			Class="fill-palette-pinkglow shadow-xl shadow-palette-pinkglow/60 h-14 w-14 bg-white rounded-full cursor-pointer"
+		/>
 	</label>
 </div>
 
@@ -233,13 +252,6 @@
 				>
 			</div>
 		</form>
-		<!-- Home Button -->
-		<div class="pt-2 flex flex-col w-auto justify-self-center">
-			<a
-				class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-gray-600 shadow-sm px-2 py-1 rounded-xl font-semibold"
-				href="/">Home</a
-			>
-		</div>
 	</div>
 </Modal>
 
