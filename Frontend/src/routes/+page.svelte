@@ -171,15 +171,19 @@
 								<!-- If business, then pink circle if personal, then blue circle if side-hustle, then green circle -->
 								{#if todo.completion == true}
 									<button type="button">
-										<CheckCircle Class="h-6 w-6 fill-palette-pinkglow" />
+										<CheckCircle Class="h-6 w-6 fill-category-cyan" />
 									</button>
 								{:else}
 									<button type="button">
-										<CircleIcon Class="h-6 w-6 fill-palette-pinkglow" />
+										<CircleIcon Class="h-6 w-6 fill-category-cyan" />
 									</button>
 								{/if}
 								<div class="grid grid-cols-1 px-2">
-									<div class="w-full text-white text-ellipsis truncate">
+									<div
+										class="w-full text-white text-ellipsis {todo.completion
+											? 'line-through'
+											: ''} truncate"
+									>
 										{todo.title}
 									</div>
 									{#if todo.due_date != 'null'}
