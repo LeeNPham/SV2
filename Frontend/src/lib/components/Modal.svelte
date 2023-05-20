@@ -15,8 +15,8 @@
 	on:click|self={() => dialog.close()}
 >
 	<div on:click|stopPropagation>
-		<div class="flex flex-row justify-center pb-2">
-			<div class="text-center text-3xl font-bold text-palette-dark">{Title}</div>
+		<div class="flex flex-row justify-center pb-3">
+			<div class="text-center text-3xl font-bold text-palette-dark pt-2">{Title}</div>
 			<!-- svelte-ignore a11y-autofocus -->
 			<button
 				class="absolute top-3 right-5 text-palette-dark"
@@ -28,7 +28,7 @@
 		</div>
 		<hr class="border-palette-dark mb-3" />
 		<slot />
-		<hr class="border-palette-dark mt-3" />
+		<div class="border-palette-dark mt-3" />
 	</div>
 </dialog>
 
