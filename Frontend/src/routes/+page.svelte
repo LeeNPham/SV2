@@ -329,53 +329,53 @@
 			<div class="overflow-y-auto h-[450px]">
 				<div class="grid grid-cols-1 w-full gap-2 px-3">
 					{#each Object.keys(completeCategories) as category}
-						<!-- {#if selectedCategory == category} -->
-						{#if completeCategories[category].todos != undefined}
-							{#each completeCategories[category].todos as todo}
-								<hr
-									class="border-{completeCategories[category]
-										.color} shadow shadow-{completeCategories[category].color}"
-								/>
-								<div
-									class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
-								>
-									<div class="text-white text-sm pr-2">
-										hello
-										{completeCategories[category].color}
-									</div>
-
-									<div class="flex gap-2 items-center">
-										{#if todo.completion == true}
-											<button type="button" class="">
-												<CheckCircle Class="h-6 w-6 fill-{completeCategories[category].color}" />
-											</button>
-										{:else}
-											<button type="button" class="">
-												<CircleIcon Class="h-6 w-6 fill-{completeCategories[category].color}" />
-											</button>
-										{/if}
-										<div class="grid grid-cols-1 px-2">
-											<div
-												class="w-full text-white text-ellipsis {todo.completion
-													? 'line-through'
-													: ''} truncate"
-											>
-												{todo.title}
-											</div>
-											{#if todo.due_date != 'null'}
-												<div class="w-full text-xs text-white/40 text-ellipsis truncate">
-													Due: {todo.due_date}
-												</div>
-											{/if}
+						{#if selectedCategory == category}
+							{#if completeCategories[category].todos != undefined}
+								{#each completeCategories[category].todos as todo}
+									<hr
+										class="border-{completeCategories[category]
+											.color} shadow shadow-{completeCategories[category].color}"
+									/>
+									<div
+										class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+									>
+										<div class="text-white text-sm pr-2">
+											hello
+											{completeCategories[category].color}
 										</div>
+
+										<div class="flex gap-2 items-center">
+											{#if todo.completion == true}
+												<button type="button" class="">
+													<CheckCircle Class="h-6 w-6 fill-{completeCategories[category].color}" />
+												</button>
+											{:else}
+												<button type="button" class="">
+													<CircleIcon Class="h-6 w-6 fill-{completeCategories[category].color}" />
+												</button>
+											{/if}
+											<div class="grid grid-cols-1 px-2">
+												<div
+													class="w-full text-white text-ellipsis {todo.completion
+														? 'line-through'
+														: ''} truncate"
+												>
+													{todo.title}
+												</div>
+												{#if todo.due_date != 'null'}
+													<div class="w-full text-xs text-white/40 text-ellipsis truncate">
+														Due: {todo.due_date}
+													</div>
+												{/if}
+											</div>
+										</div>
+										<a class="text-white" href={`/${todo._id}`}>
+											<EllipsisIcon />
+										</a>
 									</div>
-									<a class="text-white" href={`/${todo._id}`}>
-										<EllipsisIcon />
-									</a>
-								</div>
-							{/each}
+								{/each}
+							{/if}
 						{/if}
-						<!-- {/if} -->
 					{/each}
 				</div>
 			</div>
