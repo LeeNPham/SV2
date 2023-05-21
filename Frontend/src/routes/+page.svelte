@@ -285,7 +285,10 @@
 										</div>
 									</div>
 
-									<hr class={completeCategories[category].color} />
+									<hr
+										class="border-{completeCategories[category]
+											.color} shadow shadow-{completeCategories[category].color}"
+									/>
 								</div>
 							</button>
 						{/each}
