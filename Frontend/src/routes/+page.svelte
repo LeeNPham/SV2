@@ -339,28 +339,19 @@
 								<div
 									class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
 								>
-									<div class="text-white text-sm pr-2">{completeCategories[category].color}</div>
+									<div class="text-white text-sm pr-2">
+										hello
+										{completeCategories[category].color}
+									</div>
 
 									<div class="flex gap-2 items-center">
 										{#if todo.completion == true}
-											<button
-												type="button"
-												class="h-6 w-6 rounded-full bg-white
-											"
-											>
-												<CheckCircle
-													Class="h-full w-full fill-{completeCategories[category].color}"
-												/>
+											<button type="button" class="">
+												<CheckCircle Class="h-6 w-6 fill-{completeCategories[category].color}" />
 											</button>
 										{:else}
-											<button
-												type="button"
-												class="h-6 w-6 rounded-full
-											"
-											>
-												<CircleIcon
-													Class="h-full w-full fill-{completeCategories[category].color}"
-												/>
+											<button type="button" class="">
+												<CircleIcon Class="h-6 w-6 fill-{completeCategories[category].color}" />
 											</button>
 										{/if}
 										<div class="grid grid-cols-1 px-2">
