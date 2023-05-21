@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount, beforeUpdate, afterUpdate } from 'svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import CircleIcon from '$lib/icons/CircleIcon.svelte';
 	import EllipsisIcon from '$lib/icons/EllipsisIcon.svelte';
@@ -11,7 +11,6 @@
 	import MenuIcon from '$lib/icons/MenuIcon.svelte';
 	import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 	export let data; //grabs information from our +page.js
-	let Todos = data;
 	let showNewTodoModal = false;
 	let showNewCategoryModal = false;
 
@@ -51,7 +50,6 @@
 	let completeCategories: any = [];
 	let selectedCategory = 'All';
 	function switchCategories(e: any) {
-		console.log(e.currentTarget.id); // selects the category, we should create a todosMap
 		selectedCategory = e.currentTarget.id;
 	}
 
@@ -197,12 +195,24 @@
 			});
 	}
 
+	// beforeUpdate(() => {
+	// 	console.log('thing beforeUpdate: ' + selectedCategory);
+	// });
+
+	// afterUpdate(() => {
+	// 	console.log('thing afterUpdate: ' + selectedCategory);
+	// });
+
+	// onDestroy(() => {
+	// 	console.log('thing destroyed: ' + Class);
+	// });
+
 	onMount(() => {
 		tasksCount = data.items.length;
 		buildCategoriesWithTodos(data.categories, data.items);
 		// look up how to dynamically render out a variable from our map
 		// add a button to update a category
-		//
+		// add a button to update completion of a todo with an onchange for the radio value of a checkbox
 	});
 </script>
 
@@ -275,7 +285,10 @@
 									</button>
 								{/if}
 								<div
-									class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
+									class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-lg p-5 {selectedCategory ==
+									category
+										? 'shadow-category-cyan/50'
+										: 'shadow-black/50'} "
 								>
 									<div class="grid grid-cols-1 gap-1">
 										<div class="text-palette-lightgray text-sm">
@@ -315,23 +328,39 @@
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 			<div class="overflow-y-auto h-[450px]">
 				<div class="grid grid-cols-1 w-full gap-2 px-3">
-					<!-- Test -->
 					{#each Object.keys(completeCategories) as category}
-						{#if selectedCategory == category}
+						<!-- {#if selectedCategory == category} -->
+						{#if completeCategories[category].todos != undefined}
 							{#each completeCategories[category].todos as todo}
+								<hr
+									class="border-{completeCategories[category]
+										.color} shadow shadow-{completeCategories[category].color}"
+								/>
 								<div
 									class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
 								>
-									<div class="text-white">{completeCategories[category].color}</div>
-									<div class="text-white">{category}</div>
-									<div class="flex gap-2">
+									<div class="text-white text-sm pr-2">{completeCategories[category].color}</div>
+
+									<div class="flex gap-2 items-center">
 										{#if todo.completion == true}
-											<button type="button">
-												<CheckCircle Class="h-6 w-6 fill-{completeCategories[category].color}" />
+											<button
+												type="button"
+												class="h-6 w-6 rounded-full bg-white
+											"
+											>
+												<CheckCircle
+													Class="h-full w-full fill-{completeCategories[category].color}"
+												/>
 											</button>
 										{:else}
-											<button type="button">
-												<CircleIcon Class="h-6 w-6 fill-{completeCategories[category].color}" />
+											<button
+												type="button"
+												class="h-6 w-6 rounded-full
+											"
+											>
+												<CircleIcon
+													Class="h-full w-full fill-{completeCategories[category].color}"
+												/>
 											</button>
 										{/if}
 										<div class="grid grid-cols-1 px-2">
@@ -355,8 +384,8 @@
 								</div>
 							{/each}
 						{/if}
+						<!-- {/if} -->
 					{/each}
-					<!-- End Test -->
 				</div>
 			</div>
 		</div>
