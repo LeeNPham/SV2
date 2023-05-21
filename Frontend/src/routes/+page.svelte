@@ -22,11 +22,10 @@
 		showNewCategoryModal = true;
 	}
 	let userFirstName = 'Lee';
-	let origin = { All: data.items };
 	let category = '';
 	let category_id = '';
 	let tasksCount = 0;
-	let categoriesCount = 0;
+
 	let categoryColors = [
 		'border-category-pink shadow shadow-category-pink',
 		'border-category-blue shadow shadow-category-blue',
@@ -50,6 +49,11 @@
 	let completion = false;
 	let due_date: any;
 	let completeCategories: any = [];
+	let selectedCategory = 'All';
+	function switchCategories(e: any) {
+		console.log(e.currentTarget.id); // selects the category, we should create a todosMap
+		selectedCategory = e.currentTarget.id;
+	}
 
 	function buildCategoriesWithTodos(categories: any[], tasks: any[]) {
 		// console.log(categories);
@@ -112,14 +116,10 @@
 		}
 
 		// this is what I will use to do the rest of the rendering!
-		// console.log(
-		// 	'complete categories with color assignment and number of todos per category!',
-		// 	completeCategories
-		// );
-	}
-
-	function switchCategories(e: any) {
-		//console.log(e.currentTarget.id); // selects the category, we should create a todosMap
+		console.log(
+			'complete categories with color assignment and number of todos per category!',
+			completeCategories
+		);
 	}
 
 	function createTodo() {
@@ -189,21 +189,20 @@
 				'Content-Type': 'application/json'
 			}
 		})
-			.then((response) => {
+			.then(() => {
 				window.location = '/';
 			})
-			.catch((error) => {
-				err = !err;
+			.catch(() => {
+				console.log('there was an error deleting this');
 			});
 	}
 
 	onMount(() => {
 		tasksCount = data.items.length;
 		buildCategoriesWithTodos(data.categories, data.items);
-		// add a button to create and update a category
-		// create a mapper to reference between category and tasks
-		// look up map function in js
-		// console.log(Todos);
+		// look up how to dynamically render out a variable from our map
+		// add a button to update a category
+		//
 	});
 </script>
 
@@ -248,11 +247,13 @@
 			<div class="grid grid-cols-1 w-full">
 				<div class="flex overflow-scroll">
 					<div class="flex pb-10 px-3 gap-3">
-						{#each Object.keys(completeCategories) as category, i}
+						{#each Object.keys(completeCategories) as category}
 							<button
-								id={category != 'All' ? completeCategories[category].categoryId : ''}
+								id={category}
 								on:click={switchCategories}
-								class="relative text-left"
+								class="relative text-left {completeCategories[category].count != 0
+									? ''
+									: 'pointer-events-none'}"
 								type="button"
 							>
 								{#if category != 'All'}
@@ -314,48 +315,60 @@
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 			<div class="overflow-y-auto h-[450px]">
 				<div class="grid grid-cols-1 w-full gap-2 px-3">
-					{#each Todos.items as todo}
-						<div
-							class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
-						>
-							<div class="flex gap-2">
-								<!-- If business, then pink circle if personal, then blue circle if side-hustle, then green circle -->
-								{#if todo.completion == true}
-									<button type="button">
-										<CheckCircle Class="h-6 w-6 fill-category-cyan" />
-									</button>
-								{:else}
-									<button type="button">
-										<CircleIcon Class="h-6 w-6 fill-category-cyan" />
-									</button>
-								{/if}
-								<div class="grid grid-cols-1 px-2">
-									<div
-										class="w-full text-white text-ellipsis {todo.completion
-											? 'line-through'
-											: ''} truncate"
-									>
-										{todo.title}
-									</div>
-									{#if todo.due_date != 'null'}
-										<div class="w-full text-xs text-white/40 text-ellipsis truncate">
-											Due: {todo.due_date}
+					<!-- Test -->
+					{#each Object.keys(completeCategories) as category}
+						{#if selectedCategory == category}
+							{#each completeCategories[category].todos as todo}
+								<div
+									class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+								>
+									<div class="text-white">{completeCategories[category].color}</div>
+									<div class="text-white">{category}</div>
+									<div class="flex gap-2">
+										{#if todo.completion == true}
+											<button type="button">
+												<CheckCircle Class="h-6 w-6 fill-{completeCategories[category].color}" />
+											</button>
+										{:else}
+											<button type="button">
+												<CircleIcon Class="h-6 w-6 fill-{completeCategories[category].color}" />
+											</button>
+										{/if}
+										<div class="grid grid-cols-1 px-2">
+											<div
+												class="w-full text-white text-ellipsis {todo.completion
+													? 'line-through'
+													: ''} truncate"
+											>
+												{todo.title}
+											</div>
+											{#if todo.due_date != 'null'}
+												<div class="w-full text-xs text-white/40 text-ellipsis truncate">
+													Due: {todo.due_date}
+												</div>
+											{/if}
 										</div>
-									{/if}
+									</div>
+									<a class="text-white" href={`/${todo._id}`}>
+										<EllipsisIcon />
+									</a>
 								</div>
-							</div>
-							<a class="text-white" href={`/${todo._id}`}>
-								<EllipsisIcon />
-							</a>
-						</div>
+							{/each}
+						{/if}
 					{/each}
+					<!-- End Test -->
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<label class="absolute right-10 bottom-12" for="addNewTodo">
-		<button id="addNewTodo" class="hidden" type="button" on:click={displayShowNewTodoModal} />
+		<button
+			id="addNewTodo"
+			class="hidden"
+			type="button"
+			on:click|stopPropagation={displayShowNewTodoModal}
+		/>
 		<CirclePlus
 			Class="fill-palette-pinkglow shadow-xl shadow-palette-pinkglow/60 h-14 w-14 bg-white rounded-full cursor-pointer"
 		/>
