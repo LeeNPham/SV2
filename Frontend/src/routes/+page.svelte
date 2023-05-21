@@ -22,6 +22,7 @@
 		showNewCategoryModal = true;
 	}
 	let userFirstName = 'Lee';
+	let origin = { All: data.items };
 	let category = '';
 	let category_id = '';
 	let tasksCount = 0;
@@ -34,13 +35,68 @@
 		'border-category-orange shadow shadow-category-orange',
 		'border-category-purple shadow shadow-category-purple'
 	];
+	let colors = [
+		'category-cyan',
+		'category-pink',
+		'category-blue',
+		'category-green',
+		'category-yellow',
+		'category-orange',
+		'category-purple'
+	];
 	let title = '';
 	let description = '';
 	let completion = false;
 	let due_date: any;
+	let completeCategories: any = {};
 
-	function switchCategories(e) {
-		console.log(e.target.innerHTML); // selects the category, we should create a todosMap
+	function buildCategoriesWithTodos(categories: any[], tasks: any[]) {
+		completeCategories.All = tasks; // adding the All mapping of all tasks to the object
+		// Create map of categories with category name as key, and blank lists as their values
+		for (let category of categories) {
+			if (!completeCategories.hasOwnProperty(category.title)) {
+				let key = category.title;
+				completeCategories[key] = [];
+			}
+		}
+		// Iterate over tasks and adds task to correlating categorys list value
+		for (let task of tasks) {
+			let newKey = task.category;
+			if (completeCategories.hasOwnProperty(newKey)) {
+				completeCategories[newKey].push(task);
+			}
+		}
+		// Iterate over tasks and add a styling object to the categories list value to add styling ability
+		let i = 0;
+		for (let categoryObject in completeCategories) {
+			if (!completeCategories.hasOwnProperty('color')) {
+				const myStyleObject = {
+					color: colors[i]
+				};
+				completeCategories[categoryObject].push(myStyleObject);
+				i++;
+			}
+		}
+
+		for (let categoryObject in completeCategories) {
+			if (!completeCategories.hasOwnProperty('count')) {
+				console.log(completeCategories[categoryObject]);
+				let count = completeCategories[categoryObject].length - 1;
+				const myCountObject = {
+					count: count
+				};
+				completeCategories[categoryObject].push(myCountObject);
+			}
+		}
+		// this is what I will use to do the rest of the rendering!
+		console.log(
+			'complete categories with color assignment and number of todos per category!',
+			completeCategories
+		);
+	}
+
+	function switchCategories(e: any) {
+		console.log(e.currentTarget.id); // selects the category, we should create a todosMap
 	}
 
 	function createTodo() {
@@ -102,7 +158,7 @@
 			});
 	}
 
-	async function deleteCategory(e) {
+	async function deleteCategory(e: any) {
 		console.log('delete me');
 		console.log(e.target.parentElement.id);
 		category_id = e.target.parentElement.id;
@@ -124,9 +180,11 @@
 		// console.log(data);
 		// console.log(data.items);
 		tasksCount = data.items.length;
-		console.log({ tasksCount });
+		// console.log({ tasksCount });
 		let categoriesCount = data.categories.length;
-		console.log({ categoriesCount });
+		// console.log({ categoriesCount });
+		// console.log(data.categories);
+		buildCategoriesWithTodos(data.categories, data.items);
 		// add a button to create and update a category
 		// create a mapper to reference between category and tasks
 		// look up map function in js
@@ -176,7 +234,7 @@
 				<div class="flex overflow-scroll">
 					<div class="flex pb-10 px-3 gap-3">
 						<!-- Category -->
-						<button on:click={switchCategories} class="text-left" type="button">
+						<button id="All" on:click={switchCategories} class="text-left" type="button">
 							<div
 								class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
 							>
@@ -190,7 +248,12 @@
 						</button>
 						{#each Todos.categories as category, i}
 							<!-- <button on:click|self={switchCategories} class="relative text-left" type="button"> -->
-							<button class="relative text-left" type="button">
+							<button
+								id={category.title}
+								on:click={switchCategories}
+								class="relative text-left"
+								type="button"
+							>
 								<button
 									on:click={deleteCategory}
 									id={category._id}

@@ -21,11 +21,13 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 # Todo Models Start
+
+
 class Todo(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     category: Optional[str]
     title: str
-    description: str
+    description: Optional[str]
     completion: bool
     create_date: str
     due_date: Optional[str]
@@ -70,11 +72,14 @@ class UpdateTodoModel(BaseModel):
 # Todo Models End
 
 # Category Models Start
+
+
 class Category(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     title: str
     description: str
     create_date: str
+
     class Config:
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
@@ -86,6 +91,8 @@ class Category(BaseModel):
                 "create_date": "2008-09-15"
             }
         }
+
+
 class UpdateCategoryModel(BaseModel):
     title: str
     description: str
