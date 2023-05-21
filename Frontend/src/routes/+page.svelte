@@ -90,10 +90,10 @@
 		}
 
 		// this is what I will use to do the rest of the rendering!
-		// console.log(
-		// 	'complete categories with color assignment and number of todos per category!',
-		// 	completeCategories
-		// );
+		console.log(
+			'complete categories with color assignment and number of todos per category!',
+			completeCategories
+		);
 	}
 
 	function switchCategories(e: any) {
