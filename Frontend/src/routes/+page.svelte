@@ -48,51 +48,52 @@
 	let description = '';
 	let completion = false;
 	let due_date: any;
-	let completeCategories: any = {};
+	let completeCategories: any = [];
 
 	function buildCategoriesWithTodos(categories: any[], tasks: any[]) {
-		completeCategories.All = tasks; // adding the All mapping of all tasks to the object
+		completeCategories['All'] = { todos: tasks }; // adding the All mapping of all tasks to the object
 		// Create map of categories with category name as key, and blank lists as their values
 		for (let category of categories) {
 			if (!completeCategories.hasOwnProperty(category.title)) {
 				let key = category.title;
-				completeCategories[key] = [];
+				completeCategories[key] = {};
 			}
 		}
+
 		// Iterate over tasks and adds task to correlating categorys list value
 		for (let task of tasks) {
 			let newKey = task.category;
 			if (completeCategories.hasOwnProperty(newKey)) {
-				completeCategories[newKey].push(task);
+				if (!completeCategories[newKey].hasOwnProperty('todos')) {
+					completeCategories[newKey] = { todos: [task] };
+				} else {
+					completeCategories[newKey].todos.push(task);
+				}
 			}
 		}
+
 		// Iterate over tasks and add a styling object to the categories list value to add styling ability
 		let i = 0;
 		for (let categoryObject in completeCategories) {
-			if (!completeCategories.hasOwnProperty('color')) {
-				const myStyleObject = {
-					color: colors[i]
-				};
-				completeCategories[categoryObject].push(myStyleObject);
+			if (!completeCategories[categoryObject].hasOwnProperty('color')) {
+				completeCategories[categoryObject].color = colors[i];
 				i++;
 			}
 		}
 
 		for (let categoryObject in completeCategories) {
-			if (!completeCategories.hasOwnProperty('count')) {
+			if (!completeCategories[categoryObject].hasOwnProperty('count')) {
 				console.log(completeCategories[categoryObject]);
-				let count = completeCategories[categoryObject].length - 1;
-				const myCountObject = {
-					count: count
-				};
-				completeCategories[categoryObject].push(myCountObject);
+				let count = completeCategories[categoryObject].todos.length;
+				completeCategories[categoryObject].count = count;
 			}
 		}
+
 		// this is what I will use to do the rest of the rendering!
-		console.log(
-			'complete categories with color assignment and number of todos per category!',
-			completeCategories
-		);
+		// console.log(
+		// 	'complete categories with color assignment and number of todos per category!',
+		// 	completeCategories
+		// );
 	}
 
 	function switchCategories(e: any) {
@@ -177,13 +178,7 @@
 	}
 
 	onMount(() => {
-		// console.log(data);
-		// console.log(data.items);
 		tasksCount = data.items.length;
-		// console.log({ tasksCount });
-		let categoriesCount = data.categories.length;
-		// console.log({ categoriesCount });
-		// console.log(data.categories);
 		buildCategoriesWithTodos(data.categories, data.items);
 		// add a button to create and update a category
 		// create a mapper to reference between category and tasks
@@ -300,6 +295,64 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Test Start -->
+		<!-- <div class="flex pb-10 px-3 gap-3">
+			{#each Object.keys(completeCategories) as category, i}
+				{#each completeCategories[category] as it}
+					<div class="text-lg font-bold text-white">{category}</div>
+					<pre>{console.log('this is my item', it)}</pre> -->
+		<!-- <button
+								id={category.title}
+								on:click={switchCategories}
+								class="relative text-left"
+								type="button"
+							>
+								<button
+									on:click={deleteCategory}
+									id={category._id}
+									class="absolute right-5 top-5"
+									type="button"
+								>
+									<svg
+										viewBox="0 0 576 512"
+										id={category._id}
+										role="img"
+										class="h-5 w-f fill-red-600 hover:fill-red-600/50"
+										><title>Delete</title><path
+											d="M576 384c0 35.3-28.7 64-64 64H205.3c-17 0-33.3-6.7-45.3-18.7L9.372 278.6C3.371 272.6 0 264.5 0 256c0-8.5 3.372-16.6 9.372-22.6L160 82.75C172 70.74 188.3 64 205.3 64H512c35.3 0 64 28.65 64 64v256zM271 208.1l47.1 47.9-47.1 47c-9.3 9.4-9.3 24.6 0 33.1 9.4 10.2 24.6 10.2 33.1 0l47.9-46.2 47 46.2c9.4 10.2 24.6 10.2 33.1 0 10.2-8.5 10.2-23.7 0-33.1l-46.2-47 46.2-47.9c10.2-8.5 10.2-23.7 0-33.1-8.5-9.3-23.7-9.3-33.1 0l-47 47.1-47.9-47.1c-8.5-9.3-23.7-9.3-33.1 0-9.3 9.4-9.3 24.6 0 33.1z"
+										/></svg
+									>
+								</button>
+								<div
+									class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
+								>
+									<div class="grid grid-cols-1 gap-1">
+										<div class="text-palette-lightgray text-sm">{tasksCount} tasks</div>
+										<div id={category._id} class="text-white text-2xl font-bold">
+											{category.title}
+										</div>
+									</div>
+
+									<hr class={categoryColors[i]} />
+								</div>
+							</button> -->
+		<!-- {/each}
+			{/each} -->
+		<!-- <button on:click={displayCreateNewCategoryModal} class="text-left" type="button">
+							<div
+								class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-black/50 shadow-lg p-5"
+							>
+								<div class="grid grid-cols-1 gap-1">
+									<div class="text-palette-lightgray text-sm">tasks</div>
+									<div class="text-white text-2xl font-bold">+ Category</div>
+								</div>
+
+								<hr class="border-category-cyan shadow shadow-category-cyan" />
+							</div>
+						</button> -->
+		<!-- </div> -->
+		<!-- Test End -->
 
 		<!-- Today's Tasks -->
 		<div class="grid grid-cols-1 justify-start">
