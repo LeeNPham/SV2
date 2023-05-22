@@ -34,18 +34,16 @@
 
 	let showNewTodoModal = false
 	let showNewCategoryModal = false
-
-	function displayShowNewTodoModal() {
-		showNewTodoModal = true
-	}
-	function displayCreateNewCategoryModal() {
-		showNewCategoryModal = true
-	}
+	let completion = false
 	let userFirstName = 'Lee'
 	let category = ''
 	let category_id = ''
 	let tasksCount = 0
-
+	let title = ''
+	let description = ''
+	let due_date: any
+	let completeCategories: any = []
+	let selectedCategory = 'All'
 	let categoryColors = [
 		'border-category-cyan shadow shadow-category-cyan',
 		'border-category-pink shadow shadow-category-pink',
@@ -55,7 +53,6 @@
 		'border-category-orange shadow shadow-category-orange',
 		'border-category-purple shadow shadow-category-purple'
 	]
-
 	let colors = [
 		'fill-category-cyan',
 		'fill-category-pink',
@@ -66,24 +63,8 @@
 		'fill-category-purple'
 	]
 
-	let title = ''
-	let description = ''
-	let completion = false
-	let due_date: any
-	let completeCategories: any = []
-	let selectedCategory = 'All'
-
-	function switchCategories(e: any) {
-		selectedCategory = e.currentTarget.id
-	}
-
 	function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
-		// console.log(categories);
-		// start here later, you need the category id per category
-		// inside of your complete categories object so that you can delete it you dummy,,, and update it too I guess
-		// console.log(categories[0]._id);
-		completeCategories['All'] = { todos: tasks } // adding the All mapping of all tasks to the object
-		// Create map of categories with category name as key, and blank lists as their values
+		completeCategories['All'] = { todos: tasks }
 		for (let category of categories) {
 			if (!completeCategories.hasOwnProperty(category.title)) {
 				let key = category.title
@@ -144,7 +125,15 @@
 			completeCategories
 		)
 	}
-
+	function switchCategories(e: any) {
+		selectedCategory = e.currentTarget.id
+	}
+	function displayShowNewTodoModal() {
+		showNewTodoModal = true
+	}
+	function displayCreateNewCategoryModal() {
+		showNewCategoryModal = true
+	}
 	function createTodo() {
 		const currentTime = new Date()
 		const create_date = currentTime.toISOString().split('T')[0].toString()
@@ -204,7 +193,6 @@
 
 	async function deleteCategory(e: any) {
 		category_id = e.target.parentElement.id
-
 		await fetch(`http://127.0.0.1:8000/api/category/${category_id}`, {
 			method: 'DELETE',
 			headers: {
@@ -219,17 +207,9 @@
 			})
 	}
 
-	// beforeUpdate(() => {
-	// 	console.log('thing beforeUpdate: ' + selectedCategory);
-	// });
-
-	// afterUpdate(() => {
-	// 	console.log('thing afterUpdate: ' + selectedCategory);
-	// });
-
-	// onDestroy(() => {
-	// 	console.log('thing destroyed: ' + Class);
-	// });
+	async function updateCompletion(e: any) {
+		console.log(e)
+	}
 
 	onMount(() => {
 		tasksCount = data.items.length
@@ -359,13 +339,25 @@
 									>
 										<div class="flex gap-2 items-center">
 											{#if todo.completion == true}
-												<button type="button">
+												<label for={todo.id}>
 													<CheckCircle Class="h-6 w-6 {color}" />
-												</button>
+													<input
+														class="hidden"
+														id={todo.idr}
+														type="checkbox"
+														bind:checked={todo.completion}
+													/>
+												</label>
 											{:else}
-												<button type="button" class="">
+												<label for={todo.id}>
 													<CircleIcon Class="h-6 w-6 {color}" />
-												</button>
+													<input
+														class="hidden"
+														id={todo.id}
+														type="checkbox"
+														bind:checked={todo.completion}
+													/>
+												</label>
 											{/if}
 											<div class="grid grid-cols-1 px-2">
 												<div

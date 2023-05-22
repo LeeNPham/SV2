@@ -6,22 +6,23 @@
 
 	let answer: any
 	let toggleUpdate = false
+	let title = ''
 	let err = false
 	let category = ''
-	let title = data.title
+	let id = data.id
 	let description = ''
 	let completion = false
 	let due_date: number
 	let create_date: number
 
 	async function getTodo() {
-		const response = await fetch(`http://127.0.0.1:8000/api/todo/${title}`)
+		const response = await fetch(`http://127.0.0.1:8000/api/todo/${id}`)
 		const data = await response.json()
 		return data
 	}
 
 	async function deleteTodo() {
-		await fetch(`http://127.0.0.1:8000/api/todo/${title}`, {
+		await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -40,7 +41,7 @@
 	}
 
 	function updateTodo() {
-		fetch(`http://127.0.0.1:8000/api/todo/${title}?desc=${description}`, {
+		fetch(`http://127.0.0.1:8000/api/todo/${id}?desc=${description}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -70,7 +71,7 @@
 
 <!-- Head -->
 <svelte:head>
-	<title>{title}</title>
+	<title>{id}</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
@@ -119,7 +120,7 @@
 					<div class="text-md text-white font-bold">Category:</div>
 					<input
 						class="rounded-xl py-0 placeholder:text-gray-400"
-						placeholder="New Description"
+						placeholder={answer.category}
 						type="text"
 						bind:value={category}
 					/>
@@ -127,7 +128,7 @@
 					<div class="text-md text-white font-bold">Title:</div>
 					<input
 						class="rounded-xl py-0 placeholder:text-gray-400"
-						placeholder="New Title"
+						placeholder={answer.title}
 						type="text"
 						bind:value={title}
 					/>
@@ -135,7 +136,7 @@
 					<div class="text-md text-white font-bold">Description:</div>
 					<input
 						class="rounded-xl py-0 placeholder:text-gray-400"
-						placeholder="New Description"
+						placeholder={answer.description}
 						type="text"
 						bind:value={description}
 					/>
@@ -143,14 +144,17 @@
 					<div class="text-md text-white font-bold">Due Date:</div>
 					<input
 						class="rounded-xl py-0 placeholder:text-gray-400"
-						placeholder="New Description"
+						placeholder={answer.due_date}
 						type="date"
 						bind:value={due_date}
 					/>
+
+					<div class="text-md text-white font-bold">Completion:</div>
+					<input class="rounded-xl py-0" type="checkbox" bind:checked={completion} />
 					<div>
 						<button
 							class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
-							type="submit">Create Todo</button
+							type="submit">Update</button
 						>
 					</div>
 				</form>

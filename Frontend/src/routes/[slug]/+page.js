@@ -1,5 +1,5 @@
 export function load({ params }) {
 	return {
-		title: params.slug
-	};
+		id: params.slug
+	}
 }
