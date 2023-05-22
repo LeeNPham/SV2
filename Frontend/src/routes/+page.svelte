@@ -140,12 +140,13 @@
 	function displayShowNewTodoModal() {
 		showNewTodoModal = !showNewTodoModal
 	}
-	function displayUpdateTodoModal(idU, categoryU, titleU, descriptionU, due_dateU) {
+	function displayUpdateTodoModal(idU, categoryU, titleU, descriptionU, due_dateU, create_dateU) {
 		id = idU
 		category = categoryU
 		title = titleU
 		description = descriptionU
 		due_date = due_dateU
+		create_date = create_dateU
 		showUpdateTodoModal = true
 	}
 	function displayCreateNewCategoryModal() {
@@ -460,7 +461,8 @@
 												todo.category,
 												todo.title,
 												todo.description,
-												todo.due_date
+												todo.due_date,
+												todo.create_date
 											)}
 										>
 											<EllipsisIcon />
@@ -497,9 +499,6 @@
 			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
 			on:submit|preventDefault={updateTodo(id, category, title, description, due_date)}
 		>
-			<div class="text-white">
-				Originally created on: {create_date}
-			</div>
 			<div class="text-md text-white font-bold">Category:</div>
 			<input
 				class="rounded-xl py-0 placeholder:text-gray-400"
@@ -522,6 +521,15 @@
 				placeholder={description}
 				type="text"
 				bind:value={description}
+			/>
+
+			<div class="text-md text-white font-bold">Created On:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder={create_date}
+				type="date"
+				readonly
+				bind:value={create_date}
 			/>
 
 			<div class="text-md text-white font-bold">Due Date:</div>
