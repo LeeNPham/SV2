@@ -344,7 +344,7 @@
 			</div>
 		</div>
 
-		<!-- Today's Tasks -->
+		<!-- Todos List -->
 		<div class="grid grid-cols-1 justify-start">
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 			<div class="overflow-y-auto h-[450px]">
