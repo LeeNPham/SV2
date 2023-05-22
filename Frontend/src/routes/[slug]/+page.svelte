@@ -41,7 +41,7 @@
 	}
 
 	function updateTodo() {
-		fetch(`http://127.0.0.1:8000/api/todo/${id}?desc=${description}`, {
+		fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
