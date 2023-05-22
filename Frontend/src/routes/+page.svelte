@@ -59,6 +59,15 @@
 		'border-category-orange shadow shadow-category-orange',
 		'border-category-purple shadow shadow-category-purple'
 	]
+	let addButtonCategoryColor = [
+		'fill-category-cyan shadow-xl shadow-category-cyan/60',
+		'fill-category-pink shadow-xl shadow-category-pink/60',
+		'fill-category-blue shadow-xl shadow-category-blue/60',
+		'fill-category-green shadow-xl shadow-category-green/60',
+		'fill-category-yellow shadow-xl shadow-category-yellow/60',
+		'fill-category-orange shadow-xl shadow-category-orange/60',
+		'fill-category-purple shadow-xl shadow-category-purple/60'
+	]
 	let colors = [
 		'fill-category-cyan',
 		'fill-category-pink',
@@ -99,6 +108,7 @@
 			if (!completeCategories[categoryObject].hasOwnProperty('color')) {
 				completeCategories[categoryObject].color = colors[i]
 				completeCategories[categoryObject].categoryColor = categoryColors[i]
+				completeCategories[categoryObject].addButtonCategoryColor = addButtonCategoryColor[i]
 				i++
 			}
 		}
@@ -484,9 +494,16 @@
 			type="button"
 			on:click|stopPropagation={displayShowNewTodoModal}
 		/>
-		<CirclePlus
-			Class="fill-palette-pinkglow shadow-xl shadow-palette-pinkglow/60 h-14 w-14 bg-white rounded-full cursor-pointer"
-		/>
+
+		{#each Object.keys(completeCategories) as category}
+			{@const { addButtonCategoryColor } = completeCategories[category]}
+			{#if selectedCategory == category}
+				<CirclePlus
+					Class="{addButtonCategoryColor} h-14 w-14 bg-white rounded-full cursor-pointer"
+				/>
+				<!-- fill-palette-pinkglow shadow-xl shadow-palette-pinkglow/60 -->
+			{/if}
+		{/each}
 	</label>
 </div>
 
