@@ -516,10 +516,9 @@
 			/>
 
 			<div class="text-md text-white font-bold">Description:</div>
-			<input
+			<textarea
 				class="rounded-xl py-0 placeholder:text-gray-400"
 				placeholder={description}
-				type="text"
 				bind:value={description}
 			/>
 
