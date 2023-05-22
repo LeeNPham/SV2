@@ -288,7 +288,7 @@
 							<button
 								id={category}
 								on:click={switchCategories}
-								class="relative text-left {count != 0 ? '' : 'pointer-events-none'}"
+								class="relative text-left {count != 0 ? '' : ''}"
 								type="button"
 							>
 								{#if category != 'All'}
