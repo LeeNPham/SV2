@@ -150,6 +150,12 @@
 		selectedCategory = e.currentTarget.id
 	}
 	function displayShowNewTodoModal() {
+		id = ''
+		category = ''
+		title = ''
+		description = ''
+		due_date = ''
+		create_date = ''
 		showNewTodoModal = !showNewTodoModal
 	}
 	function displayUpdateTodoModal(idU, categoryU, titleU, descriptionU, due_dateU, create_dateU) {
