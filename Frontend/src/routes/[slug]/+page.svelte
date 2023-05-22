@@ -11,9 +11,7 @@
 	let category = ''
 	let id = data.id
 	let description = ''
-	let completion = false
 	let due_date: number
-	let create_date: number
 
 	async function getTodo() {
 		const response = await fetch(`http://127.0.0.1:8000/api/todo/${id}`)
@@ -50,13 +48,11 @@
 				category,
 				title,
 				description,
-				completion,
-				create_date,
 				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
 			})
 		})
 			.then((_res) => {
-				goto('/')
+				window.location = '/'
 			})
 			.catch((_err) => {
 				err = !err
@@ -92,14 +88,19 @@
 
 	<div class="bg-gray-100 p-5 border-2 border-blue-700 rounded-xl">
 		<ol class="text-gray-500">
-			<li><b>ID:</b> {answer._id}</li>
 			<li><b>Category:</b> {answer.category}</li>
 			<li><b>Title:</b> {answer.title}</li>
 			<li><b>Details:</b> {answer.description}</li>
 			<li><b>Creation Date:</b> {answer.create_date}</li>
-			<label>
-				<li><b>Completion:</b> <input type="checkbox" bind:checked={answer.completion} /></li>
-			</label>
+			<li>
+				<b>Completion:</b>
+				{#if answer.completion == true}
+					<div class="text-green-600">YOU FINISHED, YAY!</div>
+				{:else}
+					<div class="text-red-600">HURRY UP AND FINISH IT, BITCH</div>
+				{/if}
+			</li>
+			<li><b>Creation Date:</b> {answer.create_date}</li>
 			{#if answer.due_date != 'null'}
 				<li><b>Due Date:</b> {answer.due_date}</li>
 			{/if}
@@ -114,9 +115,11 @@
 		{#if toggleUpdate}
 			<div class="grid grid-cols-1 w-full">
 				<form
-					class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl"
+					class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
 					on:submit|preventDefault={updateTodo}
 				>
+					<div class="grid self-center text-2xl text-white font-semibold">Update</div>
+					<div class="text-white">Originally created on: {answer.create_date}</div>
 					<div class="text-md text-white font-bold">Category:</div>
 					<input
 						class="rounded-xl py-0 placeholder:text-gray-400"
@@ -148,23 +151,14 @@
 						type="date"
 						bind:value={due_date}
 					/>
-
-					<div class="text-md text-white font-bold">Completion:</div>
-					<input class="rounded-xl py-0" type="checkbox" bind:checked={completion} />
-					<div>
-						<button
-							class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
-							type="submit">Update</button
-						>
-					</div>
 				</form>
+
+				<button
+					class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-md font-semibold"
+					on:click={deleteTodo}>Delete</button
+				>
 			</div>
 		{/if}
-
-		<button
-			class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-md font-semibold"
-			on:click={deleteTodo}>Delete</button
-		>
 
 		<!-- Home Button -->
 		<div class="pt-2 flex flex-col w-auto justify-self-center">

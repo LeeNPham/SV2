@@ -9,6 +9,7 @@
 	import BellIcon from '$lib/icons/BellIcon.svelte'
 	import MagnifyingGlassIcon from '$lib/icons/MagnifyingGlassIcon.svelte'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
+	import { goto } from '$app/navigation'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 
 	export let data //grabs information from our +page.js
@@ -33,15 +34,20 @@
 	}
 
 	let showNewTodoModal = false
+	let showUpdateTodoModal = false
 	let showNewCategoryModal = false
 	let completion = false
 	let userFirstName = 'Lee'
+	let create_date = ''
+
+	let id = ''
 	let category = ''
-	let category_id = ''
-	let tasksCount = 0
 	let title = ''
 	let description = ''
 	let due_date: any
+
+	let category_id = ''
+	let tasksCount = 0
 	let completeCategories: any = []
 	let selectedCategory = 'All'
 	let categoryColors = [
@@ -63,6 +69,9 @@
 		'fill-category-purple'
 	]
 
+	function gotoProfile() {
+		goto('/profile')
+	}
 	function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
 		completeCategories['All'] = { todos: tasks }
 		for (let category of categories) {
@@ -129,7 +138,15 @@
 		selectedCategory = e.currentTarget.id
 	}
 	function displayShowNewTodoModal() {
-		showNewTodoModal = true
+		showNewTodoModal = !showNewTodoModal
+	}
+	function displayUpdateTodoModal(idU, categoryU, titleU, descriptionU, due_dateU) {
+		id = idU
+		category = categoryU
+		title = titleU
+		description = descriptionU
+		due_date = due_dateU
+		showUpdateTodoModal = true
 	}
 	function displayCreateNewCategoryModal() {
 		showNewCategoryModal = true
@@ -164,6 +181,47 @@
 			})
 	}
 
+	function updateTodo(
+		id: string,
+		category: string,
+		title: string,
+		description: string,
+		due_date: string
+	) {
+		fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				category: category,
+				title: title,
+				description: description,
+				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+			})
+		})
+			.then((_res) => {
+				window.location = '/'
+			})
+			.catch((_err) => {
+				err = !err
+			})
+	}
+
+	async function deleteTodo(id) {
+		await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(() => {
+				;(window as Window).location = '/'
+			})
+			.catch(() => {
+				err = !err
+			})
+	}
 	function createCategory() {
 		const currentTime = new Date()
 		const create_date = currentTime.toISOString().split('T')[0].toString()
@@ -206,11 +264,28 @@
 				console.log('there was an error deleting this')
 			})
 	}
+	function toggleCheckbox(x, id) {
+		x = !x
+		updateCompletion()
 
-	async function updateCompletion(e: any) {
-		console.log(e)
+		async function updateCompletion() {
+			await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					completion: x
+				})
+			})
+				.then((_res) => {
+					goto('/')
+				})
+				.catch((_err) => {
+					err = !err
+				})
+		}
 	}
-
 	onMount(() => {
 		tasksCount = data.items.length
 		buildCategoriesWithTodos(data.categories, data.items)
@@ -230,7 +305,7 @@
 		<!-- Top Menu -->
 		<div class="h-[90px] w-full flex flex-row justify-between">
 			<div>
-				<button type="button">
+				<button on:click={gotoProfile} type="button">
 					<MenuIcon
 						Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-8 w-8"
 					/></button
@@ -339,22 +414,24 @@
 									>
 										<div class="flex gap-2 items-center">
 											{#if todo.completion == true}
-												<label for={todo.id}>
+												<label for={todo._id}>
 													<CheckCircle Class="h-6 w-6 {color}" />
 													<input
 														class="hidden"
-														id={todo.idr}
+														id={todo._id}
 														type="checkbox"
+														on:change={toggleCheckbox(todo.completion, todo._id)}
 														bind:checked={todo.completion}
 													/>
 												</label>
 											{:else}
-												<label for={todo.id}>
+												<label for={todo._id}>
 													<CircleIcon Class="h-6 w-6 {color}" />
 													<input
 														class="hidden"
-														id={todo.id}
+														id={todo._id}
 														type="checkbox"
+														on:change={toggleCheckbox(todo.completion, todo._id)}
 														bind:checked={todo.completion}
 													/>
 												</label>
@@ -375,9 +452,19 @@
 											</div>
 										</div>
 
-										<a class="text-white" href={`/${todo._id}`}>
+										<button
+											type="button"
+											value={todo._id}
+											on:click|stopPropagation={displayUpdateTodoModal(
+												todo._id,
+												todo.category,
+												todo.title,
+												todo.description,
+												todo.due_date
+											)}
+										>
 											<EllipsisIcon />
-										</a>
+										</button>
 									</div>
 								{/each}
 							{/if}
@@ -401,7 +488,62 @@
 	</label>
 </div>
 
-<!-- Modals -->
+<!-- New Modals -->
+
+<!-- TODO: apply per id by looking it up and rendering out the form? -->
+<Modal Title="Update your Todo" bind:showModal={showUpdateTodoModal}>
+	<div class="grid grid-cols-1 w-full">
+		<form
+			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
+			on:submit|preventDefault={updateTodo(id, category, title, description, due_date)}
+		>
+			<div class="text-white">
+				Originally created on: {create_date}
+			</div>
+			<div class="text-md text-white font-bold">Category:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder={category}
+				type="text"
+				bind:value={category}
+			/>
+
+			<div class="text-md text-white font-bold">Title:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder={title}
+				type="text"
+				bind:value={title}
+			/>
+
+			<div class="text-md text-white font-bold">Description:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder={description}
+				type="text"
+				bind:value={description}
+			/>
+
+			<div class="text-md text-white font-bold">Due Date:</div>
+			<input
+				class="rounded-xl py-0 placeholder:text-gray-400"
+				placeholder={due_date}
+				type="date"
+				bind:value={due_date}
+			/>
+			<button
+				class="text-white px-2 py-1 bg-palette-dark hover:bg-palette-dark/50 rounded-xl"
+				type="submit">Update</button
+			>
+			<button
+				type="button"
+				class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-xl font-semibold"
+				on:click|stopPropagation={deleteTodo(id)}>Delete</button
+			>
+		</form>
+	</div>
+</Modal>
+
 <Modal Title="Create a New Todo" bind:showModal={showNewTodoModal}>
 	<div class="grid grid-cols-1 w-full">
 		<form

@@ -52,8 +52,8 @@ class UpdateTodoModel(BaseModel):
     category: Optional[str]
     title: Optional[str]
     description: Optional[str]
-    completion: bool
-    create_date: str
+    completion:  Optional[bool]
+    create_date: Optional[str]
     due_date: Optional[str]
 
     class Config:
