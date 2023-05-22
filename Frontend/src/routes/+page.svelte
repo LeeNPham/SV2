@@ -50,6 +50,7 @@
 	let tasksCount = 0
 	let completeCategories: any = []
 	let selectedCategory = 'All'
+
 	let categoryColors = [
 		'border-category-cyan shadow shadow-category-cyan',
 		'border-category-pink shadow shadow-category-pink',
@@ -83,6 +84,7 @@
 	}
 	function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
 		completeCategories['All'] = { todos: tasks }
+
 		for (let category of categories) {
 			if (!completeCategories.hasOwnProperty(category.title)) {
 				let key = category.title
@@ -139,10 +141,10 @@
 		}
 
 		// this is what I will use to do the rest of the rendering!
-		console.log(
-			'complete categories with color assignment and number of todos per category!',
+
+		console.log('complete categories with color assignment and number of todos per category!', {
 			completeCategories
-		)
+		})
 	}
 	function switchCategories(e: any) {
 		selectedCategory = e.currentTarget.id
@@ -166,7 +168,7 @@
 		const currentTime = new Date()
 		const create_date = currentTime.toISOString().split('T')[0].toString()
 		const newTodo = {
-			category,
+			category: category == 'All' ? (category = '') : category,
 			title,
 			description,
 			completion,
@@ -501,7 +503,6 @@
 				<CirclePlus
 					Class="{addButtonCategoryColor} h-14 w-14 bg-white rounded-full cursor-pointer"
 				/>
-				<!-- fill-palette-pinkglow shadow-xl shadow-palette-pinkglow/60 -->
 			{/if}
 		{/each}
 	</label>
@@ -575,12 +576,20 @@
 			on:submit|preventDefault={createTodo}
 		>
 			<div class="text-md text-white font-bold">Category:</div>
-			<input
+
+			<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
+				<option disabled selected>Select a category</option>
+				{#each Object.keys(completeCategories) as categoryValue}
+					<option value={categoryValue}>{categoryValue}</option>
+				{/each}
+			</select>
+
+			<!-- <input
 				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="New Description"
+				placeholder="New category"
 				type="text"
 				bind:value={category}
-			/>
+			/> -->
 
 			<div class="text-md text-white font-bold">Title:</div>
 			<input
