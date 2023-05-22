@@ -518,12 +518,12 @@
 			on:submit|preventDefault={updateTodo(id, category, title, description, due_date)}
 		>
 			<div class="text-md text-white font-bold">Category:</div>
-			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder={category}
-				type="text"
-				bind:value={category}
-			/>
+			<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
+				<option disabled selected>Select a category</option>
+				{#each Object.keys(completeCategories) as categoryValue}
+					<option value={categoryValue}>{categoryValue}</option>
+				{/each}
+			</select>
 
 			<div class="text-md text-white font-bold">Title:</div>
 			<input
@@ -556,15 +556,18 @@
 				type="date"
 				bind:value={due_date}
 			/>
-			<button
-				class="text-white px-2 py-1 bg-palette-dark hover:bg-palette-dark/50 rounded-xl"
-				type="submit">Update</button
-			>
-			<button
-				type="button"
-				class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-xl font-semibold"
-				on:click|stopPropagation={deleteTodo(id)}>Delete</button
-			>
+
+			<div class="flex flex-row justify-between">
+				<button
+					class="text-white px-2 py-1 bg-palette-dark hover:bg-palette-dark/50 rounded-xl"
+					type="submit">Update</button
+				>
+				<button
+					type="button"
+					class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-xl font-semibold"
+					on:click|stopPropagation={deleteTodo(id)}>Delete</button
+				>
+			</div>
 		</form>
 	</div>
 </Modal>
@@ -583,13 +586,6 @@
 					<option value={categoryValue}>{categoryValue}</option>
 				{/each}
 			</select>
-
-			<!-- <input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="New category"
-				type="text"
-				bind:value={category}
-			/> -->
 
 			<div class="text-md text-white font-bold">Title:</div>
 			<input
