@@ -574,20 +574,14 @@
 			/>
 
 			<div class="text-md text-white font-bold">Description:</div>
-			<input
+			<textarea
 				class="rounded-xl py-0 placeholder:text-gray-400"
 				placeholder="New Description"
-				type="text"
 				bind:value={description}
 			/>
 
 			<div class="text-md text-white font-bold">Due Date:</div>
-			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="New Description"
-				type="date"
-				bind:value={due_date}
-			/>
+			<input class="rounded-xl py-0 placeholder:text-gray-400" type="date" bind:value={due_date} />
 			<div>
 				<button
 					class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
@@ -613,10 +607,9 @@
 			/>
 
 			<div class="text-md text-white font-bold">Description:</div>
-			<input
+			<textarea
 				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="Details"
-				type="text"
+				placeholder="Description Details"
 				bind:value={description}
 			/>
 
