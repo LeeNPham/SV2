@@ -534,7 +534,9 @@
 			<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
 				<option disabled selected>Select a category</option>
 				{#each Object.keys(completeCategories) as categoryValue}
-					<option value={categoryValue}>{categoryValue}</option>
+					{#if categoryValue != 'All'}
+						<option value={categoryValue}>{categoryValue}</option>
+					{/if}
 				{/each}
 			</select>
 
@@ -596,7 +598,9 @@
 			<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
 				<option disabled selected>Select a category</option>
 				{#each Object.keys(completeCategories) as categoryValue}
-					<option value={categoryValue}>{categoryValue}</option>
+					{#if categoryValue != 'All'}
+						<option value={categoryValue}>{categoryValue}</option>
+					{/if}
 				{/each}
 			</select>
 
