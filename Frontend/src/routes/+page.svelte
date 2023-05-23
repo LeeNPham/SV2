@@ -158,7 +158,14 @@
 		create_date = ''
 		showNewTodoModal = !showNewTodoModal
 	}
-	function displayUpdateTodoModal(idU, categoryU, titleU, descriptionU, due_dateU, create_dateU) {
+	function displayUpdateTodoModal(
+		idU: string,
+		categoryU: string,
+		titleU: string,
+		descriptionU: string,
+		due_dateU: string,
+		create_dateU: string
+	) {
 		id = idU
 		category = categoryU
 		title = titleU
@@ -200,14 +207,14 @@
 			})
 	}
 
-	function updateTodo(
+	async function updateTodo(
 		id: string,
 		category: string,
 		title: string,
 		description: string,
 		due_date: string
 	) {
-		fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+		await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -220,14 +227,14 @@
 			})
 		})
 			.then((_res) => {
-				window.location = '/'
+				goto('/')
 			})
 			.catch((_err) => {
-				err = !err
+				_err = !_err
 			})
 	}
 
-	async function deleteTodo(id) {
+	async function deleteTodo(id: string) {
 		await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
 			method: 'DELETE',
 			headers: {
@@ -237,8 +244,8 @@
 			.then(() => {
 				;(window as Window).location = '/'
 			})
-			.catch(() => {
-				err = !err
+			.catch((_err) => {
+				_err = !_err
 			})
 	}
 	function createCategory() {
@@ -283,7 +290,7 @@
 				console.log('there was an error deleting this')
 			})
 	}
-	function toggleCheckbox(x, id) {
+	async function toggleCheckbox(x: any, id: string) {
 		x = !x
 		updateCompletion()
 
@@ -301,7 +308,7 @@
 					goto('/')
 				})
 				.catch((_err) => {
-					err = !err
+					_err = !_err
 				})
 		}
 	}
