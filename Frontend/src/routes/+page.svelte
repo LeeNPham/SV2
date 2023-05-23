@@ -436,7 +436,7 @@
 							{#if todos != undefined}
 								{#each todos as todo}
 									<div
-										class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+										class="hover:-translate-x-2 bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
 									>
 										<div class="flex gap-2 items-center">
 											{#if todo.completion == true}
