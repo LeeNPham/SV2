@@ -10,6 +10,7 @@
 	import MagnifyingGlassIcon from '$lib/icons/MagnifyingGlassIcon.svelte'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import { goto } from '$app/navigation'
+	import { fly, fade } from 'svelte/transition'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 
 	export let data //grabs information from our +page.js
@@ -227,7 +228,7 @@
 			})
 		})
 			.then((_res) => {
-				goto('/')
+				window.location = '/'
 			})
 			.catch((_err) => {
 				_err = !_err
@@ -502,7 +503,7 @@
 		</div>
 	</div>
 
-	<label class="absolute right-10 bottom-12" for="addNewTodo">
+	<label class="absolute right-7 bottom-7" for="addNewTodo">
 		<button
 			id="addNewTodo"
 			class="hidden"
@@ -610,6 +611,7 @@
 				placeholder="New Title"
 				type="text"
 				bind:value={title}
+				required
 			/>
 
 			<div class="text-md text-white font-bold">Description:</div>
@@ -643,6 +645,7 @@
 				placeholder="Category Name"
 				type="text"
 				bind:value={title}
+				required
 			/>
 
 			<div class="text-md text-white font-bold">Description:</div>
