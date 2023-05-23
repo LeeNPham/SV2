@@ -565,7 +565,7 @@
 
 			<div class="flex flex-row justify-between">
 				<button
-					class="text-white px-2 py-1 bg-palette-dark hover:bg-palette-dark/50 rounded-xl"
+					class="text-white px-2 py-1 bg-palette-dark hover:bg-palette-dark/50 rounded-xl font-semibold"
 					type="submit">Update</button
 				>
 				<button
@@ -581,7 +581,7 @@
 <Modal Title="Create a New Todo" bind:showModal={showNewTodoModal}>
 	<div class="grid grid-cols-1 w-full">
 		<form
-			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl"
+			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
 			on:submit|preventDefault={createTodo}
 		>
 			<div class="text-md text-white font-bold">Category:</div>
@@ -612,7 +612,7 @@
 			<input class="rounded-xl py-0 placeholder:text-gray-400" type="date" bind:value={due_date} />
 			<div>
 				<button
-					class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
+					class="text-white bg-palette-dark hover:bg-palette-dark/50 shadow-md px-2 py-1 rounded-xl font-semibold"
 					type="submit">Create Todo</button
 				>
 			</div>
