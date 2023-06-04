@@ -14,3 +14,6 @@ create graph based on week and month based results
 have the height of the graph reference the total amount of todos left divided by the days within either the week or month based graph
 
 clock good for 50% completed, poor for 33% not completed, amazing for 88% and above, done for 100%
+
+consider creating a scheduled task
+allow for scheduled tasks matching the same title to be deleted in a cascading manner
