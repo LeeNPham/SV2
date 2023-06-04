@@ -14,6 +14,7 @@
 	import Fuse from 'fuse.js'
 	import { stringify } from 'postcss'
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
+	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 
 	export let data //grabs information from our +page.js
@@ -504,7 +505,7 @@
 										<div class="text-orange-400 font-semibold">Coming Up:</div>
 										<div>title</div>
 									</div>
-									<div><BellNoticeIcon /></div>
+									<div><AlarmIcon /></div>
 								</div>
 							</div>
 						</dialog>
