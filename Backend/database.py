@@ -33,7 +33,8 @@ async def create_todo(todo):
 
 
 async def fetch_one_todo(id):
-    if (todo := await collection.find_one({"_id": id})) is not None:
+    todo = await collection.find_one({"_id": id})
+    if todo is not None:
         return todo
 
 
