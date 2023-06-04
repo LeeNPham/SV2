@@ -5,6 +5,7 @@
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import { slide } from 'svelte/transition'
+	import profileDefault from '$lib/images/profileDefault.jpeg'
 
 	let firstName = 'Lee'
 	let lastName = 'Pham'
@@ -25,7 +26,7 @@
 		<div class="flex flex-row">
 			<img
 				class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
-				src="https://media.licdn.com/dms/image/D5603AQG-mY_44Scwyg/profile-displayphoto-shrink_200_200/0/1666621097857?e=1690416000&v=beta&t=7UrcE6PLt9svm02pLYv-YivCe3Ly5UhBcq0q4t-WNbs"
+				src={profileDefault}
 				alt=""
 			/>
 			<div class="grid grid-cols-1 content-start pt-12">
