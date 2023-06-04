@@ -13,6 +13,7 @@
 	import { fly, fade, slide } from 'svelte/transition'
 	import Fuse from 'fuse.js'
 	import { stringify } from 'postcss'
+	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 
 	export let data //grabs information from our +page.js
@@ -53,6 +54,15 @@
 	let tasksCount = 0
 	let completeCategories: any = []
 	let selectedCategory = 'All'
+	let notifications: any[] = []
+
+	function initNotifications() {
+		// console.log('hello world', data.items)
+		for (let item of data.items) {
+			console.log(item.due_date, item._id, item.title, item.completion)
+		}
+		// notifications = data.items
+	}
 
 	let categoryColors = [
 		'border-category-cyan shadow shadow-category-cyan',
@@ -192,9 +202,7 @@
 
 		// this is what I will use to do the rest of the rendering!
 
-		console.log('complete categories with color assignment and number of todos per category!', {
-			completeCategories
-		})
+		// console.log('complete categories with color assignment and number of todos per category!', {completeCategories})
 	}
 
 	function switchCategories(e: any) {
@@ -373,6 +381,7 @@
 		// todosList = data.items
 		searchableTodos = data.items
 		tasksCount = data.items.length
+		initNotifications()
 		buildCategoriesWithTodos(data.categories, data.items)
 	})
 </script>
@@ -476,51 +485,26 @@
 									Notifications
 								</div>
 								<hr class="border-palette-dark" />
-								<div>
-									Add acknowledge button, add snooze button, icons will alarm clock for coming up,
-									and warning sign for past due
+								<div>Add a snooze button to add another day to the item</div>
+
+								<div
+									class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
+								>
+									<div class="flex flex-row gap-2">
+										<div class="text-red-600 font-semibold">Past Due:</div>
+										<div>title</div>
+									</div>
+									<div><BellNoticeIcon /></div>
 								</div>
 
-								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
-									<div>icon</div>
-									<div>Reminder:</div>
-									<div>This is past due</div>
-								</div>
-
-								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
-									<div>icon</div>
-									<div>Reminder:</div>
-									<div>This is coming up</div>
-								</div>
-
-								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
-									<div>icon</div>
-									<div>Reminder:</div>
-									<div>This is past due</div>
-								</div>
-
-								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
-									<div>icon</div>
-									<div>Reminder:</div>
-									<div>This is past due</div>
-								</div>
-
-								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
-									<div>icon</div>
-									<div>Reminder:</div>
-									<div>This is past due</div>
-								</div>
-
-								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
-									<div>icon</div>
-									<div>Reminder:</div>
-									<div>This is coming up</div>
-								</div>
-
-								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
-									<div>icon</div>
-									<div>Reminder:</div>
-									<div>This is coming up</div>
+								<div
+									class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
+								>
+									<div class="flex flex-row gap-2">
+										<div class="text-orange-400 font-semibold">Coming Up:</div>
+										<div>title</div>
+									</div>
+									<div><BellNoticeIcon /></div>
 								</div>
 							</div>
 						</dialog>
