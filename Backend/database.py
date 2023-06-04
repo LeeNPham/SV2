@@ -11,7 +11,8 @@ print(api_key)
 client = motor.motor_asyncio.AsyncIOMotorClient(
     f'mongodb+srv://LeeNPham:{api_key}@cluster0.jizibqp.mongodb.net/test')  # helps to connect with mongodb compass
 database = client.TodoList  # name of database
-collection = database.todo  # same thing as a table in SQL
+# same thing as a table in SQL not really sure on why this isnt deploying
+collection = database.todo
 category_collection = database.category
 
 # Todo DB Calls Start
