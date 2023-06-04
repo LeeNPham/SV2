@@ -382,7 +382,9 @@
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
 
-<div class="bg-palette-medium p-10 h-screen w-full rounded-3xl grid grid-cols-1 content-between">
+<div
+	class="relative bg-palette-medium p-10 h-screen w-full rounded-3xl grid grid-cols-1 content-between"
+>
 	<div class="min-w-[335px]">
 		<!-- Top Menu -->
 		<div class="h-[90px] w-full flex flex-row justify-between">
@@ -396,6 +398,7 @@
 			<div
 				on:mouseleave={() => {
 					showSearch = false
+					showNotifications = false
 				}}
 				class="flex flex-row gap-5 items-start"
 			>
@@ -602,79 +605,80 @@
 		</div>
 
 		<!-- Todos List -->
-		<div class="grid grid-cols-1 justify-start">
+		<div class="static grid grid-cols-1 justify-start">
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
-			<div class="overflow-y-auto">
-				<div class="grid grid-cols-1 w-full gap-2 px-3 pb-5">
-					{#each Object.keys(completeCategories) as category}
-						{@const { todos, color } = completeCategories[category]}
-						{#if selectedCategory == category}
-							{#if todos != undefined}
-								{#each todos as todo}
-									<div
-										in:slide={{ axis: 'x', duration: 500 }}
-										class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
-									>
-										<div class="flex gap-2 items-center">
-											{#if todo.completion == true}
-												<label for={todo._id}>
-													<CheckCircle Class="h-6 w-6 {color}" />
-													<input
-														class="hidden"
-														id={todo._id}
-														type="checkbox"
-														on:change={toggleCheckbox(todo.completion, todo._id)}
-														bind:checked={todo.completion}
-													/>
-												</label>
-											{:else}
-												<label for={todo._id}>
-													<CircleIcon Class="h-6 w-6 {color}" />
-													<input
-														class="hidden"
-														id={todo._id}
-														type="checkbox"
-														on:change={toggleCheckbox(todo.completion, todo._id)}
-														bind:checked={todo.completion}
-													/>
-												</label>
-											{/if}
-											<div class="grid grid-cols-1 px-2">
-												<div
-													class="w-full text-white text-ellipsis {todo.completion
-														? 'line-through'
-														: ''} truncate"
-												>
-													{todo.title}
-												</div>
-												{#if todo.due_date != 'null'}
-													<div class="w-full text-xs text-white/40 text-ellipsis truncate">
-														Due: {todo.due_date}
-													</div>
-												{/if}
-											</div>
-										</div>
 
-										<button
-											type="button"
-											value={todo._id}
-											on:click|stopPropagation={displayUpdateTodoModal(
-												todo._id,
-												todo.category,
-												todo.title,
-												todo.description,
-												todo.due_date,
-												todo.create_date
-											)}
-										>
-											<EllipsisIcon />
-										</button>
+			<div
+				class="static grid grid-cols-1 w-full gap-2 px-2 pb-5 overflow-auto h-auto max-h-[400px]"
+			>
+				{#each Object.keys(completeCategories) as category}
+					{@const { todos, color } = completeCategories[category]}
+					{#if selectedCategory == category}
+						{#if todos != undefined}
+							{#each todos as todo}
+								<div
+									in:slide={{ axis: 'x', duration: 500 }}
+									class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+								>
+									<div class="flex gap-2 items-center">
+										{#if todo.completion == true}
+											<label for={todo._id}>
+												<CheckCircle Class="h-6 w-6 {color}" />
+												<input
+													class="hidden"
+													id={todo._id}
+													type="checkbox"
+													on:change={toggleCheckbox(todo.completion, todo._id)}
+													bind:checked={todo.completion}
+												/>
+											</label>
+										{:else}
+											<label for={todo._id}>
+												<CircleIcon Class="h-6 w-6 {color}" />
+												<input
+													class="hidden"
+													id={todo._id}
+													type="checkbox"
+													on:change={toggleCheckbox(todo.completion, todo._id)}
+													bind:checked={todo.completion}
+												/>
+											</label>
+										{/if}
+										<div class="grid grid-cols-1 px-2">
+											<div
+												class="w-full text-white text-ellipsis {todo.completion
+													? 'line-through'
+													: ''} truncate"
+											>
+												{todo.title}
+											</div>
+											{#if todo.due_date != 'null'}
+												<div class="w-full text-xs text-white/40 text-ellipsis truncate">
+													Due: {todo.due_date}
+												</div>
+											{/if}
+										</div>
 									</div>
-								{/each}
-							{/if}
+
+									<button
+										type="button"
+										value={todo._id}
+										on:click|stopPropagation={displayUpdateTodoModal(
+											todo._id,
+											todo.category,
+											todo.title,
+											todo.description,
+											todo.due_date,
+											todo.create_date
+										)}
+									>
+										<EllipsisIcon />
+									</button>
+								</div>
+							{/each}
 						{/if}
-					{/each}
-				</div>
+					{/if}
+				{/each}
 			</div>
 		</div>
 	</div>
