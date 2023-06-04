@@ -73,7 +73,7 @@
 			<div>
 				<div
 					in:slide={{ axis: 'x', duration: 500 }}
-					class="w-2/3 h-[120px] border border-white bg-white"
+					class="w-2/3 h-[120px] border border-white bg-white/10"
 				/>
 				<div class="text-[14px] font-normal text-palette-gray">Good</div>
 				<div class="text-white text-[18px] tracking-wider">Consistency</div>
