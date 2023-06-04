@@ -1,35 +1,9 @@
-# Foobar
+For search results, display title of search results, include fuzzy search using fuze to also look at description details, display as dropdown list that opens up details for the specific task
 
-Foobar is a Python library for dealing with word pluralization.
+Think a little more on how we want notifications sent
 
-## Installation
+look into userbase to provide auth, consider firebase if demosize allows for cheaper deployment
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+update models in fastapi to allow for utilization with user accounts
 
-```bash
-pip install foobar
-```
-
-## Usage
-
-```python
-import foobar
-
-# returns 'words'
-foobar.pluralize('word')
-
-# returns 'geese'
-foobar.pluralize('goose')
-
-# returns 'phenomenon'
-foobar.singularize('phenomena')
-```
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
+set up a loading screen while async calls are initiated to grab todos
