@@ -5,8 +5,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 api_key = os.environ.get('CLUSTER_PASSWORD')
-print(api_key)
-
 
 client = motor.motor_asyncio.AsyncIOMotorClient(
     f'mongodb+srv://LeeNPham:{api_key}@cluster0.jizibqp.mongodb.net/test')  # helps to connect with mongodb compass
