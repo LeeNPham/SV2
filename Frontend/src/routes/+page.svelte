@@ -393,7 +393,12 @@
 					/></button
 				>
 			</div>
-			<div class="flex flex-row gap-5 items-start">
+			<div
+				on:mouseleave={() => {
+					showSearch = false
+				}}
+				class="flex flex-row gap-5 items-start"
+			>
 				{#if showSearch}
 					<input
 						bind:value={searchPattern}
