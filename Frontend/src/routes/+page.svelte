@@ -96,7 +96,7 @@
 		description: string
 		completion: boolean
 		create_date: string
-		due_date?: string | null
+		due_date: string | null
 	}
 	let todosList: Todos[]
 	let searchableTodos: Todos[]
@@ -426,24 +426,23 @@
 											in:slide={{ axis: 'x', duration: 500 }}
 											class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
 										>
-											<div class="text-white">
-												{todoItem.title}
+											<div class="text-white truncate text-ellipsis">{todoItem.title}</div>
 
-												<button
-													type="button"
-													value={todoItem._id}
-													on:click|stopPropagation={displayUpdateTodoModal(
-														todoItem._id,
-														todoItem.category,
-														todoItem.title,
-														todoItem.description,
-														todoItem.due_date,
-														todoItem.create_date
-													)}
-												>
-													<EllipsisIcon />
-												</button>
-											</div>
+											<button
+												class="flex items-center"
+												type="button"
+												value={todoItem._id}
+												on:click|stopPropagation={displayUpdateTodoModal(
+													todoItem._id,
+													todoItem.category,
+													todoItem.title,
+													todoItem.description,
+													todoItem.due_date,
+													todoItem.create_date
+												)}
+											>
+												<EllipsisIcon />
+											</button>
 										</div>
 									{/each}
 								{/if}
