@@ -522,7 +522,7 @@
 							{#if todos != undefined}
 								{#each todos as todo}
 									<div
-										transition:slide={{ axis: 'x', duration: 500 }}
+										in:slide={{ axis: 'x', duration: 500 }}
 										class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
 									>
 										<div class="flex gap-2 items-center">
