@@ -31,7 +31,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/")
+async def read_root():
+    response = {"hello": "world"}
+    return response
+
 # Todos Start
+
+
 @app.get("/api/todo")
 async def get_todos():
     response = await fetch_all_todos()
@@ -74,10 +82,13 @@ async def delete_todo(id: str):
 # Todos End
 
 # Categories Start
+
+
 @app.get("/api/category")
 async def get_categories():
     response = await fetch_all_categories()
     return response
+
 
 @app.post("/api/category", response_description="Add a new category", response_model=Category)
 async def post_category(category: Category = Body(...)):
