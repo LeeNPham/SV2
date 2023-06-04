@@ -5,7 +5,7 @@
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import { slide } from 'svelte/transition'
-	import profileDefault from '$lib/images/profileDefault.jpeg'
+	import profileDefault from '$lib/images/profileDefault.jpg'
 
 	let firstName = 'Lee'
 	let lastName = 'Pham'
