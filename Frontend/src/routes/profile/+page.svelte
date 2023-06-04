@@ -4,6 +4,7 @@
 	import BooksmarksIcon from '$lib/icons/BooksmarksIcon.svelte'
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
+	import { slide } from 'svelte/transition'
 
 	let firstName = 'Lee'
 	let lastName = 'Pham'
@@ -41,20 +42,38 @@
 			<div class="grid grid-cols-1 gap-4">
 				<div class="flex flex-row gap-4 items-center">
 					<BooksmarksIcon Class="fill-palette-gray hover:fill-palette-gray h-5 w-5 ml-0.5" />
-					<div class=" text-[17px] tracking-wider text-slate-200 font-normal">Templates</div>
+					<div
+						in:slide={{ axis: 'x', duration: 500 }}
+						class=" text-[17px] tracking-wider text-slate-200 font-normal"
+					>
+						Templates
+					</div>
 				</div>
 				<div class="flex flex-row gap-4 items-center">
 					<Categories Class="fill-palette-gray hover:fill-palette-gray h-6 w-6" />
-					<div class=" text-[17px] tracking-wider text-slate-200 font-normal">Categories</div>
+					<div
+						in:slide={{ axis: 'x', duration: 500 }}
+						class=" text-[17px] tracking-wider text-slate-200 font-normal"
+					>
+						Categories
+					</div>
 				</div>
 				<div class="flex flex-row gap-4 items-center">
 					<PieChart Class="fill-palette-gray hover:fill-palette-gray h-6 w-6" />
-					<div class=" text-[17px] tracking-wider text-slate-200 font-normal">Analytics</div>
+					<div
+						in:slide={{ axis: 'x', duration: 500 }}
+						class=" text-[17px] tracking-wider text-slate-200 font-normal"
+					>
+						Analytics
+					</div>
 				</div>
 			</div>
 
 			<div>
-				<div class="w-2/3 h-[120px] border border-white" />
+				<div
+					in:slide={{ axis: 'x', duration: 500 }}
+					class="w-2/3 h-[120px] border border-white bg-white"
+				/>
 				<div class="text-[14px] font-normal text-palette-gray">Good</div>
 				<div class="text-white text-[18px] tracking-wider">Consistency</div>
 			</div>
