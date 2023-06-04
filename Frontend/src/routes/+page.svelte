@@ -549,7 +549,7 @@
 		<!-- Todos List -->
 		<div class="grid grid-cols-1 justify-start">
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
-			<div class="overflow-y-auto h-[450px]">
+			<div class="overflow-y-auto">
 				<div class="grid grid-cols-1 w-full gap-2 px-3">
 					{#each Object.keys(completeCategories) as category}
 						{@const { todos, color } = completeCategories[category]}
