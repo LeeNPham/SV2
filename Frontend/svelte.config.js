@@ -14,12 +14,12 @@ const config = {
 		preprocess({
 			postcss: true
 		})
-	],
+	]
 
 	// Enable svelte inspector.
-	vitePlugin: {
-		inspector: true
-	}
+	// vitePlugin: {
+	// 	inspector: true
+	// }
 }
 
 export default config
