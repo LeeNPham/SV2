@@ -41,11 +41,11 @@ async def fetch_one_todo(id):
 async def update_todo(id, todo):
     update_result = await collection.update_one({"_id": id}, {"$set": todo})
     if update_result.modified_count == 1:
-        if (
-            updated_todo := await collection.find_one({"_id": id})
-        ) is not None:
+        updated_todo = await collection.find_one({"_id": id})
+        if updated_todo is not None:
             return updated_todo
-    if (existing_todo := await collection.find_one({"_id": id})) is not None:
+    existing_todo = await collection.find_one({"_id": id})
+    if existing_todo is not None:
         return existing_todo
 
 
@@ -72,18 +72,19 @@ async def create_category(category):
 
 
 async def fetch_one_category(id):
-    if (category := await category_collection.find_one({"_id": id})) is not None:
+    category = await category_collection.find_one({"_id": id})
+    if category is not None:
         return category
 
 
 async def update_category(id, category):
     update_result = await category_collection.update_one({"_id": id}, {"$set": category})
     if update_result.modified_count == 1:
-        if (
-            updated_category := await category_collection.find_one({"_id": id})
-        ) is not None:
+        updated_category = await category_collection.find_one({"_id": id})
+        if updated_category is not None:
             return updated_category
-    if (existing_category := await category_collection.find_one({"_id": id})) is not None:
+    existing_category = await category_collection.find_one({"_id": id})
+    if existing_category is not None:
         return existing_category
 
 
