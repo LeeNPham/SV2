@@ -93,7 +93,7 @@
 		_id: string
 		category: string
 		title: string
-		description?: string
+		description: string
 		completion: boolean
 		create_date: string
 		due_date?: string | null
@@ -428,6 +428,21 @@
 										>
 											<div class="text-white">
 												{todoItem.title}
+
+												<button
+													type="button"
+													value={todoItem._id}
+													on:click|stopPropagation={displayUpdateTodoModal(
+														todoItem._id,
+														todoItem.category,
+														todoItem.title,
+														todoItem.description,
+														todoItem.due_date,
+														todoItem.create_date
+													)}
+												>
+													<EllipsisIcon />
+												</button>
 											</div>
 										</div>
 									{/each}
