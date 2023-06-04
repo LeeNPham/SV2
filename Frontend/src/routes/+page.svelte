@@ -333,9 +333,6 @@
 	onMount(() => {
 		tasksCount = data.items.length
 		buildCategoriesWithTodos(data.categories, data.items)
-		// look up how to dynamically render out a variable from our map
-		// add a button to update a category
-		// add a button to update completion of a todo with an onchange for the radio value of a checkbox
 	})
 </script>
 
