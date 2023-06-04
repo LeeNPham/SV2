@@ -205,7 +205,7 @@
 			due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
 		}
 
-		fetch('http://127.0.0.1:8000/api/todo/', {
+		fetch('https://todo-test-api.onrender.com/api/todo/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -230,7 +230,7 @@
 		description: string,
 		due_date: string
 	) {
-		await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -251,7 +251,7 @@
 	}
 
 	async function deleteTodo(id: string) {
-		await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -274,7 +274,7 @@
 			create_date
 		}
 
-		fetch('http://127.0.0.1:8000/api/category/', {
+		fetch('https://todo-test-api.onrender.com/api/category/', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -294,7 +294,7 @@
 
 	async function deleteCategory(e: any) {
 		category_id = e.target.parentElement.id
-		await fetch(`http://127.0.0.1:8000/api/category/${category_id}`, {
+		await fetch(`https://todo-test-api.onrender.com/api/category/${category_id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -313,7 +313,7 @@
 		updateCompletion()
 
 		async function updateCompletion() {
-			await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+			await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'

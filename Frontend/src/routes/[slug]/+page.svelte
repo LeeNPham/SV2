@@ -14,13 +14,13 @@
 	let due_date: number
 
 	async function getTodo() {
-		const response = await fetch(`http://127.0.0.1:8000/api/todo/${id}`)
+		const response = await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`)
 		const data = await response.json()
 		return data
 	}
 
 	async function deleteTodo() {
-		await fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -39,7 +39,7 @@
 	}
 
 	function updateTodo() {
-		fetch(`http://127.0.0.1:8000/api/todo/${id}`, {
+		fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
