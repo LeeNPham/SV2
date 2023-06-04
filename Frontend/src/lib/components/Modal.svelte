@@ -1,15 +1,16 @@
 <script lang="ts">
-	import CloseIcon from '$lib/icons/CloseIcon.svelte';
-	export let showModal: any; // boolean
-	export let Title: any;
-	let dialog: any; // HTMLDialogElement
+	import CloseIcon from '$lib/icons/CloseIcon.svelte'
+	export let showModal: any // boolean
+	export let Title: any
+	export let Class = ''
+	let dialog: any // HTMLDialogElement
 
-	$: if (dialog && showModal) dialog.showModal();
+	$: if (dialog && showModal) dialog.showModal()
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <dialog
-	class="bg-palette-lightgray"
+	class="bg-palette-lightgray {Class}"
 	bind:this={dialog}
 	on:close={() => (showModal = false)}
 	on:click|self={() => dialog.close()}

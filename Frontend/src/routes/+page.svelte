@@ -10,7 +10,7 @@
 	import MagnifyingGlassIcon from '$lib/icons/MagnifyingGlassIcon.svelte'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import { goto } from '$app/navigation'
-	import { fly, fade } from 'svelte/transition'
+	import { fly, fade, slide } from 'svelte/transition'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 
 	export let data //grabs information from our +page.js
@@ -80,6 +80,16 @@
 		'fill-category-purple'
 	]
 
+	let showSearch = false
+	function displaySearch() {
+		showSearch = !showSearch
+	}
+
+	let showNotifications = false
+	function displayNotifications() {
+		showNotifications = !showNotifications
+	}
+
 	function gotoProfile() {
 		goto('/profile')
 	}
@@ -147,9 +157,11 @@
 			completeCategories
 		})
 	}
+
 	function switchCategories(e: any) {
 		selectedCategory = e.currentTarget.id
 	}
+
 	function displayShowNewTodoModal() {
 		id = ''
 		category = ''
@@ -159,6 +171,7 @@
 		create_date = ''
 		showNewTodoModal = !showNewTodoModal
 	}
+
 	function displayUpdateTodoModal(
 		idU: string,
 		categoryU: string,
@@ -175,9 +188,11 @@
 		create_date = create_dateU
 		showUpdateTodoModal = true
 	}
+
 	function displayCreateNewCategoryModal() {
 		showNewCategoryModal = true
 	}
+
 	function createTodo() {
 		const currentTime = new Date()
 		const create_date = currentTime.toISOString().split('T')[0].toString()
@@ -249,6 +264,7 @@
 				_err = !_err
 			})
 	}
+
 	function createCategory() {
 		const currentTime = new Date()
 		const create_date = currentTime.toISOString().split('T')[0].toString()
@@ -291,6 +307,7 @@
 				console.log('there was an error deleting this')
 			})
 	}
+
 	async function toggleCheckbox(x: any, id: string) {
 		x = !x
 		updateCompletion()
@@ -338,16 +355,84 @@
 					/></button
 				>
 			</div>
-			<div class="flex flex-row gap-5">
+			<div class="flex flex-row gap-5 items-start">
+				{#if showSearch}
+					<input
+						transition:slide={{ axis: 'x', duration: 500 }}
+						class="text-sm py-1 rounded-md bg-white/10 text-white border-palette-dark"
+						type="text"
+						name=""
+						id=""
+					/>
+				{/if}
+				<button on:click|stopPropagation={displaySearch} type="button">
+					<MagnifyingGlassIcon
+						Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-7 w-7"
+					/></button
+				>
+
 				<div>
-					<button type="button">
-						<MagnifyingGlassIcon
-							Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-7 w-7"
-						/></button
-					>
-				</div>
-				<div>
-					<button type="button">
+					{#if showNotifications}
+						<dialog
+							open
+							class="bg-palette-lightgray rounded-md text-palette-dark mt-10 z-10"
+							transition:slide={{ duration: 500 }}
+						>
+							<div class="grid grid-cols-1 gap-2">
+								<div class="font-bold text-lg text-center text-palette-dark min-w-[250px]">
+									Notifications
+								</div>
+								<hr class="border-palette-dark" />
+								<div>
+									Add acknowledge button, add snooze button, icons will alarm clock for coming up,
+									and warning sign for past due
+								</div>
+
+								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
+									<div>icon</div>
+									<div>Reminder:</div>
+									<div>This is past due</div>
+								</div>
+
+								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
+									<div>icon</div>
+									<div>Reminder:</div>
+									<div>This is coming up</div>
+								</div>
+
+								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
+									<div>icon</div>
+									<div>Reminder:</div>
+									<div>This is past due</div>
+								</div>
+
+								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
+									<div>icon</div>
+									<div>Reminder:</div>
+									<div>This is past due</div>
+								</div>
+
+								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
+									<div>icon</div>
+									<div>Reminder:</div>
+									<div>This is past due</div>
+								</div>
+
+								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
+									<div>icon</div>
+									<div>Reminder:</div>
+									<div>This is coming up</div>
+								</div>
+
+								<div class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2">
+									<div>icon</div>
+									<div>Reminder:</div>
+									<div>This is coming up</div>
+								</div>
+							</div>
+						</dialog>
+					{/if}
+					<button on:click|stopPropagation={displayNotifications} type="button">
 						<BellIcon
 							Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-7 w-7"
 						/></button
@@ -437,7 +522,8 @@
 							{#if todos != undefined}
 								{#each todos as todo}
 									<div
-										class="hover:-translate-x-2 bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+										transition:slide={{ axis: 'x', duration: 500 }}
+										class="bg-palette-dark h-[60px] w-full rounded-3xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
 									>
 										<div class="flex gap-2 items-center">
 											{#if todo.completion == true}
