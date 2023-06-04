@@ -11,6 +11,8 @@
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import { goto } from '$app/navigation'
 	import { fly, fade, slide } from 'svelte/transition'
+	import Fuse from 'fuse.js'
+	import { stringify } from 'postcss'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 
 	export let data //grabs information from our +page.js
@@ -83,6 +85,43 @@
 	let showSearch = false
 	function displaySearch() {
 		showSearch = !showSearch
+	}
+
+	let searchPattern: any
+	let fuse
+	interface Todos {
+		_id: string
+		category: string
+		title: string
+		description?: string
+		completion: boolean
+		create_date: string
+		due_date?: string | null
+	}
+	let todosList: Todos[]
+	let searchableTodos: Todos[]
+	const searchOptions = {
+		includeScore: true,
+		threshold: 0.5, // value 0 is very strict, value 1 is not strict, .6 is the default,
+		keys: ['title', 'description']
+	}
+
+	function search(Todos) {
+		fuse = new Fuse(Todos, searchOptions)
+	}
+
+	$: searchPattern && searchTodos()
+	const searchTodos = () => {
+		search(searchableTodos)
+		if (fuse) {
+			if (searchPattern) {
+				const searchResult = fuse.search(searchPattern)
+				const filteredTodos = searchResult.map((obj) => obj.item)
+				todosList = filteredTodos
+			} else {
+				todosList = []
+			}
+		}
 	}
 
 	let showNotifications = false
@@ -331,6 +370,8 @@
 		}
 	}
 	onMount(() => {
+		// todosList = data.items
+		searchableTodos = data.items
 		tasksCount = data.items.length
 		buildCategoriesWithTodos(data.categories, data.items)
 	})
@@ -355,6 +396,8 @@
 			<div class="flex flex-row gap-5 items-start">
 				{#if showSearch}
 					<input
+						bind:value={searchPattern}
+						on:input={searchTodos}
 						transition:slide={{ axis: 'x', duration: 500 }}
 						class="text-sm py-1 rounded-md bg-white/10 text-white border-palette-dark"
 						type="text"
@@ -367,36 +410,29 @@
 						transition:slide={{ duration: 500 }}
 						open
 					>
-						<div class="font-bold text-lg text-center text-palette-dark min-w-[250px]">Results</div>
+						<div class="font-bold text-xl text-center text-palette-dark min-w-[250px]">Results</div>
 						<hr class="border-palette-dark" />
 						<div class="grid grid-cols-1 gap-2 mt-2">
-							<div
-								in:slide={{ axis: 'x', duration: 500 }}
-								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
-							>
-								<div class="text-white">result 1</div>
-							</div>
-
-							<div
-								in:slide={{ axis: 'x', duration: 500 }}
-								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
-							>
-								<div class="text-white">result 2</div>
-							</div>
-
-							<div
-								in:slide={{ axis: 'x', duration: 500 }}
-								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
-							>
-								<div class="text-white">result 3</div>
-							</div>
-
-							<div
-								in:slide={{ axis: 'x', duration: 500 }}
-								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
-							>
-								<div class="text-white">result 4</div>
-							</div>
+							{#await todosList}
+								<div
+									class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+								>
+									No Results available
+								</div>
+							{:then todosList}
+								{#if todosList}
+									{#each todosList as todoItem}
+										<div
+											in:slide={{ axis: 'x', duration: 500 }}
+											class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+										>
+											<div class="text-white">
+												{todoItem.title}
+											</div>
+										</div>
+									{/each}
+								{/if}
+							{/await}
 						</div>
 					</dialog>
 				{/if}
@@ -550,7 +586,7 @@
 		<div class="grid grid-cols-1 justify-start">
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 			<div class="overflow-y-auto">
-				<div class="grid grid-cols-1 w-full gap-2 px-3">
+				<div class="grid grid-cols-1 w-full gap-2 px-3 pb-5">
 					{#each Object.keys(completeCategories) as category}
 						{@const { todos, color } = completeCategories[category]}
 						{#if selectedCategory == category}
