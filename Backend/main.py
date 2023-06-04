@@ -21,7 +21,7 @@ app = FastAPI()
 
 
 # Set up a settings.py file later to import these settings?
-origins = ['http://localhost:3000', 'http://localhost:5173']
+origins = ['*']
 
 app.add_middleware(
     CORSMiddleware,
