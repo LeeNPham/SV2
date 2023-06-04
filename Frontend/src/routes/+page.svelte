@@ -364,6 +364,44 @@
 						name=""
 						id=""
 					/>
+
+					<dialog
+						class="bg-palette-lightgray rounded-md text-palette-dark mt-10 z-10"
+						transition:slide={{ duration: 500 }}
+						open
+					>
+						<div class="font-bold text-lg text-center text-palette-dark min-w-[250px]">Results</div>
+						<hr class="border-palette-dark" />
+						<div class="grid grid-cols-1 gap-2 mt-2">
+							<div
+								in:slide={{ axis: 'x', duration: 500 }}
+								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+							>
+								<div class="text-white">result 1</div>
+							</div>
+
+							<div
+								in:slide={{ axis: 'x', duration: 500 }}
+								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+							>
+								<div class="text-white">result 2</div>
+							</div>
+
+							<div
+								in:slide={{ axis: 'x', duration: 500 }}
+								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+							>
+								<div class="text-white">result 3</div>
+							</div>
+
+							<div
+								in:slide={{ axis: 'x', duration: 500 }}
+								class="bg-palette-dark h-[30px] w-full rounded-xl flex flex-row justify-between items-center px-4 shadow-black/50 shadow-md"
+							>
+								<div class="text-white">result 4</div>
+							</div>
+						</div>
+					</dialog>
 				{/if}
 				<button on:click|stopPropagation={displaySearch} type="button">
 					<MagnifyingGlassIcon
