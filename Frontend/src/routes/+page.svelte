@@ -68,35 +68,27 @@
 		const oneDay = 24 * 60 * 60 * 1000 // One day in milliseconds
 
 		if (targetDate < current_date) {
-			return 'late'
+			return 'Past Due:'
 		} else if (Math.abs(targetDate - current_date) <= oneDay) {
-			return 'upcoming'
+			return 'Upcoming:'
 		} else {
 			return 'NA'
 		}
 	}
 
+	let newList: any[] = []
 	function initNotifications() {
-		let newList = []
-		// console.log('hello world', data.items)
-		//filter out things that are completed, and things that have no due-date
 		for (let item of data.items) {
-			// console.log(item.due_date, item._id, item.title, item.completion)
 			if (item.due_date != 'null' && item.completion != true) {
 				newList.push(item)
 			}
 		}
-		console.log(newList)
 		for (let x of newList) {
 			let y = x.due_date
 			let val = checkDateStatus(y)
-			console.log(val)
+			x.condition = val
 		}
-		// START HERE LEE
-		//iterate over new list to create notifications, somehow grab our current time and compare to the duedate
-		// if not completed, set it as overdue
-		//
-		// notifications = data.items
+		console.log(newList)
 	}
 
 	let categoryColors = [
@@ -520,27 +512,30 @@
 									Notifications
 								</div>
 								<hr class="border-palette-dark" />
-								<div>Add a snooze button to add another day to the item</div>
 
-								<div
-									class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
-								>
-									<div class="flex flex-row gap-2">
-										<div class="text-red-600 font-semibold">Past Due:</div>
-										<div>title</div>
-									</div>
-									<div><BellNoticeIcon /></div>
-								</div>
-
-								<div
-									class="border bg-white w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
-								>
-									<div class="flex flex-row gap-2">
-										<div class="text-orange-400 font-semibold">Coming Up:</div>
-										<div>title</div>
-									</div>
-									<div><AlarmIcon /></div>
-								</div>
+								{#each newList as notificationItem}
+									{#if notificationItem.condition != 'NA'}
+										<div
+											class=" bg-palette-medium w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
+										>
+											<div class="flex flex-row gap-1 items-center">
+												{#if notificationItem.condition == 'Past Due:'}
+													<div><BellNoticeIcon /></div>
+												{:else}
+													<div><AlarmIcon /></div>
+												{/if}
+												<div
+													class="text-xs {notificationItem.condition == 'Past Due:'
+														? 'text-red-600'
+														: 'text-orange-400'} font-semibold"
+												>
+													{notificationItem.condition}
+												</div>
+												<div class="text-palette-lightgray">{notificationItem.title}</div>
+											</div>
+										</div>
+									{/if}
+								{/each}
 							</div>
 						</dialog>
 					{/if}
