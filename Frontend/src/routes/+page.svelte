@@ -56,12 +56,46 @@
 	let completeCategories: any = []
 	let selectedCategory = 'All'
 	let notifications: any[] = []
+	let current_date = new Date()
+
+	function formatDate(date) {
+		const options = { year: 'numeric', month: 'long', day: 'numeric' }
+		return date.toLocaleDateString(undefined, options)
+	}
+
+	function checkDateStatus(dateArgument) {
+		const targetDate = new Date(dateArgument)
+		const oneDay = 24 * 60 * 60 * 1000 // One day in milliseconds
+
+		if (targetDate < current_date) {
+			return 'late'
+		} else if (Math.abs(targetDate - current_date) <= oneDay) {
+			return 'upcoming'
+		} else {
+			return 'NA'
+		}
+	}
 
 	function initNotifications() {
+		let newList = []
 		// console.log('hello world', data.items)
+		//filter out things that are completed, and things that have no due-date
 		for (let item of data.items) {
-			console.log(item.due_date, item._id, item.title, item.completion)
+			// console.log(item.due_date, item._id, item.title, item.completion)
+			if (item.due_date != 'null' && item.completion != true) {
+				newList.push(item)
+			}
 		}
+		console.log(newList)
+		for (let x of newList) {
+			let y = x.due_date
+			let val = checkDateStatus(y)
+			console.log(val)
+		}
+		// START HERE LEE
+		//iterate over new list to create notifications, somehow grab our current time and compare to the duedate
+		// if not completed, set it as overdue
+		//
 		// notifications = data.items
 	}
 
