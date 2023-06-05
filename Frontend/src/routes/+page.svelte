@@ -623,7 +623,7 @@
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
 
 			<div
-				class="static grid grid-cols-1 w-full gap-2 px-2 pb-5 overflow-auto h-auto max-h-[400px]"
+				class="static grid grid-cols-1 w-full gap-2 px-2 pb-5 overflow-auto h-auto max-h-[375px]"
 			>
 				{#each Object.keys(completeCategories) as category}
 					{@const { todos, color } = completeCategories[category]}
