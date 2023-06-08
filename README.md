@@ -17,3 +17,15 @@ clock good for 50% completed, poor for 33% not completed, amazing for 88% and ab
 
 consider creating a scheduled task
 allow for scheduled tasks matching the same title to be deleted in a cascading manner
+
+
+
+continue for auth >> https://www.youtube.com/watch?v=5GxQ1rLTwaU
+```
+pip install fastapi uvicorn python-multipart python-jose[cryptography] passlib[bcrypt]
+```
+5:00
+
+in main.py:
+from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
