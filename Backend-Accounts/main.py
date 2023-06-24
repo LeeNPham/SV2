@@ -1,12 +1,30 @@
 # Start
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+# class architecture
+from pydantic import BaseModel
+# time and time changes
+from datetime import datetime, timedelta
+# jwt encoding
+from jose import JWTError, jwt
+# context for hashing passwords in library
+from passlib.context import CryptContext
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# look into query parameters, we can instantiate it in the function as an optional query by giving it a default value,
+# or requiring it by not giving it a value and only giving it a type
+
+# in terminal
+# openssl rand -hex 32
+# creates a 32 bit encryption key
+secret_key = os.environ.get('SECRET_KEY')
+algorithm = os.environ.get('ALGORITHM')
+access_token_expire_minutes = os.environ.get('ACCESS_TOKEN_EXPIRE_MINUTES')
+
 
 app = FastAPI()
-
-@app.get('/test/')
-async def test():
-    return {'hello': "world"}
 
 
 
