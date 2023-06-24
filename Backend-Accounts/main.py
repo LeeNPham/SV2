@@ -71,10 +71,20 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 # This will initialize our model which comes from UserInDB, which inherits from User, which inherits from BaseModel
+#   by passing in all of the keyword arguments we got from our user_data dictionary
+#       (creates an object based on the keyword provided for all subkey/subvalue pairs)
 def get_user(db, username:str):
     if username in db:
         user_data = db[username]
         return UserInDB(**user_data)
+
+def authenticate_user(db, username: str, password: str):
+    user = get_user(db, username)
+    if not user:
+        return False
+    if not verify_password(password, user.hashed_password):
+        return False
+    return user
 
 app = FastAPI()
 
