@@ -7,7 +7,7 @@ load_dotenv()
 api_key = os.environ.get('CLUSTER_PASSWORD')
 
 client = motor.motor_asyncio.AsyncIOMotorClient(
-    f'mongodb+srv://LeeNPham:{api_key}@cluster0.jizibqp.mongodb.net/test')  # helps to connect with mongodb compass
+    api_key)  # helps to connect with mongodb compass
 database = client.TodoList  # name of database
 # same thing as a table in SQL not really sure on why this isnt deploying
 collection = database.todo
