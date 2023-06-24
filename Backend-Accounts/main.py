@@ -1,16 +1,21 @@
 # Start
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+
 # class architecture
 from pydantic import BaseModel
+
 # time and time changes
 from datetime import datetime, timedelta
+
 # jwt encoding
 from jose import JWTError, jwt
+
 # context for hashing passwords in library
 from passlib.context import CryptContext
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # look into query parameters, we can instantiate it in the function as an optional query by giving it a default value,
@@ -19,12 +24,56 @@ load_dotenv()
 # in terminal
 # openssl rand -hex 32
 # creates a 32 bit encryption key
-secret_key = os.environ.get('SECRET_KEY')
-algorithm = os.environ.get('ALGORITHM')
-access_token_expire_minutes = os.environ.get('ACCESS_TOKEN_EXPIRE_MINUTES')
+secret_key = os.environ.get("SECRET_KEY")
+algorithm = os.environ.get("ALGORITHM")
+access_token_expire_minutes = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
+
+
+fake_db = {
+    "tim": {
+        "username": "tim",
+        "full_name": "Tim Ruscica",
+        "email": "tim@gmail.com",
+        "hashed_password": "",
+        "disabled": False,
+    }
+}
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str or None = None
+
+class User(BaseModel):
+    username: str
+    email: str or None = None
+    full_name: str or None = None
+    disabled: bool or None = None
+
+class UserInDB(User):
+    hashed_password: str
 
 
 app = FastAPI()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
