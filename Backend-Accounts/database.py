@@ -1,13 +1,13 @@
-from model import Todo, UpdateTodoModel
-import motor.motor_asyncio  # MongoDB Driver
-from bson.objectid import ObjectId
-import os
-from dotenv import load_dotenv
-load_dotenv()
-api_key = os.environ.get('CLUSTER_PASSWORD')
+# from model import Todo, UpdateTodoModel
+# import motor.motor_asyncio  # MongoDB Driver
+# from bson.objectid import ObjectId
+# import os
+# from dotenv import load_dotenv
+# load_dotenv()
+# api_key = os.environ.get('CLUSTER_PASSWORD')
 
-client = motor.motor_asyncio.AsyncIOMotorClient(
-    api_key)  # helps to connect with mongodb compass
+# client = motor.motor_asyncio.AsyncIOMotorClient(
+#     api_key)  # helps to connect with mongodb compass
 
 # database = client.UserList  # name of database
 # # same thing as a table in SQL not really sure on why this isnt deploying
