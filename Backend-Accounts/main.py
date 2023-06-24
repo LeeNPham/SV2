@@ -56,6 +56,25 @@ class User(BaseModel):
 class UserInDB(User):
     hashed_password: str
 
+# This is going to define where we go to retrieve our access token
+# Allows us to verify password after hashing, and to has a password provided by the user
+pwd_context= CryptContext(schemes=['bcrypt'], deprecated='auto')
+oauth_2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+
+# Utility functions to authenticate our users and hash their passwords
+#   hashing means to perform encryption on the password so we aren't storing it as plain text
+#       this allows us to store and authenticate the users password without ever knowing or storing it
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
+
+def get_password_hash(password):
+    return pwd_context.hash(password)
+
+# This will initialize our model which comes from UserInDB, which inherits from User, which inherits from BaseModel
+def get_user(db, username:str):
+    if username in db:
+        user_data = db[username]
+        return UserInDB(**user_data)
 
 app = FastAPI()
 
