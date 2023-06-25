@@ -21,42 +21,42 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str
+# class Token(BaseModel):
+#     access_token: str
+#     token_type: str
 
 
-class TokenData(BaseModel):
-    username: str or None = None
+# class TokenData(BaseModel):
+#     username: str or None = None
 
 
-class User(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    username: str
-    email: str or None = None
-    profile_description: str or None = None
-    full_name: str or None = None
-    create_date: str
-    disabled: bool or None = None
+# class User(BaseModel):
+#     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+#     username: str or None = None
+#     email: str or None = None
+#     profile_description: str or None = None
+#     full_name: str or None = None
+#     create_date: str or None = None
+#     disabled: bool or None = None
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "exampleUser": {
-                "username": "Bladeburner01",
-                "email": "Bladeburner01@gmail.com",
-                "profile_description": "This is a description",
-                "full_name": "Lee Pham",
-                "create_date": "2008-09-15",
-                "disabled": False,
-            }
-        }
+#     class Config:
+#         allow_population_by_field_name = True
+#         arbitrary_types_allowed = True
+#         json_encoders = {ObjectId: str}
+#         schema_extra = {
+#             "exampleUser": {
+#                 "username": "Bladeburner01",
+#                 "email": "Bladeburner01@gmail.com",
+#                 "profile_description": "This is a description",
+#                 "full_name": "Lee Pham",
+#                 "create_date": "2008-09-15",
+#                 "disabled": False,
+#             }
+#         }
 
 
-class UserInDB(User):
-    hashed_password: str
+# class UserInDB(User):
+#     hashed_password: str
 
 
 # class Todo(BaseModel):
