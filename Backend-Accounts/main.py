@@ -29,7 +29,7 @@ algorithm = os.environ.get("ALGORITHM")
 access_token_expire_minutes = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
 
 
-fake_db = {
+db = {
     "tim": {
         "username": "tim",
         "full_name": "Tim Ruscica",
