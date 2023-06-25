@@ -21,13 +21,37 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 
-# class Token(BaseModel):
-#     access_token: str
-#     token_type: str
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 
-# class TokenData(BaseModel):
-#     username: str or None = None
+class TokenData(BaseModel):
+    username: str or None = None
+
+
+class User(BaseModel):
+    username: str or None = None
+    email: str or None = None
+    full_name: str or None = None
+    disabled: bool or None = None
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "exampleUser": {
+                "username": "Bladeburner01",
+                "email": "Bladeburner01@gmail.com",
+                "full_name": "Lee Pham",
+                "disabled": False,
+            }
+        }
+
+
+class UserInDB(User):
+    hashed_password: str
 
 
 # class User(BaseModel):
@@ -51,35 +75,6 @@ class PyObjectId(ObjectId):
 #                 "full_name": "Lee Pham",
 #                 "create_date": "2008-09-15",
 #                 "disabled": False,
-#             }
-#         }
-
-
-# class UserInDB(User):
-#     hashed_password: str
-
-
-# class Todo(BaseModel):
-#     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-#     category: Optional[str]
-#     title: str
-#     description: Optional[str]
-#     completion: bool
-#     create_date: str
-#     due_date: Optional[str]
-
-#     class Config:
-#         allow_population_by_field_name = True
-#         arbitrary_types_allowed = True
-#         json_encoders = {ObjectId: str}
-#         schema_extra = {
-#             "example": {
-#                 "category": "Business",
-#                 "title": "My Title",
-#                 "description": "This is a description",
-#                 "completion": "True",
-#                 "create_date": "2008-09-15",
-#                 "due_date": '2008-09-15'
 #             }
 #         }
 
