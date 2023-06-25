@@ -26,7 +26,7 @@ load_dotenv()
 # creates a 32 bit encryption key
 secret_key = os.environ.get("SECRET_KEY")
 algorithm = os.environ.get("ALGORITHM")
-access_token_expire_minutes = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
+access_token_expire_minutes = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 
 db = {
@@ -34,7 +34,7 @@ db = {
         "username": "tim",
         "full_name": "Tim Ruscica",
         "email": "tim@gmail.com",
-        "hashed_password": "",
+        "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
         "disabled": False,
     }
 }
@@ -154,6 +154,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=access_token_expire_minutes)
+    print(f'access token expires in {access_token_expires}')
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
@@ -168,6 +169,11 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @app.get('/users/me/items')
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [{"item_id": 1,  "owner": current_user}]
+
+# pwd = get_password_hash("tim1234")
+# print(pwd)
+
+# registration route later
 
 # original reference
 # from database import (
