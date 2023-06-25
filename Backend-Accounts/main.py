@@ -154,30 +154,37 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=access_token_expire_minutes)
-    print(f'access token expires in {access_token_expires}')
+    print(f"access token expires in {access_token_expires}")
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get('/accounts/profile/', response_model=User)
+@app.get("/accounts/profile/", response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
 
 
-@app.get('/accounts/profile/items')
+@app.get("/accounts/profile/items")
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": 1,
-            "name": "playlist1",
-            "owner": current_user},
-            {"item_id": 2,
-            "name": "playlist2",
-            "owner": current_user},
-            {"item_id": 3,
-            "name": "playlist3",
-            "owner": current_user},
+    return [
+        {
+            "todos": [
+                {"todo_id": 1, "title": "playlist1", "owner": current_user},
+                {"todo_id": 2, "title": "playlist2", "owner": current_user},
+                {"todo_id": 3, "title": "playlist3", "owner": current_user},
             ]
+        },
+        {
+            "categories": [
+                {"category_id": 1, "title": "category1", "owner": current_user},
+                {"category_id": 2, "title": "category2", "owner": current_user},
+                {"category_id": 3, "title": "category3", "owner": current_user},
+            ]
+        },
+    ]
+
 
 # pwd = get_password_hash("tim1234")
 # print(pwd)
