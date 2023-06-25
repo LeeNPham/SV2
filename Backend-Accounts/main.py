@@ -18,6 +18,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from model import User, UserInDB, Token, TokenData
+
 # look into query parameters, we can instantiate it in the function as an optional query by giving it a default value,
 # or requiring it by not giving it a value and only giving it a type
 
@@ -38,26 +40,6 @@ db = {
         "disabled": False,
     }
 }
-
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-
-class TokenData(BaseModel):
-    username: str or None = None
-
-
-class User(BaseModel):
-    username: str
-    email: str or None = None
-    full_name: str or None = None
-    disabled: bool or None = None
-
-
-class UserInDB(User):
-    hashed_password: str
 
 
 # This is going to define where we go to retrieve our access token
