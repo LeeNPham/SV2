@@ -10,12 +10,10 @@ from database import db
 
 load_dotenv()
 
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth_2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 secret_key = os.environ.get("SECRET_KEY")
 algorithm = os.environ.get("ALGORITHM")
-access_token_expire_minutes = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 
 def verify_password(plain_password, hashed_password):
