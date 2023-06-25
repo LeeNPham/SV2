@@ -1,19 +1,15 @@
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from datetime import datetime, timedelta
-from jose import JWTError, jwt
+from datetime import timedelta
+
 from passlib.context import CryptContext
-from model import User, UserInDB, Token, TokenData
+from model import User, Token
 import os
 from dotenv import load_dotenv
 from database import db
 from utils import (
-    verify_password,
-    get_password_hash,
-    get_user,
     authenticate_user,
     create_access_token,
-    get_current_user,
     get_current_active_user,
 )
 
