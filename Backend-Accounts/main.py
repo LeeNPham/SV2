@@ -161,14 +161,23 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get('/users/me/', response_model=User)
+@app.get('/accounts/profile/', response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
 
 
-@app.get('/users/me/items')
+@app.get('/accounts/profile/items')
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [{"item_id": 1,  "owner": current_user}]
+    return [{"item_id": 1,
+            "name": "playlist1",
+            "owner": current_user},
+            {"item_id": 2,
+            "name": "playlist2",
+            "owner": current_user},
+            {"item_id": 3,
+            "name": "playlist3",
+            "owner": current_user},
+            ]
 
 # pwd = get_password_hash("tim1234")
 # print(pwd)
