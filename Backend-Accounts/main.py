@@ -98,6 +98,32 @@ def create_access_token(data:dict, expires_delta: timedelta or None = None):
     encoded_jwt = jwt.encode(to_encode, secret_key, algorithm=algorithm)
     return encoded_jwt
 
+
+# Functions to getting our user from an access token, and if we're creating one based on login data
+    # calls out our oauth_2_scheme which will parse our our token and give us access to it in this parameter
+    # jwt.encode takes 1 algo
+    # jwt.decode takes multiple algos
+async def get_current_user(token: str = Depends(oauth_2_scheme)):
+    credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                        detail='Could not validate credentials',
+                                        headers={'WWW-Authenticate': 'Bearer'})
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+        username: str = payload.get('sub')
+        if username is None:
+            raise credential_exception
+
+        token_data = TokenData(username=username)
+    except JWTError:
+        raise credential_exception
+    user = get_user(db, username=token_data.username)
+
+    if user is None:
+        raise credential_exception
+
+    return user
+
+
 app = FastAPI()
 
 
