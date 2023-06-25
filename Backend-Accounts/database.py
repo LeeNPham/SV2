@@ -1,18 +1,12 @@
-# from model import Todo, UpdateTodoModel
-# import motor.motor_asyncio  # MongoDB Driver
-# from bson.objectid import ObjectId
-# import os
-# from dotenv import load_dotenv
-# load_dotenv()
-# api_key = os.environ.get('CLUSTER_PASSWORD')
-
-# client = motor.motor_asyncio.AsyncIOMotorClient(
-#     api_key)  # helps to connect with mongodb compass
-
-# database = client.UserList  # name of database
-# # same thing as a table in SQL not really sure on why this isnt deploying
-# collection = database.users
-
+db = {
+    "tim": {
+        "username": "tim",
+        "full_name": "Tim Ruscica",
+        "email": "tim@gmail.com",
+        "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
+        "disabled": False,
+    }
+}
 
 # # Todo DB Calls Start
 # async def fetch_all_todos():
