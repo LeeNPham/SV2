@@ -14,6 +14,7 @@ import motor.motor_asyncio  # MongoDB Driver
 from bson.objectid import ObjectId
 import os
 from dotenv import load_dotenv
+from utils import get_password_hash
 
 load_dotenv()
 api_key = os.environ.get("CLUSTER_PASSWORD")
@@ -33,6 +34,7 @@ async def fetch_all_accounts():
 
 
 async def create_account(user):
+    user["hashed_password"] = get_password_hash(user["hashed_password"])
     document = user
     result = await collection.insert_one(document)
     return document
