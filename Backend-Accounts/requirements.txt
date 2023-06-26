@@ -11,6 +11,7 @@ exceptiongroup==1.1.1
 fastapi==0.98.0
 h11==0.14.0
 idna==3.4
+motor==3.1.1
 mypy-extensions==1.0.0
 packaging==23.1
 passlib==1.7.4

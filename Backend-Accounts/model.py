@@ -31,13 +31,19 @@ class TokenData(BaseModel):
 
 
 class User(BaseModel):
-    username: str or None = None
-    email: str or None = None
-    full_name: str or None = None
-    disabled: bool or None = None
+    username: Optional[str] = None
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+    disabled: Optional[bool] = False
+
+
+class UpdateUserModel(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+    full_name: Optional[str] = None
+    disabled: Optional[bool] = False
 
     class Config:
-        allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
         schema_extra = {
@@ -51,53 +57,19 @@ class User(BaseModel):
 
 
 class UserInDB(User):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     hashed_password: str
 
-
-# class User(BaseModel):
-#     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-#     username: str or None = None
-#     email: str or None = None
-#     profile_description: str or None = None
-#     full_name: str or None = None
-#     create_date: str or None = None
-#     disabled: bool or None = None
-
-#     class Config:
-#         allow_population_by_field_name = True
-#         arbitrary_types_allowed = True
-#         json_encoders = {ObjectId: str}
-#         schema_extra = {
-#             "exampleUser": {
-#                 "username": "Bladeburner01",
-#                 "email": "Bladeburner01@gmail.com",
-#                 "profile_description": "This is a description",
-#                 "full_name": "Lee Pham",
-#                 "create_date": "2008-09-15",
-#                 "disabled": False,
-#             }
-#         }
-
-
-# class UpdateTodoModel(BaseModel):
-#     category: Optional[str]
-#     title: Optional[str]
-#     description: Optional[str]
-#     completion:  Optional[bool]
-#     create_date: Optional[str]
-#     due_date: Optional[str]
-
-#     class Config:
-#         arbitrary_types_allowed = True
-#         json_encoders = {ObjectId: str}
-#         schema_extra = {
-#             "example": {
-#                 "category": "Business",
-#                 "title": "My Title",
-#                 "description": "This is a description",
-#                 "completion": "True",
-#                 "create_date": "2008-09-15",
-#                 "due_date": '2008-09-15'
-#             }
-#         }
-# # Todo Models End
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "User": {
+                "username": "Bladeburner01",
+                "email": "Bladeburner01@gmail.com",
+                "full_name": "Lee Pham",
+                "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
+                "disabled": False,
+            }
+        }
