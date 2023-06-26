@@ -20,17 +20,20 @@ class PyObjectId(ObjectId):
     def __modify_schema__(cls, field_schema):
         field_schema.update(type="string")
 
+
 # Todo Models Start
 
 
-class Todo(BaseModel):
+class User(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    category: Optional[str]
-    title: str
-    description: Optional[str]
-    completion: bool
-    create_date: str
-    due_date: Optional[str]
+    username: Optional[str] = None
+    email: Optional[str] = None
+    disabled: Optional[bool] = False
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    description: Optional[str] = None
+    todos: Optional[list] = None
+    categories: Optional[list] = None
 
     class Config:
         allow_population_by_field_name = True
@@ -38,37 +41,51 @@ class Todo(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "category": "Business",
-                "title": "My Title",
-                "description": "This is a description",
-                "completion": "True",
-                "create_date": "2008-09-15",
-                "due_date": '2008-09-15'
+                "username": "Bladeburner01",
+                "email": "Bladeburner01@gmail.com",
+                "disabled": "false",
+                "first_name": "Lee",
+                "last_name": "Pham",
+                "todos": [
+                    "647c33b7257a0b5aa8bf7a3f",
+                    "647c61bff3250a39f366376d",
+                    "647c66cbf3250a39f366376e",
+                ],
+                "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
             }
         }
 
 
-class UpdateTodoModel(BaseModel):
-    category: Optional[str]
-    title: Optional[str]
-    description: Optional[str]
-    completion:  Optional[bool]
-    create_date: Optional[str]
-    due_date: Optional[str]
+class UpdateUserModel(BaseModel):
+    username: Optional[str] = None
+    email: Optional[str] = None
+    disabled: Optional[bool] = False
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    description: Optional[str] = None
+    todos: Optional[list] = None
+    categories: Optional[list] = None
 
     class Config:
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "category": "Business",
-                "title": "My Title",
-                "description": "This is a description",
-                "completion": "True",
-                "create_date": "2008-09-15",
-                "due_date": '2008-09-15'
+                "username": "Bladeburner01",
+                "email": "Bladeburner01@gmail.com",
+                "disabled": "false",
+                "first_name": "Lee",
+                "last_name": "Pham",
+                "todos": [
+                    "647c33b7257a0b5aa8bf7a3f",
+                    "647c61bff3250a39f366376d",
+                    "647c66cbf3250a39f366376e",
+                ],
+                "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
             }
         }
+
+
 # Todo Models End
 
 # Category Models Start
@@ -88,7 +105,7 @@ class Category(BaseModel):
             "example": {
                 "title": "My Title",
                 "description": "This is a description",
-                "create_date": "2008-09-15"
+                "create_date": "2008-09-15",
             }
         }
 
@@ -105,6 +122,6 @@ class UpdateCategoryModel(BaseModel):
             "example": {
                 "title": "My Title",
                 "description": "This is a description",
-                "create_date": "2008-09-15"
+                "create_date": "2008-09-15",
             }
         }

@@ -1,27 +1,22 @@
 from database import (
-    fetch_all_todos,
-    fetch_one_todo,
-    create_todo,
-    update_todo,
-    remove_todo,
-    fetch_all_categories,
-    fetch_one_category,
-    create_category,
-    update_category,
-    remove_category
+    fetch_all_users,
+    fetch_one_user,
+    create_user,
+    update_user,
+    remove_user,
 )
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
-from model import Todo, UpdateTodoModel, Category, UpdateCategoryModel
+from model import User, UpdateUserModel
 
 # App object
 app = FastAPI()
 
 
 # Set up a settings.py file later to import these settings?
-origins = ['*']
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,90 +32,51 @@ async def read_root():
     response = {"hello": "world"}
     return response
 
-# Todos Start
+
+# Users Start
 
 
-@app.get("/api/todo")
-async def get_todos():
-    response = await fetch_all_todos()
+@app.get("/api/user")
+async def get_users():
+    response = await fetch_all_users()
     return response
 
 
-@app.post("/api/todo", response_description="Add a new todo", response_model=Todo)
-async def post_todo(todo: Todo = Body(...)):
-    todo = jsonable_encoder(todo)
-    response = await create_todo(todo)
+@app.post("/api/user", response_description="Add a new user", response_model=User)
+async def post_user(user: User = Body(...)):
+    user = jsonable_encoder(user)
+    response = await create_user(user)
     if response:
         return response
     raise HTTPException(400, "Something went wrong / Bad Request")
 
 
-@app.get("/api/todo/{id}", response_description="Get a single todo", response_model=Todo)
-async def get_todo_by_id(id: str):
-    response = await fetch_one_todo(id)
+@app.get(
+    "/api/user/{id}", response_description="Get a single user", response_model=User
+)
+async def get_user_by_id(id: str):
+    response = await fetch_one_user(id)
     if response:
         return response
     raise HTTPException(404, f"ID {id} not found")
 
 
-@app.put("/api/todo/{id}", response_description="Update a todo", response_model=Todo)
-async def put_todo(id: str, todo: UpdateTodoModel = Body(...)):
-    todo = {k: v for k, v in todo.dict().items() if v is not None}
-    if len(todo) >= 1:
-        response = await update_todo(id, todo)
+@app.put("/api/user/{id}", response_description="Update a user", response_model=User)
+async def put_user(id: str, user: UpdateUserModel = Body(...)):
+    user = {k: v for k, v in user.dict().items() if v is not None}
+    if len(user) >= 1:
+        response = await update_user(id, user)
     if response:
         return response
-    raise HTTPException(404, f"There is no TODO item with this title {id}")
+    raise HTTPException(404, f"There is no user account with this {id}")
 
 
-@app.delete("/api/todo/{id}", response_description="Delete a todo")
-async def delete_todo(id: str):
-    response = await remove_todo(id)
+@app.delete("/api/user/{id}", response_description="Delete a user")
+async def delete_user(id: str):
+    response = await remove_user(id)
     if response:
-        return "Successfully deleted todo item"
-    raise HTTPException(404, f"There is no TODO item with this id:{id}")
-# Todos End
-
-# Categories Start
+        return "Successfully deleted user item"
+    raise HTTPException(404, f"There is no user account with this {id}")
 
 
-@app.get("/api/category")
-async def get_categories():
-    response = await fetch_all_categories()
-    return response
-
-
-@app.post("/api/category", response_description="Add a new category", response_model=Category)
-async def post_category(category: Category = Body(...)):
-    category = jsonable_encoder(category)
-    response = await create_category(category)
-    if response:
-        return response
-    raise HTTPException(400, "Something went wrong / Bad Request")
-
-
-@app.get("/api/category/{id}", response_description="Get a single category", response_model=Category)
-async def get_category_by_id(id: str):
-    response = await fetch_one_category(id)
-    if response:
-        return response
-    raise HTTPException(404, f"ID {id} not found")
-
-
-@app.put("/api/category/{id}", response_description="Update a category", response_model=Category)
-async def put_category(id: str, category: UpdateCategoryModel = Body(...)):
-    category = {k: v for k, v in category.dict().items() if v is not None}
-    if len(category) >= 1:
-        response = await update_category(id, category)
-    if response:
-        return response
-    raise HTTPException(404, f"There is no TODO item with this title {id}")
-
-
-@app.delete("/api/category/{id}", response_description="Delete a category")
-async def delete_category(id: str):
-    response = await remove_category(id)
-    if response:
-        return "Successfully deleted todo item"
-    raise HTTPException(404, f"There is no TODO item with this id:{id}")
-# Categories End
+# Users End
