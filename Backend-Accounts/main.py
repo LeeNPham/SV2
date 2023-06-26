@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from datetime import timedelta
 from fastapi.encoders import jsonable_encoder
 from passlib.context import CryptContext
-from model import User, UserInDB, Token, UpdateUserModel
+from model import User, UserInDB, Token
 from database import (
     db,
     fetch_all_accounts,
@@ -84,9 +84,7 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 # Account CRUD
 
 
-@app.post(
-    "/accounts", response_description="Add a new account", response_model=UserInDB
-)
+@app.post("/accounts", response_description="Add a new account", response_model=User)
 async def post_account(user: UserInDB = Body(...)):
     user = jsonable_encoder(user)
     response = await create_account(user)
@@ -104,7 +102,7 @@ async def get_accounts():
 @app.get(
     "/accounts/{id}",
     response_description="Get a single account",
-    response_model=UserInDB,
+    response_model=User,
 )
 async def get_account_by_id(id: str):
     response = await fetch_one_account(id)
@@ -116,7 +114,7 @@ async def get_account_by_id(id: str):
 @app.put(
     "/accounts/{id}", response_description="Update an account", response_model=User
 )
-async def put_account(id: str, user: UpdateUserModel = Body(...)):
+async def put_account(id: str, user: User = Body(...)):
     user = {k: v for k, v in user.dict().items() if v is not None}
     if len(user) >= 1:
         response = await update_account(id, user)

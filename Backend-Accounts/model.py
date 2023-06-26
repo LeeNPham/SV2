@@ -33,28 +33,12 @@ class TokenData(BaseModel):
 class User(BaseModel):
     username: Optional[str] = None
     email: Optional[str] = None
-    full_name: Optional[str] = None
     disabled: Optional[bool] = False
-
-
-class UpdateUserModel(BaseModel):
-    username: Optional[str] = None
-    email: Optional[str] = None
-    full_name: Optional[str] = None
-    disabled: Optional[bool] = False
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "exampleUser": {
-                "username": "Bladeburner01",
-                "email": "Bladeburner01@gmail.com",
-                "full_name": "Lee Pham",
-                "disabled": False,
-            }
-        }
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    description: Optional[str] = None
+    todos: Optional[list] = None
+    categories: Optional[list] = None
 
 
 class UserInDB(User):
