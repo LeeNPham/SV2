@@ -4,6 +4,8 @@ from database import (
     create_user,
     update_user,
     remove_user,
+    fetch_one_user_by_username,
+    db,
 )
 
 from utils import get_current_active_user, authenticate_user, create_access_token
@@ -19,7 +21,6 @@ from model import User, UserInDb, UpdateUserModel, Token, TokenData
 import os
 from dotenv import load_dotenv
 
-from database import db
 
 load_dotenv()
 
@@ -50,6 +51,7 @@ async def read_root():
 # Tokens
 @app.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -115,6 +117,18 @@ async def get_user_by_id(id: str):
     if response:
         return response
     raise HTTPException(404, f"ID {id} not found")
+
+
+@app.get(
+    "/api/user/username/{username}",
+    response_description="Get a single user by username",
+    response_model=UserInDb,
+)
+async def get_user_by_username(username: str):
+    response = await fetch_one_user_by_username(username)
+    if response:
+        return response
+    raise HTTPException(404, f"{username} not found")
 
 
 @app.put("/api/user/{id}", response_description="Update a user", response_model=User)

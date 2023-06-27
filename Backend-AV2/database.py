@@ -42,6 +42,12 @@ async def fetch_one_user(id):
         return user
 
 
+async def fetch_one_user_by_username(username):
+    user = await collection.find_one({"username": username})
+    if user is not None:
+        return user
+
+
 async def update_user(id, user):
     update_result = await collection.update_one({"_id": id}, {"$set": user})
     if update_result.modified_count == 1:
