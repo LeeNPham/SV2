@@ -9,6 +9,17 @@ client = motor.motor_asyncio.AsyncIOMotorClient(api_key)
 database = client.UserList
 collection = database.user
 
+# db = {
+#     "tim": {
+#         "username": "tim",
+#         "email": "tim@gmail.com",
+#         "full_name": "Tim Ruscica",
+#         "disabled": "false",
+#         "_id": "6498df1ae1d6dcaa38ea0f28",
+#         "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
+#     }
+# }
+
 
 # User DB Calls Start
 async def fetch_all_users():

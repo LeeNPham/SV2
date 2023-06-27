@@ -108,3 +108,12 @@ class UpdateUserModel(BaseModel):
                 "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
             }
         }
+
+
+# class Token(BaseModel):
+#     access_token: str
+#     token_type: str
+
+
+# class TokenData(BaseModel):
+#     username: Optional[str] = None
