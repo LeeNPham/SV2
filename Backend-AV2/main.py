@@ -12,13 +12,15 @@ from fastapi import FastAPI, HTTPException, status, Body, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
-from model import User, UserInDb, UpdateUserModel, Token, TokenData
-import os
-from dotenv import load_dotenv
+from model import User, UserInDb, UpdateUserModel
+
+# from model import User, UserInDb, UpdateUserModel, Token, TokenData
+# import os
+# from dotenv import load_dotenv
 
 # from database import db
 
-load_dotenv()
+# load_dotenv()
 
 
 # access_token_expire_minutes = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
