@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException, Body
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
-from model import User, UpdateUserModel
+from model import User, UserInDb, UpdateUserModel
 
 # App object
 app = FastAPI()
@@ -43,7 +43,7 @@ async def get_users():
 
 
 @app.post("/api/user", response_description="Add a new user", response_model=User)
-async def post_user(user: User = Body(...)):
+async def post_user(user: UserInDb = Body(...)):
     user = jsonable_encoder(user)
     response = await create_user(user)
     if response:
@@ -76,7 +76,7 @@ async def delete_user(id: str):
     response = await remove_user(id)
     if response:
         return "Successfully deleted user item"
-    raise HTTPException(404, f"There is no user account with this {id}")
+    raise HTTPException(404, f"There is no TODO item with this id:{id}")
 
 
 # Users End

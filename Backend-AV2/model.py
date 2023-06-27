@@ -21,9 +21,6 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 
-# Todo Models Start
-
-
 class User(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     username: Optional[str] = None
@@ -56,6 +53,31 @@ class User(BaseModel):
         }
 
 
+class UserInDb(User):
+    hashed_password: Optional[str]
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "username": "Bladeburner01",
+                "email": "Bladeburner01@gmail.com",
+                "disabled": "false",
+                "first_name": "Lee",
+                "last_name": "Pham",
+                "todos": [
+                    "647c33b7257a0b5aa8bf7a3f",
+                    "647c61bff3250a39f366376d",
+                    "647c66cbf3250a39f366376e",
+                ],
+                "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
+                "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
+            }
+        }
+
+
 class UpdateUserModel(BaseModel):
     username: Optional[str] = None
     email: Optional[str] = None
@@ -65,6 +87,7 @@ class UpdateUserModel(BaseModel):
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
+    hashed_password: Optional[str]
 
     class Config:
         arbitrary_types_allowed = True
@@ -82,46 +105,6 @@ class UpdateUserModel(BaseModel):
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
-            }
-        }
-
-
-# Todo Models End
-
-# Category Models Start
-
-
-class Category(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    title: str
-    description: str
-    create_date: str
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "title": "My Title",
-                "description": "This is a description",
-                "create_date": "2008-09-15",
-            }
-        }
-
-
-class UpdateCategoryModel(BaseModel):
-    title: str
-    description: str
-    create_date: str
-
-    class Config:
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "title": "My Title",
-                "description": "This is a description",
-                "create_date": "2008-09-15",
+                "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
             }
         }
