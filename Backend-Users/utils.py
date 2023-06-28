@@ -24,13 +24,6 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-# replaced this one with fetch_one_user_by_username
-# def get_user(db, username: str):
-#     if username in db:
-#         user_data = db[username]
-#         return UserInDb(**user_data)
-
-
 async def authenticate_user(username: str, password: str):
     user: UserInDb = await fetch_one_user_by_username(username)
     if not user:

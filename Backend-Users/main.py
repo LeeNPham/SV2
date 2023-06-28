@@ -5,7 +5,6 @@ from database import (
     update_user,
     remove_user,
     fetch_one_user_by_username,
-    db,
 )
 
 from utils import (
