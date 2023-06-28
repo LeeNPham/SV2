@@ -8,7 +8,13 @@ from database import (
     db,
 )
 
-from utils import get_current_active_user, authenticate_user, create_access_token
+from utils import (
+    get_current_active_user,
+    authenticate_user,
+    create_access_token,
+    get_password_hash,
+    verify_password,
+)
 from datetime import timedelta
 from fastapi import FastAPI, HTTPException, status, Body, Depends
 from fastapi.encoders import jsonable_encoder
@@ -102,6 +108,12 @@ async def get_users():
 
 @app.post("/api/user", response_description="Add a new user", response_model=User)
 async def post_user(user: UserInDb = Body(...)):
+
+    existing_user = await fetch_one_user_by_username(user.username)
+    if existing_user:
+        raise HTTPException(400, "Username already exists")
+
+    user.hashed_password = get_password_hash(user.hashed_password)
     user = jsonable_encoder(user)
     response = await create_user(user)
     if response:

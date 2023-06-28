@@ -46,6 +46,7 @@ async def fetch_one_user_by_username(username):
     user = await collection.find_one({"username": username})
     if user is not None:
         return user
+    return None
 
 
 async def update_user(id, user):
