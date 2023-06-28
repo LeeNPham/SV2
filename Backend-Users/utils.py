@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from model import UserInDb, TokenData
 import os
 from dotenv import load_dotenv
-from database import db
+from database import fetch_one_user_by_username
 
 load_dotenv()
 
@@ -24,14 +24,15 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def get_user(db, username: str):
-    if username in db:
-        user_data = db[username]
-        return UserInDb(**user_data)
+# replaced this one with fetch_one_user_by_username
+# def get_user(db, username: str):
+#     if username in db:
+#         user_data = db[username]
+#         return UserInDb(**user_data)
 
 
-def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
+async def authenticate_user(username: str, password: str):
+    user: UserInDb = await fetch_one_user_by_username(username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -65,7 +66,7 @@ async def get_current_user(token: str = Depends(oauth_2_scheme)):
         token_data = TokenData(username=username)
     except JWTError:
         raise credential_exception
-    user = get_user(db, username=token_data.username)
+    user = fetch_one_user_by_username(username=token_data.username)
     if user is None:
         raise credential_exception
     return user

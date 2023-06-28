@@ -1,4 +1,4 @@
-from model import User
+from model import User, UserInDb
 import motor.motor_asyncio
 import os
 from dotenv import load_dotenv
@@ -45,7 +45,7 @@ async def fetch_one_user(id):
 async def fetch_one_user_by_username(username):
     user = await collection.find_one({"username": username})
     if user is not None:
-        return user
+        return UserInDb(**user)
     return None
 
 
