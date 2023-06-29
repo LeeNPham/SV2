@@ -56,7 +56,7 @@
 						in:slide={{ axis: 'x', duration: 500 }}
 						class=" text-[17px] tracking-wider text-slate-200 font-normal"
 					>
-						Categories
+						<a href="/categories">Categories</a>
 					</div>
 				</div>
 				<div class="flex flex-row gap-4 items-center">
