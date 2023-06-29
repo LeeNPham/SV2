@@ -72,7 +72,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-# Account Verification
+# Account Verification # WORK ON THESE TWO, REFACTOR AND ALLOW IT TO WORK ON BACKEND FIRST THEN APPLY TO FRONTEND
 @app.get("/accounts/profile/", response_model=User)
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
