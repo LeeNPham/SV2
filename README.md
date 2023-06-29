@@ -1,5 +1,5 @@
 
-
+use npm run preview instead of npm run dev
 # Project Structure:
 * Dependencies
   * Varies per service
