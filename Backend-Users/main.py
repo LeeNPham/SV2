@@ -47,14 +47,8 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-async def read_root():
-    response = {"hello": "world"}
-    return response
-
-
 # Tokens
-@app.post("/token", response_model=Token)
+@app.post("/token", response_model=Token, tags=["Tokens"])
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
 
     user = await authenticate_user(form_data.username, form_data.password)
@@ -73,12 +67,12 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 
 # Account Verification # WORK ON THESE TWO, REFACTOR AND ALLOW IT TO WORK ON BACKEND FIRST THEN APPLY TO FRONTEND
-@app.get("/accounts/profile/", response_model=User)
+@app.get("/accounts/profile/", response_model=User, tags=["User Authentication"])
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
 
 
-@app.get("/accounts/profile/items")
+@app.get("/accounts/profile/items", tags=["User Authentication"])
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
     return [
         {
@@ -99,13 +93,18 @@ async def read_own_items(current_user: User = Depends(get_current_active_user)):
 
 
 # User CRUD
-@app.get("/api/user")
+@app.get("/api/user", tags=["CRUD Users"])
 async def get_users():
     response = await fetch_all_users()
     return response
 
 
-@app.post("/api/user", response_description="Add a new user", response_model=User)
+@app.post(
+    "/api/user",
+    response_description="Add a new user",
+    response_model=User,
+    tags=["CRUD Users"],
+)
 async def post_user(user: UserInDb = Body(...)):
 
     existing_user = await fetch_one_user_by_username(user.username)
@@ -121,7 +120,10 @@ async def post_user(user: UserInDb = Body(...)):
 
 
 @app.get(
-    "/api/user/{id}", response_description="Get a single user", response_model=User
+    "/api/user/{id}",
+    response_description="Get a single user",
+    response_model=User,
+    tags=["CRUD Users"],
 )
 async def get_user_by_id(id: str):
     response = await fetch_one_user(id)
@@ -134,6 +136,7 @@ async def get_user_by_id(id: str):
     "/api/user/username/{username}",
     response_description="Get a single user by username",
     response_model=UserInDb,
+    tags=["CRUD Users"],
 )
 async def get_user_by_username(username: str):
     response = await fetch_one_user_by_username(username)
@@ -142,7 +145,12 @@ async def get_user_by_username(username: str):
     raise HTTPException(404, f"{username} not found")
 
 
-@app.put("/api/user/{id}", response_description="Update a user", response_model=User)
+@app.put(
+    "/api/user/{id}",
+    response_description="Update a user",
+    response_model=User,
+    tags=["CRUD Users"],
+)
 async def put_user(id: str, user: UpdateUserModel = Body(...)):
     user = {k: v for k, v in user.dict().items() if v is not None}
     if len(user) >= 1:
@@ -152,7 +160,7 @@ async def put_user(id: str, user: UpdateUserModel = Body(...)):
     raise HTTPException(404, f"There is no user account with this {id}")
 
 
-@app.delete("/api/user/{id}", response_description="Delete a user")
+@app.delete("/api/user/{id}", response_description="Delete a user", tags=["CRUD Users"])
 async def delete_user(id: str):
     response = await remove_user(id)
     if response:
