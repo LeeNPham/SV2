@@ -1,21 +1,19 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation'
 	let username = ''
 	let password = ''
-
-	// function register() {
-	// 	// Perform registration logic here
-	// 	console.log('Registering user:', username)
-	// 	console.log('Password:', password)
-
-	// 	// Clear form fields after registration
-	// 	username = ''
-	// 	password = ''
-	// }
+	let email = ''
+	let firstName = ''
+	let lastName = ''
+	let description = ''
 
 	function register() {
 		const newUser = {
 			username: username,
+			email: email,
+			first_name: firstName,
+			last_name: lastName,
+			description: description,
 			hashed_password: password
 		}
 
@@ -39,11 +37,11 @@
 </script>
 
 <main class="max-w-md mx-auto p-4 text-center">
-	<h1 class="text-2xl font-bold mb-4">Register New User</h1>
+	<h1 class="text-white text-2xl font-bold mb-4">Register New User</h1>
 
 	<form on:submit|preventDefault={register} class="flex flex-col">
-		<label for="username" class="font-bold mb-2">Username:</label>
 		<input
+			placeholder="Username"
 			type="text"
 			id="username"
 			bind:value={username}
@@ -51,12 +49,46 @@
 			class="px-4 py-2 mb-4 border rounded"
 		/>
 
-		<label for="password" class="font-bold mb-2">Password:</label>
 		<input
+			placeholder="Email"
+			type="text"
+			id="email"
+			bind:value={email}
+			required
+			class="px-4 py-2 mb-4 border rounded"
+		/>
+
+		<input
+			placeholder="First Name"
+			type="text"
+			id="firstName"
+			bind:value={firstName}
+			required
+			class="px-4 py-2 mb-4 border rounded"
+		/>
+
+		<input
+			placeholder="Last Name"
+			type="text"
+			id="lastName"
+			bind:value={lastName}
+			required
+			class="px-4 py-2 mb-4 border rounded"
+		/>
+
+		<input
+			placeholder="Password"
 			type="password"
 			id="password"
 			bind:value={password}
 			required
+			class="px-4 py-2 mb-4 border rounded"
+		/>
+
+		<textarea
+			placeholder="Profile Description (Optional)"
+			id="description"
+			bind:value={description}
 			class="px-4 py-2 mb-4 border rounded"
 		/>
 
