@@ -25,6 +25,7 @@ def get_password_hash(password):
 
 
 async def authenticate_user(username: str, password: str):
+    username = username.lower()
     user: UserInDb = await fetch_one_user_by_username(username)
     if not user:
         return False
