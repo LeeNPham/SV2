@@ -58,10 +58,10 @@
 	let notifications: any[] = []
 	let current_date = new Date()
 
-	function formatDate(date) {
-		const options = { year: 'numeric', month: 'long', day: 'numeric' }
-		return date.toLocaleDateString(undefined, options)
-	}
+	// function formatDate(date) {
+	// 	const options = { year: 'numeric', month: 'long', day: 'numeric' }
+	// 	return date.toLocaleDateString(undefined, options)
+	// }
 
 	function checkDateStatus(dateArgument) {
 		const targetDate = new Date(dateArgument)
