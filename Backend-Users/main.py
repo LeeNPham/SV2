@@ -63,6 +63,14 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
+    print(f"access token {access_token}")
+    # this is how I will log in,
+    # I will then use my access token to allow myself to use
+    # read users me, and
+    # use read own items
+    # after logging in, I want to store temp token in stores
+    # I also want to preload all of my todos and categories and profile details in stores to more easily reference and update them
+
     return {"access_token": access_token, "token_type": "bearer"}
 
 
