@@ -66,7 +66,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-# Account Verification # WORK ON THESE TWO, REFACTOR AND ALLOW IT TO WORK ON BACKEND FIRST THEN APPLY TO FRONTEND
+# Account Verification #Get Personal Account Details
 @app.get("/accounts/profile/", response_model=User, tags=["User Authentication"])
 async def read_users_me(current_user: User = Depends(get_current_active_user)):
     return current_user
@@ -74,22 +74,9 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 
 @app.get("/accounts/profile/items", tags=["User Authentication"])
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    return [
-        {
-            "todos": [
-                {"todo_id": 1, "title": "playlist1", "owner": current_user},
-                {"todo_id": 2, "title": "playlist2", "owner": current_user},
-                {"todo_id": 3, "title": "playlist3", "owner": current_user},
-            ]
-        },
-        {
-            "categories": [
-                {"category_id": 1, "title": "category1", "owner": current_user},
-                {"category_id": 2, "title": "category2", "owner": current_user},
-                {"category_id": 3, "title": "category3", "owner": current_user},
-            ]
-        },
-    ]
+    print(current_user.todos)
+    print(current_user.categories)
+    return {"todos": current_user.todos, "categories": current_user.categories}
 
 
 # User CRUD
