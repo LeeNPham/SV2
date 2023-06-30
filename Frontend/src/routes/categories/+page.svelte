@@ -1,17 +1,19 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation'
 
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import { slide } from 'svelte/transition'
 	import profileDefault from '$lib/images/profileDefault.jpg'
 
-	let firstName = 'Lee'
-	let lastName = 'Pham'
 	let userName = 'Bladeburner01'
 	let userEmail = 'Bladeburner01@gmail.com'
 
 	function goProfile() {
 		goto('/profile')
+	}
+
+	function goHome() {
+		goto('/')
 	}
 </script>
 
@@ -32,5 +34,11 @@
 </div>
 
 <button class="absolute right-10 top-20" type="button" on:click={goProfile}>
+	<div class="text-white">Profile</div>
+	<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
+</button>
+
+<button class="absolute right-10 top-40" type="button" on:click={goHome}>
+	<div class="text-white">Home</div>
 	<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
 </button>
