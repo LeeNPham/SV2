@@ -10,9 +10,8 @@
 	import MagnifyingGlassIcon from '$lib/icons/MagnifyingGlassIcon.svelte'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import { goto } from '$app/navigation'
-	import { fly, fade, slide } from 'svelte/transition'
+	import { slide } from 'svelte/transition'
 	import Fuse from 'fuse.js'
-	import { stringify } from 'postcss'
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
