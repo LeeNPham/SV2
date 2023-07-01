@@ -43,6 +43,7 @@ class User(BaseModel):
                 "disabled": "false",
                 "first_name": "Lee",
                 "last_name": "Pham",
+                "description": "hello world, i like to code, i like to consider that im a real software engineer but im just actually having fun!",
                 "todos": [
                     "647c33b7257a0b5aa8bf7a3f",
                     "647c61bff3250a39f366376d",
@@ -67,6 +68,7 @@ class UserInDb(User):
                 "disabled": "false",
                 "first_name": "Lee",
                 "last_name": "Pham",
+                "description": "hello world, i like to code, i like to consider that im a real software engineer but im just actually having fun!",
                 "todos": [
                     "647c33b7257a0b5aa8bf7a3f",
                     "647c61bff3250a39f366376d",

@@ -87,7 +87,7 @@
 			let val = checkDateStatus(y)
 			x.condition = val
 		}
-		console.log(newList)
+		// console.log(newList)
 	}
 
 	let categoryColors = [
@@ -407,7 +407,7 @@
 	function filterToMyTodos(myTodos: any[], todos: any[]) {
 		let newTodos = []
 		for (let i of myTodos) {
-			console.log('value', i)
+			// console.log('value', i)
 			const todo = todos.find((todo) => todo._id === i)
 			if (todo) {
 				newTodos.push(todo)

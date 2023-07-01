@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation'
-	import { token } from '$lib/stores'
+	import { token, user_username, user_description } from '$lib/stores'
 
 	let username = ''
 	let password = ''
@@ -10,7 +10,7 @@
 		const formData = new FormData()
 		formData.append('username', username)
 		formData.append('password', password)
-
+		user_username.set(username)
 		await fetch('http://127.0.0.1:8000/token', {
 			method: 'POST',
 			body: formData
@@ -28,6 +28,18 @@
 				token.set({ access_token })
 				document.cookie = `access_token=${access_token}; path=/;`
 				goto('/home')
+			})
+			.catch((error) => {
+				console.error(error)
+			})
+
+		await fetch(`http://127.0.0.1:8000/api/username/${username}`, {
+			method: 'GET',
+			body: formData
+		})
+			.then((data) => {
+				console.log('this is data in get by username', data)
+				// user_description.set(data.description)
 			})
 			.catch((error) => {
 				console.error(error)
