@@ -12,19 +12,19 @@ token.subscribe((value) => {
 
 export const prerender = true
 
-async function getTodos() {
+async function getTodos(fetch) {
 	const response = await fetch('https://todo-test-api.onrender.com/api/todo')
 	const data = await response.json()
 	return data
 }
 
-async function getCategories() {
+async function getCategories(fetch) {
 	const response = await fetch('https://todo-test-api.onrender.com/api/category')
 	const data = await response.json()
 	return data
 }
 
-async function getAccountItems() {
+async function getAccountItems(fetch) {
 	const response = await fetch('https://accounts-79lp.onrender.com/accounts/profile/items', {
 		headers: {
 			Authorization: `Bearer ${accessToken}`
@@ -34,11 +34,11 @@ async function getAccountItems() {
 	return data
 }
 
-export async function load() {
+export async function load({ fetch }) {
 	const [todos, categories, stuff] = await Promise.all([
-		getTodos(),
-		getCategories(),
-		getAccountItems()
+		getTodos(fetch),
+		getCategories(fetch),
+		getAccountItems(fetch)
 	])
 
 	return {
