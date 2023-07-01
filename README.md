@@ -13,4 +13,25 @@
 ![Microservices Object Reference 1](Docs\Microservices-Architecture.png)
 
 ### Tickets:
-Add routing for login, add routing for registration, add routing for logout
+* [x] Set Up Todos Backend with CRUD Functions
+* [x] Set Up Categories Backend with CRUD Functions
+* [x] Start up dummy frontend and develop useable components
+* [x] Populate pages to allow for CRUD usage for both Todos and Categories
+* [x] Set up Fuzzy Search
+* [x] Set up Notifications listing
+* [x] Add routing for login
+* [x] add routing for registration
+* [x] add routing for logout
+* [x] Look into housing access token via localStorage vs cookies vs stores
+* [x] Set up data to be stored in stores to more easily access identity data
+* [x] Set up Users Backend with CRUD Functions
+* [x] Apply validation after encrypting and saving only hashed passwords to the db
+* [ ] Set up stores values such that client can house their own data for offline use
+  * [x] username
+  * [x] userdescription
+  * [ ] categories
+  * [ ] todos
+
+
+* [ ] Set up Notification ping
+* [ ] Set up APIGateway to allow for todos and category creation/deletion to be afixed to a users account, usage will be by reference only which might take more time but less calls in case we want to load balance the servers instead of housing them all on one array within the db system
