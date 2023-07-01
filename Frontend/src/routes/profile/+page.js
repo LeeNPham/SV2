@@ -1,35 +1,25 @@
-// // since there's no dynamic data here, we can prerender
-// // it so that it gets served as a static asset in production
 // import { goto } from '$app/navigation'
+import { user_username } from '$lib/stores'
 
-// export const prerender = true
+export const prerender = true
 
-// async function getAccountItems() {
-// 	const cookie = getAccessToken()
-// 	console.log('coooooookie')
+let userUsername = ''
 
-// 	const response = await fetch('http://127.0.0.1:8000/accounts/profile/items', {
-// 		headers: {
-// 			Authorization: `Bearer ${cookie}`
-// 		}
-// 	})
-// 	const data = await response.json()
-// 	return data
-// }
+user_username.subscribe((value) => {
+	userUsername = value
+})
 
-// function getAccessToken() {
-// 	const cookieValue = document.cookie.split('; ').find((row) => row.startsWith('access_token='))
-// 	if (cookieValue) {
-// 		return cookieValue.split('=')[1]
-// 	}
-// 	goto('/login')
-// }
-// let stuff = getAccountItems()
+async function getUserDetails() {
+	userUsername = userUsername.toLowerCase()
+	const response = await fetch(`http://127.0.0.1:8000/api/user/username/${userUsername}`)
+	const data = await response.json()
+	return data
+}
 
-// export function load() {
-// 	return {
-// 		stuff: stuff
-// 	}
-// }
+let user = getUserDetails()
 
-// make call function to grab profile details and allow for updating details
+export function load() {
+	return {
+		user: user
+	}
+}

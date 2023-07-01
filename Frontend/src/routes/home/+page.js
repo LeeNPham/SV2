@@ -1,18 +1,14 @@
 // @ts-nocheck
 // since there's no dynamic data here, we can prerender
 // it so that it gets served as a static asset in production
-import { token, user_description, user_username } from '$lib/stores'
+import { token, user_username } from '$lib/stores'
 
 let accessToken
-let userDescription
+
 let userUsername
 
 user_username.subscribe((value) => {
 	userUsername = value
-})
-
-user_description.subscribe((value) => {
-	userDescription = value
 })
 
 // Subscribe to updates of the token store
@@ -35,9 +31,6 @@ async function getCategories() {
 }
 
 async function getAccountItems() {
-	console.log('hello world')
-	console.log(userDescription)
-	console.log(userUsername)
 	const response = await fetch('http://127.0.0.1:8000/accounts/profile/items', {
 		headers: {
 			Authorization: `Bearer ${accessToken}`

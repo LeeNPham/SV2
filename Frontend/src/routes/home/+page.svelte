@@ -419,7 +419,7 @@
 	function filterToMyCategories(myCategories: any[], categories: any[]) {
 		let newCategories = []
 		for (let i of myCategories) {
-			console.log('value', i)
+			// console.log('value', i)
 			const category = categories.find((category) => category._id === i)
 			if (category) {
 				newCategories.push(category)
