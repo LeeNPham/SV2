@@ -1,15 +1,9 @@
 // @ts-nocheck
 // since there's no dynamic data here, we can prerender
 // it so that it gets served as a static asset in production
-import { token, user_username } from '$lib/stores'
+import { token } from '$lib/stores'
 
 let accessToken
-
-let userUsername
-
-user_username.subscribe((value) => {
-	userUsername = value
-})
 
 // Subscribe to updates of the token store
 token.subscribe((value) => {
@@ -40,11 +34,13 @@ async function getAccountItems() {
 	return data
 }
 
-let stuff = getAccountItems()
-let todos = getTodos()
-let categories = getCategories()
+export async function load() {
+	const [todos, categories, stuff] = await Promise.all([
+		getTodos(),
+		getCategories(),
+		getAccountItems()
+	])
 
-export function load() {
 	return {
 		items: todos,
 		categories: categories,

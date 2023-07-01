@@ -6,17 +6,14 @@
 	let password = ''
 
 	async function handleLogin() {
-		// Perform login logic here
 		const formData = new FormData()
 		formData.append('username', username)
 		formData.append('password', password)
-		user_username.set(username)
 		await fetch('https://accounts-79lp.onrender.com/token', {
 			method: 'POST',
 			body: formData
 		})
 			.then((res) => {
-				// console.log('res', res)
 				if (res.ok) {
 					return res.json()
 				} else {
@@ -25,6 +22,7 @@
 			})
 			.then((data) => {
 				const { access_token } = data
+				user_username.set(username)
 				token.set({ access_token })
 				document.cookie = `access_token=${access_token}; path=/;`
 				goto('/home')
@@ -74,7 +72,7 @@
 				>Register</a
 			>
 			<a
-				href="forgot-password"
+				href="/forgot-password"
 				class="inline-block align-baseline font-bold text-sm text-palette-dark hover:text-palette-dark/50"
 				>Forgot Password?</a
 			>
