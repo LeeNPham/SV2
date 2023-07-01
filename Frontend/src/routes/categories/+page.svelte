@@ -13,7 +13,7 @@
 	}
 
 	function goHome() {
-		goto('/')
+		goto('/home')
 	}
 </script>
 
