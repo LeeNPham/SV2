@@ -34,9 +34,20 @@
 				console.error(error)
 			})
 	}
-
+	// From LocalStorage
 	// function getAccessToken() {
 	// 	return localStorage.getItem('access_token')
+	// }
+
+	// From Cookie
+	// function getAccessToken() {
+	// 	const cookieValue = document.cookie.split('; ').find((row) => row.startsWith('access_token='))
+
+	// 	if (cookieValue) {
+	// 		return cookieValue.split('=')[1]
+	// 	}
+
+	// 	return null
 	// }
 </script>
 
