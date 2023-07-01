@@ -24,6 +24,7 @@
 				const { access_token } = data
 				user_username.set(username)
 				token.set({ access_token })
+				localStorage.setItem('accessToken', access_token)
 				document.cookie = `access_token=${access_token}; path=/;`
 				goto('/home')
 			})

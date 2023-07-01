@@ -285,8 +285,10 @@
 			},
 			body: JSON.stringify(newTodo)
 		})
-			.then(() => {
-				;(window as Window).location = '/home'
+			.then((res) => {
+				console.log(res)
+
+				window.location.assign('/home')
 			})
 			.catch(() => {
 				return {
@@ -294,6 +296,23 @@
 					error: new Error('Could not create a new todo')
 				}
 			})
+
+		// fetch('https://todo-test-api.onrender.com/api/todo/', {
+		// 	method: 'PUT',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: JSON.stringify(newTodo)
+		// })
+		// 	.then(() => {
+		// 		;(window as Window).location = '/home'
+		// 	})
+		// 	.catch(() => {
+		// 		return {
+		// 			status: 301,
+		// 			error: new Error('Could not create a new todo')
+		// 		}
+		// 	})
 	}
 
 	async function updateTodo(
@@ -404,10 +423,13 @@
 		}
 	}
 
-	function filterToMyTodos(myTodos: any[], todos: any[]) {
+	function filterToMyTodos(myTodos: any, todos: any[]) {
 		let newTodos = []
+		if (!Array.isArray(myTodos)) {
+			console.log('myTodos is not an array')
+			return newTodos
+		}
 		for (let i of myTodos) {
-			// console.log('value', i)
 			const todo = todos.find((todo) => todo._id === i)
 			if (todo) {
 				newTodos.push(todo)
@@ -417,9 +439,14 @@
 	}
 
 	function filterToMyCategories(myCategories: any[], categories: any[]) {
-		let newCategories = []
+		let newCategories: any[] = []
+		if (!Array.isArray(myCategories)) {
+			console.log(
+				'myTodos is not an array, store the initially mounted value in either stores and check to see if available before updating this, we can subscribe to it later on as well'
+			)
+			return newCategories
+		}
 		for (let i of myCategories) {
-			// console.log('value', i)
 			const category = categories.find((category) => category._id === i)
 			if (category) {
 				newCategories.push(category)

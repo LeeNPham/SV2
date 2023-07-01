@@ -3,11 +3,14 @@
 // it so that it gets served as a static asset in production
 import { token } from '$lib/stores'
 
-let accessToken
+let accessToken = typeof localStorage !== 'undefined' ? localStorage.getItem('accessToken') : null
 
 // Subscribe to updates of the token store
 token.subscribe((value) => {
 	accessToken = value.access_token
+	if (typeof localStorage !== 'undefined') {
+		localStorage.setItem('accessToken', accessToken)
+	}
 })
 
 export const prerender = true
