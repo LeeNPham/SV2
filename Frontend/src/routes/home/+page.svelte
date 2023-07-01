@@ -424,7 +424,7 @@
 	}
 
 	function filterToMyTodos(myTodos: any, todos: any[]) {
-		let newTodos = []
+		let newTodos: any[] = []
 		if (!Array.isArray(myTodos)) {
 			console.log('myTodos is not an array')
 			return newTodos
