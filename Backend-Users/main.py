@@ -58,18 +58,11 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=access_token_expire_minutes)
-    print(f"access token expires in {access_token_expires}")
+    # print(f"access token expires in {access_token_expires}")
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    print(f"access token {access_token}")
-    # this is how I will log in,
-    # I will then use my access token to allow myself to use
-    # read users me, and
-    # use read own items
-    # after logging in, I want to store temp token in stores
-    # I also want to preload all of my todos and categories and profile details in stores to more easily reference and update them
-
+    # print(f"access token {access_token}")
     return {"access_token": access_token, "token_type": "bearer"}
 
 
@@ -81,8 +74,8 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 
 @app.get("/accounts/profile/items", tags=["User Authentication"])
 async def read_own_items(current_user: User = Depends(get_current_active_user)):
-    print(current_user.todos)
-    print(current_user.categories)
+    # print(current_user.todos)
+    # print(current_user.categories)
     return {"todos": current_user.todos, "categories": current_user.categories}
 
 
