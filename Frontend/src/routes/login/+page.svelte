@@ -35,9 +35,9 @@
 			})
 	}
 
-	function getAccessToken() {
-		return localStorage.getItem('access_token')
-	}
+	// function getAccessToken() {
+	// 	return localStorage.getItem('access_token')
+	// }
 </script>
 
 <div class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8 mb-4">
