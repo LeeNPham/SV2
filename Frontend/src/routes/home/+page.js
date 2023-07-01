@@ -2,6 +2,7 @@
 // it so that it gets served as a static asset in production
 
 import { goto } from '$app/navigation'
+import { token } from '$lib/stores'
 
 export const prerender = true
 
@@ -19,8 +20,6 @@ async function getCategories() {
 
 async function getAccountItems() {
 	const cookie = getAccessToken()
-	console.log('coooooookie')
-
 	const response = await fetch('http://127.0.0.1:8000/accounts/profile/items', {
 		headers: {
 			Authorization: `Bearer ${cookie}`

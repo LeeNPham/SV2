@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation'
+	import { token } from '$lib/stores'
 
 	let username = ''
 	let password = ''
@@ -15,7 +16,7 @@
 			body: formData
 		})
 			.then((res) => {
-				console.log('res', res)
+				// console.log('res', res)
 				if (res.ok) {
 					return res.json()
 				} else {
@@ -24,31 +25,13 @@
 			})
 			.then((data) => {
 				const { access_token } = data
-				// console.log('accesstoken', access_token)
 				document.cookie = `access_token=${access_token}; path=/;`
-				// localStorage.setItem('access_token', access_token)
-				//stores access token in cookie, consider doing refresh tokens in stores though?
 				goto('/home')
 			})
 			.catch((error) => {
 				console.error(error)
 			})
 	}
-	// From LocalStorage
-	// function getAccessToken() {
-	// 	return localStorage.getItem('access_token')
-	// }
-
-	// From Cookie
-	// function getAccessToken() {
-	// 	const cookieValue = document.cookie.split('; ').find((row) => row.startsWith('access_token='))
-
-	// 	if (cookieValue) {
-	// 		return cookieValue.split('=')[1]
-	// 	}
-
-	// 	return null
-	// }
 </script>
 
 <div class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8 mb-4">
