@@ -31,7 +31,7 @@ async function getCategories() {
 }
 
 async function getAccountItems() {
-	const response = await fetch('http://127.0.0.1:8000/accounts/profile/items', {
+	const response = await fetch('https://accounts-79lp.onrender.com/accounts/profile/items', {
 		headers: {
 			Authorization: `Bearer ${accessToken}`
 		}

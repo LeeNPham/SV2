@@ -11,7 +11,7 @@
 		formData.append('username', username)
 		formData.append('password', password)
 		user_username.set(username)
-		await fetch('http://127.0.0.1:8000/token', {
+		await fetch('https://accounts-79lp.onrender.com/token', {
 			method: 'POST',
 			body: formData
 		})
