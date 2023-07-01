@@ -1,11 +1,16 @@
-
-use npm run preview instead of npm run dev
-# Project Structure:
-* Dependencies
-  * Varies per service
+### Project Structure:
 * Backend (FastAPI)
-* Backend-Accounts (FastAPI)
-* Frontend (Svelte)
+  * Todos and Categories
+* Backend-Users (FastAPI)
+  * Users and account validation
+* Frontend (SvelteKit)
+  * API Gateway + UI/UX
 
-# Tickets:
+
+### UI Spec References:
+![Microservices Object Reference 1](Docs\UI-Spec.JPG)
+### Model References:
+![Microservices Object Reference 1](Docs\Microservices-Architecture.png)
+
+### Tickets:
 Add routing for login, add routing for registration, add routing for logout
