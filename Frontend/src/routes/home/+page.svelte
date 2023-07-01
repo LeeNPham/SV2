@@ -286,7 +286,7 @@
 			body: JSON.stringify(newTodo)
 		})
 			.then(() => {
-				;(window as Window).location = '/'
+				;(window as Window).location = '/home'
 			})
 			.catch(() => {
 				return {
@@ -331,7 +331,7 @@
 			}
 		})
 			.then(() => {
-				;(window as Window).location = '/'
+				;(window as Window).location = '/home'
 			})
 			.catch((_err) => {
 				_err = !_err
@@ -355,7 +355,7 @@
 			body: JSON.stringify(newCategory)
 		})
 			.then(() => {
-				;(window as Window).location = '/'
+				;(window as Window).location = '/home'
 			})
 			.catch(() => {
 				return {
@@ -374,7 +374,7 @@
 			}
 		})
 			.then(() => {
-				;(window as Window).location = '/'
+				;(window as Window).location = '/home'
 			})
 			.catch(() => {
 				console.log('there was an error deleting this')
@@ -396,7 +396,7 @@
 				})
 			})
 				.then((_res) => {
-					goto('/')
+					goto('/home')
 				})
 				.catch((_err) => {
 					_err = !_err

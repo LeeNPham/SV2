@@ -27,7 +27,7 @@
 			}
 		})
 			.then(() => {
-				;(window as Window).location = '/'
+				;(window as Window).location = '/home'
 			})
 			.catch(() => {
 				err = !err
@@ -52,7 +52,7 @@
 			})
 		})
 			.then((_res) => {
-				window.location = '/'
+				window.location = '/home'
 			})
 			.catch((_err) => {
 				err = !err
