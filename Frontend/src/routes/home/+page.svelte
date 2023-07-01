@@ -316,7 +316,7 @@
 			})
 		})
 			.then((_res) => {
-				window.location.assign = '/home'
+				window.location.assign('/home')
 			})
 			.catch((_err) => {
 				_err = !_err
@@ -427,6 +427,7 @@
 		}
 		return newCategories
 	}
+
 	onMount(() => {
 		let newItems = filterToMyTodos(data.stuff.todos, data.items)
 		let newCats = filterToMyCategories(data.stuff.categories, data.categories)
@@ -501,14 +502,15 @@
 												class="flex items-center"
 												type="button"
 												value={todoItem._id}
-												on:click|stopPropagation={displayUpdateTodoModal(
-													todoItem._id,
-													todoItem.category,
-													todoItem.title,
-													todoItem.description,
-													todoItem.due_date,
-													todoItem.create_date
-												)}
+												on:click|stopPropagation={() =>
+													displayUpdateTodoModal(
+														todoItem._id,
+														todoItem.category,
+														todoItem.title,
+														todoItem.description,
+														todoItem.due_date,
+														todoItem.create_date
+													)}
 											>
 												<EllipsisIcon />
 											</button>
@@ -667,7 +669,7 @@
 													class="hidden"
 													id={todo._id}
 													type="checkbox"
-													on:change={toggleCheckbox(todo.completion, todo._id)}
+													on:change={() => toggleCheckbox(todo.completion, todo._id)}
 													bind:checked={todo.completion}
 												/>
 											</label>
@@ -678,7 +680,7 @@
 													class="hidden"
 													id={todo._id}
 													type="checkbox"
-													on:change={toggleCheckbox(todo.completion, todo._id)}
+													on:change={() => toggleCheckbox(todo.completion, todo._id)}
 													bind:checked={todo.completion}
 												/>
 											</label>
@@ -702,14 +704,15 @@
 									<button
 										type="button"
 										value={todo._id}
-										on:click|stopPropagation={displayUpdateTodoModal(
-											todo._id,
-											todo.category,
-											todo.title,
-											todo.description,
-											todo.due_date,
-											todo.create_date
-										)}
+										on:click|stopPropagation={() =>
+											displayUpdateTodoModal(
+												todo._id,
+												todo.category,
+												todo.title,
+												todo.description,
+												todo.due_date,
+												todo.create_date
+											)}
 									>
 										<EllipsisIcon />
 									</button>
@@ -748,7 +751,7 @@
 	<div class="grid grid-cols-1 w-full">
 		<form
 			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
-			on:submit|preventDefault={updateTodo(id, category, title, description, due_date)}
+			on:submit|preventDefault={() => updateTodo(id, category, title, description, due_date)}
 		>
 			<div class="text-md text-white font-bold">Category:</div>
 			<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
@@ -800,7 +803,7 @@
 				<button
 					type="button"
 					class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-xl font-semibold"
-					on:click|stopPropagation={deleteTodo(id)}>Delete</button
+					on:click|stopPropagation={() => deleteTodo(id)}>Delete</button
 				>
 			</div>
 		</form>
