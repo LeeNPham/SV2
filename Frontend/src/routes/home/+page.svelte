@@ -404,7 +404,7 @@
 		}
 	}
 
-	function filterToMyTodos(myTodos, todos) {
+	function filterToMyTodos(myTodos: any[], todos: any[]) {
 		let newTodos = []
 		for (let i of myTodos) {
 			console.log('value', i)
@@ -416,7 +416,7 @@
 		return newTodos
 	}
 
-	function filterToMyCategories(myCategories, categories) {
+	function filterToMyCategories(myCategories: any[], categories: any[]) {
 		let newCategories = []
 		for (let i of myCategories) {
 			console.log('value', i)
