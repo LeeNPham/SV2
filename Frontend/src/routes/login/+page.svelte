@@ -1,13 +1,36 @@
 <script>
-	let email = ''
+	import { goto } from '$app/navigation'
+
+	let username = ''
 	let password = ''
 
-	function handleLogin() {
+	async function handleLogin() {
 		// Perform login logic here
-		// You can send the email and password to your server for authentication
-		console.log('Logging in...')
-		console.log('Email:', email)
-		console.log('Password:', password)
+		const formData = new FormData()
+		formData.append('username', username)
+		formData.append('password', password)
+
+		await fetch('http://127.0.0.1:8000/token', {
+			method: 'POST',
+			body: formData
+		})
+			.then((res) => {
+				console.log('res', res)
+				if (res.ok) {
+					return res.json()
+				} else {
+					throw new Error('Could not Login/obtain token')
+				}
+			})
+			.then((data) => {
+				const { access_token } = data
+				console.log('accesstoken', access_token)
+				// Use the access token for further authentication or store it as needed
+				// goto('/')
+			})
+			.catch((error) => {
+				console.error(error)
+			})
 	}
 </script>
 
@@ -16,11 +39,11 @@
 
 	<form on:submit|preventDefault={handleLogin}>
 		<div class="mb-4">
-			<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
+			<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
 			<input
-				type="email"
-				id="email"
-				bind:value={email}
+				type="text"
+				id="username"
+				bind:value={username}
 				required
 				class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 			/>

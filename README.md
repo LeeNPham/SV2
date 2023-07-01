@@ -8,3 +8,4 @@ use npm run preview instead of npm run dev
 * Frontend (Svelte)
 
 # Tickets:
+Add routing for login, add routing for registration, add routing for logout
