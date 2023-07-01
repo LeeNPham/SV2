@@ -1,8 +1,14 @@
+// @ts-nocheck
 // since there's no dynamic data here, we can prerender
 // it so that it gets served as a static asset in production
-
-import { goto } from '$app/navigation'
 import { token } from '$lib/stores'
+
+let accessToken
+
+// Subscribe to updates of the token store
+token.subscribe((value) => {
+	accessToken = value.access_token
+})
 
 export const prerender = true
 
@@ -19,23 +25,15 @@ async function getCategories() {
 }
 
 async function getAccountItems() {
-	const cookie = getAccessToken()
 	const response = await fetch('http://127.0.0.1:8000/accounts/profile/items', {
 		headers: {
-			Authorization: `Bearer ${cookie}`
+			Authorization: `Bearer ${accessToken}`
 		}
 	})
 	const data = await response.json()
 	return data
 }
 
-function getAccessToken() {
-	const cookieValue = document.cookie.split('; ').find((row) => row.startsWith('access_token='))
-	if (cookieValue) {
-		return cookieValue.split('=')[1]
-	}
-	goto('/login')
-}
 let stuff = getAccountItems()
 let todos = getTodos()
 let categories = getCategories()

@@ -25,6 +25,7 @@
 			})
 			.then((data) => {
 				const { access_token } = data
+				token.set({ access_token })
 				document.cookie = `access_token=${access_token}; path=/;`
 				goto('/home')
 			})
