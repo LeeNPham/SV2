@@ -26,13 +26,17 @@
 				const { access_token } = data
 				console.log('accesstoken', access_token)
 				document.cookie = `access_token=${access_token}; path=/;`
-				localStorage.set(`access_token=${access_token}; path=/;`)
+				localStorage.setItem('access_token', access_token)
 				//stores access token in cookie, consider doing refresh tokens in stores though?
 				goto('/')
 			})
 			.catch((error) => {
 				console.error(error)
 			})
+	}
+
+	function getAccessToken() {
+		return localStorage.getItem('access_token')
 	}
 </script>
 
