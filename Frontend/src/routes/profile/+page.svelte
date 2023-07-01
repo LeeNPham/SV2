@@ -19,6 +19,11 @@
 	function goHome() {
 		goto('/home')
 	}
+
+	function logout() {
+		goto('/')
+		localStorage.setItem('', '')
+	}
 </script>
 
 <div class="min-w-[414px] flex justify-center h-full px-8 py-20">

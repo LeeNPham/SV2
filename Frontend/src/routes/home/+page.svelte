@@ -403,13 +403,38 @@
 				})
 		}
 	}
+
+	function filterToMyTodos(myTodos, todos) {
+		let newTodos = []
+		for (let i of myTodos) {
+			console.log('value', i)
+			const todo = todos.find((todo) => todo._id === i)
+			if (todo) {
+				newTodos.push(todo)
+			}
+		}
+		return newTodos
+	}
+
+	function filterToMyCategories(myCategories, categories) {
+		let newCategories = []
+		for (let i of myCategories) {
+			console.log('value', i)
+			const category = categories.find((category) => category._id === i)
+			if (category) {
+				newCategories.push(category)
+			}
+		}
+		return newCategories
+	}
 	onMount(() => {
-		console.log('is this actually saved?', document.cookie)
-		// todosList = data.items
-		searchableTodos = data.items
+		let newItems = filterToMyTodos(data.stuff.todos, data.items)
+		let newCats = filterToMyCategories(data.stuff.categories, data.categories)
+
+		searchableTodos = newItems
 		tasksCount = data.items.length
 		initNotifications()
-		buildCategoriesWithTodos(data.categories, data.items)
+		buildCategoriesWithTodos(newCats, newItems)
 	})
 </script>
 

@@ -94,13 +94,13 @@
 
 		<button
 			type="submit"
-			class="px-4 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
+			class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
 		>
 			Register
 		</button>
 		<button
 			type="button"
-			class="px-4 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
+			class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
 		>
 			<a href="/">Login</a>
 		</button>
