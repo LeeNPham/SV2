@@ -316,7 +316,7 @@
 			})
 		})
 			.then((_res) => {
-				window.location = '/'
+				window.location.assign = '/home'
 			})
 			.catch((_err) => {
 				_err = !_err
