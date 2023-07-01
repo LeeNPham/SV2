@@ -25,8 +25,9 @@
 			.then((data) => {
 				const { access_token } = data
 				console.log('accesstoken', access_token)
-				// Use the access token for further authentication or store it as needed
-				// goto('/')
+				document.cookie = `access_token=${access_token}; path=/;`
+				//stores access token in cookie, consider doing refresh tokens in stores though?
+				goto('/')
 			})
 			.catch((error) => {
 				console.error(error)

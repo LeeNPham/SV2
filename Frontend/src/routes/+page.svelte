@@ -55,15 +55,15 @@
 	let completeCategories: any = []
 	let selectedCategory = 'All'
 	let notifications: any[] = []
-	let current_date = new Date()
+	let current_date: any = new Date()
 
 	// function formatDate(date) {
 	// 	const options = { year: 'numeric', month: 'long', day: 'numeric' }
 	// 	return date.toLocaleDateString(undefined, options)
 	// }
 
-	function checkDateStatus(dateArgument) {
-		const targetDate = new Date(dateArgument)
+	function checkDateStatus(dateArgument: any) {
+		const targetDate: any = new Date(dateArgument)
 		const oneDay = 24 * 60 * 60 * 1000 // One day in milliseconds
 
 		if (targetDate < current_date) {
@@ -124,7 +124,7 @@
 	}
 
 	let searchPattern: any
-	let fuse
+	let fuse: any
 	interface Todos {
 		_id: string
 		category: string
@@ -132,7 +132,7 @@
 		description: string
 		completion: boolean
 		create_date: string
-		due_date: string | null
+		due_date: string
 	}
 	let todosList: Todos[]
 	let searchableTodos: Todos[]
@@ -142,7 +142,7 @@
 		keys: ['title', 'description']
 	}
 
-	function search(Todos) {
+	function search(Todos: any) {
 		fuse = new Fuse(Todos, searchOptions)
 	}
 
@@ -152,7 +152,7 @@
 		if (fuse) {
 			if (searchPattern) {
 				const searchResult = fuse.search(searchPattern)
-				const filteredTodos = searchResult.map((obj) => obj.item)
+				const filteredTodos = searchResult.map((obj: any) => obj.item)
 				todosList = filteredTodos
 			} else {
 				todosList = []
@@ -404,6 +404,7 @@
 		}
 	}
 	onMount(() => {
+		console.log('is this actually saved?', document.cookie)
 		// todosList = data.items
 		searchableTodos = data.items
 		tasksCount = data.items.length
