@@ -98,5 +98,11 @@
 		>
 			Register
 		</button>
+		<button
+			type="button"
+			class="px-4 py-2 bg-green-500 text-white rounded cursor-pointer hover:bg-green-600"
+		>
+			<a href="/">Login</a>
+		</button>
 	</form>
 </main>
