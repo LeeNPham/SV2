@@ -23,11 +23,11 @@ class PyObjectId(ObjectId):
 
 class User(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    username: Optional[str] = None
-    email: Optional[str] = None
+    username: str
+    email: str
     disabled: Optional[bool] = False
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
+    first_name: str = None
+    last_name: str = None
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
@@ -55,7 +55,7 @@ class User(BaseModel):
 
 
 class UserInDb(User):
-    hashed_password: Optional[str]
+    hashed_password: str
 
     class Config:
         allow_population_by_field_name = True
@@ -81,11 +81,11 @@ class UserInDb(User):
 
 
 class UpdateUserModel(BaseModel):
-    username: Optional[str] = None
-    email: Optional[str] = None
+    username: Optional[str]
+    email: Optional[str]
     disabled: Optional[bool] = False
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
+    first_name: Optional[str]
+    last_name: Optional[str]
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
@@ -101,6 +101,7 @@ class UpdateUserModel(BaseModel):
                 "disabled": "false",
                 "first_name": "Lee",
                 "last_name": "Pham",
+                "description": "This is an example description for a user",
                 "todos": [
                     "647c33b7257a0b5aa8bf7a3f",
                     "647c61bff3250a39f366376d",
