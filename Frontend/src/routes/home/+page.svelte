@@ -416,6 +416,7 @@
 				error: new Error('Could not update user todo list')
 			}
 		}
+		showUpdateTodoModal = false
 	}
 
 	function createCategory() {
