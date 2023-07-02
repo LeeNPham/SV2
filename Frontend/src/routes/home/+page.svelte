@@ -268,90 +268,76 @@
 		showNewCategoryModal = true
 	}
 
-	function createTodo() {
-		const currentTime = new Date()
-		const create_date = currentTime.toISOString().split('T')[0].toString()
-		const newTodo = {
-			category: category == 'All' ? (category = '') : category,
-			title,
-			description,
-			completion,
-			create_date,
-			due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
-		}
+	async function createTodo() {
+		try {
+			const currentTime = new Date()
+			const create_date = currentTime.toISOString().split('T')[0].toString()
+			const newTodo = {
+				category: category === 'All' ? '' : category,
+				title,
+				description,
+				completion,
+				create_date,
+				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+			}
 
-		fetch('https://todo-test-api.onrender.com/api/todo/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(newTodo)
-		})
-			.then((res) => {
-				if (res.ok) {
-					return res.json()
-				} else {
-					throw new Error('Failed to create a new todo')
+			const res = await fetch('https://todo-test-api.onrender.com/api/todo/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newTodo)
+			})
+
+			if (!res.ok) {
+				throw new Error('Failed to create a new todo')
+			}
+
+			const data = await res.json()
+			const objectId = data._id
+
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET', // Fetch the user's current todo list
+				headers: {
+					'Content-Type': 'application/json'
 				}
 			})
-			.then((data) => {
-				const objectId = data._id
-				fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-					method: 'GET', // Fetch the user's current todo list
-					headers: {
-						'Content-Type': 'application/json'
-					}
+
+			if (!response.ok) {
+				throw new Error('Failed to fetch user todo list')
+			}
+
+			const userData = await response.json()
+			const currentTodos = userData.todos || [] // Existing todos or empty array if none
+			const updatedTodos = [...currentTodos, objectId] // Append the new objectId
+
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					todos: updatedTodos
 				})
-					.then((response) => {
-						if (response.ok) {
-							return response.json()
-						} else {
-							throw new Error('Failed to fetch user todo list')
-						}
-					})
-					.then((userData) => {
-						const currentTodos = userData.todos || [] // Existing todos or empty array if none
-						const updatedTodos = [...currentTodos, objectId] // Append the new objectId
-						return fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-							method: 'PUT',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({
-								todos: updatedTodos
-							})
-						})
-					})
-					.then((response) => {
-						if (response.ok) {
-							console.log('User todo list updated successfully')
-							;(window as Window).location = '/home'
-							return response.json()
-						} else {
-							throw new Error('Failed to update user todo list')
-						}
-					})
-					.then((userData) => {
-						console.log('Data after updating user:', userData)
-						console.log(userData.todos)
-					})
-					.catch((error) => {
-						console.error('Error updating user todo list:', error)
-						return {
-							status: 301,
-							error: new Error('Could not update user todo list')
-						}
-					})
-			})
-			.catch((error) => {
-				console.error('Error creating a new todo:', error)
-				return {
-					status: 301,
-					error: new Error('Could not create a new todo')
-				}
 			})
 
-		showNewTodoModal = false
+			if (!putResponse.ok) {
+				throw new Error('Failed to update user todo list')
+			}
+
+			console.log('User todo list updated successfully')
+			console.log('Data after updating user:', userData)
+			console.log(userData.todos)
+
+			showNewTodoModal = false
+			;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error creating a new todo:', error)
+			return {
+				status: 301,
+				error: new Error('Could not create a new todo')
+			}
+		}
 	}
 
 	async function updateTodo(
@@ -361,83 +347,75 @@
 		description: string,
 		due_date: string
 	) {
-		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				category: category,
-				title: title,
-				description: description,
-				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+		try {
+			const response = await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					category,
+					title,
+					description,
+					due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+				})
 			})
-		})
-			.then((_res) => {
-				window.location.assign('/home')
-			})
-			.catch((_err) => {
-				_err = !_err
-			})
+
+			if (!response.ok) {
+				throw new Error('Failed to update the todo')
+			}
+
+			window.location.assign('/home')
+		} catch (error) {
+			console.error('Error updating the todo:', error)
+			return {
+				status: 301,
+				error: new Error('Could not update the todo')
+			}
+		}
 	}
 
 	async function deleteTodo(id: string) {
-		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json'
+		try {
+			await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET', // Fetch the user's current todo list
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			if (!response.ok) {
+				throw new Error('Failed to fetch user todo list')
 			}
-		})
-			.then(() => {
-				fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-					method: 'GET', // Fetch the user's current todo list
-					headers: {
-						'Content-Type': 'application/json'
-					}
+			const userData = await response.json()
+			const currentTodos = userData.todos || [] // Existing todos or empty array if none
+			const updatedTodos = currentTodos.filter((todoId: string) => todoId !== id) // Remove the deleted todo from the list
+			const updateResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					todos: updatedTodos
 				})
-					.then((response) => {
-						if (response.ok) {
-							return response.json()
-						} else {
-							throw new Error('Failed to fetch user todo list')
-						}
-					})
-					.then((userData) => {
-						const currentTodos = userData.todos || [] // Existing todos or empty array if none
-						const updatedTodos = currentTodos.filter((todoId) => todoId !== id) // Remove the deleted todo from the list
-						return fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-							method: 'PUT',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({
-								todos: updatedTodos
-							})
-						})
-					})
-					.then((response) => {
-						if (response.ok) {
-							console.log('User todo list updated successfully')
-							return response.json()
-						} else {
-							throw new Error('Failed to update user todo list')
-						}
-					})
-					.then((userData) => {
-						console.log('Data after updating user:', userData)
-						console.log(userData.todos)
-					})
-					.catch((error) => {
-						console.error('Error updating user todo list:', error)
-						return {
-							status: 301,
-							error: new Error('Could not update user todo list')
-						}
-					})
 			})
-			.catch((_err) => {
-				_err = !_err
-			})
+			if (!updateResponse.ok) {
+				throw new Error('Failed to update user todo list')
+			}
+			const updatedUserData = await updateResponse.json()
+			console.log('Data after updating user:', updatedUserData)
+			console.log(updatedUserData.todos)
+		} catch (error) {
+			return {
+				status: 301,
+				error: new Error('Could not update user todo list')
+			}
+		}
 	}
 
 	function createCategory() {
