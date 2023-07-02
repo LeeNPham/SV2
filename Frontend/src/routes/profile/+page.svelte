@@ -21,7 +21,7 @@
 		goto('/home')
 	}
 
-	function logout() {
+	const logout = () => {
 		goto('/')
 		localStorage.setItem('', '')
 	}
@@ -93,6 +93,13 @@
 				/>
 				<div class="text-[14px] font-normal text-palette-gray">Good</div>
 				<div class="text-white text-[18px] tracking-wider">Consistency</div>
+			</div>
+			<div>
+				<button
+					on:click={logout}
+					type="button"
+					class="px-2 py-1 text-white bg-palette-lightgray rounded-md">Logout</button
+				>
 			</div>
 		</div>
 	</div>
