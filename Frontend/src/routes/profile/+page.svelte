@@ -27,6 +27,7 @@
 	}
 
 	onMount(async () => {
+		// console.log($user_username)
 		console.log(userID)
 		console.log(data)
 	})
