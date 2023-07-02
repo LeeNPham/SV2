@@ -51,18 +51,12 @@
 	let description = ''
 	let due_date: any
 
-	let myTodos = data.stuff.todos
 	let category_id = ''
-	let tasksCount = 0
+
 	let completeCategories: any = []
 	let selectedCategory = 'All'
-	let notifications: any[] = []
-	let current_date: any = new Date()
 
-	// function formatDate(date) {
-	// 	const options = { year: 'numeric', month: 'long', day: 'numeric' }
-	// 	return date.toLocaleDateString(undefined, options)
-	// }
+	let current_date: any = new Date()
 
 	function checkDateStatus(dateArgument: any) {
 		const targetDate: any = new Date(dateArgument)
@@ -77,19 +71,13 @@
 		}
 	}
 
-	let newList: any[] = []
-	function initNotifications(todos) {
-		for (let item of todos) {
-			if (item.due_date != 'null' && item.completion != true) {
-				newList.push(item)
+	function initNotifications(todos: any) {
+		todos.forEach((item: any) => {
+			if (item.due_date !== 'null' && !item.completion) {
+				item.condition = checkDateStatus(item.due_date)
 			}
-		}
-		for (let x of newList) {
-			let y = x.due_date
-			let val = checkDateStatus(y)
-			x.condition = val
-		}
-		// console.log(newList)
+		})
+		return todos
 	}
 
 	let categoryColors = [
@@ -522,8 +510,6 @@
 	let newCats = filterToMyCategories(data.stuff.categories, data.categories)
 	onMount(() => {
 		searchableTodos = newItems
-		tasksCount = data.items.length
-		initNotifications(newItems)
 		buildCategoriesWithTodos(newCats, newItems)
 	})
 </script>
@@ -628,30 +614,33 @@
 									Notifications
 								</div>
 								<hr class="border-palette-dark" />
-
-								{#each newList as notificationItem}
-									{#if notificationItem.condition != 'NA'}
-										<div
-											class=" bg-palette-medium w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
-										>
-											<div class="flex flex-row gap-1 items-center">
-												{#if notificationItem.condition == 'Past Due:'}
-													<div><BellNoticeIcon /></div>
-												{:else}
-													<div><AlarmIcon /></div>
-												{/if}
-												<div
-													class="text-xs {notificationItem.condition == 'Past Due:'
-														? 'text-red-600'
-														: 'text-orange-400'} font-semibold"
-												>
-													{notificationItem.condition}
+								{#await initNotifications(newItems)}
+									loading...
+								{:then newList}
+									{#each newList as notificationItem}
+										{#if notificationItem.condition != 'NA'}
+											<div
+												class=" bg-palette-medium w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
+											>
+												<div class="flex flex-row gap-1 items-center">
+													{#if notificationItem.condition == 'Past Due:'}
+														<div><BellNoticeIcon /></div>
+													{:else}
+														<div><AlarmIcon /></div>
+													{/if}
+													<div
+														class="text-xs {notificationItem.condition == 'Past Due:'
+															? 'text-red-600'
+															: 'text-orange-400'} font-semibold"
+													>
+														{notificationItem.condition}
+													</div>
+													<div class="text-palette-lightgray">{notificationItem.title}</div>
 												</div>
-												<div class="text-palette-lightgray">{notificationItem.title}</div>
 											</div>
-										</div>
-									{/if}
-								{/each}
+										{/if}
+									{/each}
+								{/await}
 							</div>
 						</dialog>
 					{/if}
@@ -836,69 +825,70 @@
 <!-- New Modals -->
 
 <!-- TODO: apply per id by looking it up and rendering out the form? -->
-<Modal Title="Update your Todo" bind:showModal={showUpdateTodoModal}>
-	<div class="grid grid-cols-1 w-full">
-		<form
-			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
-			on:submit|preventDefault={() => updateTodo(id, category, title, description, due_date)}
-		>
-			<div class="text-md text-white font-bold">Category:</div>
-			<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
-				<option disabled selected>Select a category</option>
-				{#each Object.keys(completeCategories) as categoryValue}
-					{#if categoryValue != 'All'}
-						<option value={categoryValue}>{categoryValue}</option>
-					{/if}
-				{/each}
-			</select>
+{#if showUpdateTodoModal}
+	<Modal Title="Update your Todo" bind:showModal={showUpdateTodoModal}>
+		<div class="grid grid-cols-1 w-full">
+			<form
+				class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
+				on:submit|preventDefault={() => updateTodo(id, category, title, description, due_date)}
+			>
+				<div class="text-md text-white font-bold">Category:</div>
+				<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
+					<option disabled selected>Select a category</option>
+					{#each Object.keys(completeCategories) as categoryValue}
+						{#if categoryValue != 'All'}
+							<option value={categoryValue}>{categoryValue}</option>
+						{/if}
+					{/each}
+				</select>
 
-			<div class="text-md text-white font-bold">Title:</div>
-			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder={title}
-				type="text"
-				bind:value={title}
-			/>
+				<div class="text-md text-white font-bold">Title:</div>
+				<input
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder={title}
+					type="text"
+					bind:value={title}
+				/>
 
-			<div class="text-md text-white font-bold">Description:</div>
-			<textarea
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder={description}
-				bind:value={description}
-			/>
+				<div class="text-md text-white font-bold">Description:</div>
+				<textarea
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder={description}
+					bind:value={description}
+				/>
 
-			<div class="text-md text-white font-bold">Created On:</div>
-			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder={create_date}
-				type="date"
-				readonly
-				bind:value={create_date}
-			/>
+				<div class="text-md text-white font-bold">Created On:</div>
+				<input
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder={create_date}
+					type="date"
+					readonly
+					bind:value={create_date}
+				/>
 
-			<div class="text-md text-white font-bold">Due Date:</div>
-			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder={due_date}
-				type="date"
-				bind:value={due_date}
-			/>
+				<div class="text-md text-white font-bold">Due Date:</div>
+				<input
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder={due_date}
+					type="date"
+					bind:value={due_date}
+				/>
 
-			<div class="flex flex-row justify-between">
-				<button
-					class="text-white px-2 py-1 bg-palette-dark hover:bg-palette-dark/50 rounded-xl font-semibold"
-					type="submit">Update</button
-				>
-				<button
-					type="button"
-					class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-xl font-semibold"
-					on:click|stopPropagation={() => deleteTodo(id)}>Delete</button
-				>
-			</div>
-		</form>
-	</div>
-</Modal>
-
+				<div class="flex flex-row justify-between">
+					<button
+						class="text-white px-2 py-1 bg-palette-dark hover:bg-palette-dark/50 rounded-xl font-semibold"
+						type="submit">Update</button
+					>
+					<button
+						type="button"
+						class="bg-red-600 hover:bg-red-600/50 text-white px-2 py-1 rounded-xl font-semibold"
+						on:click|stopPropagation={() => deleteTodo(id)}>Delete</button
+					>
+				</div>
+			</form>
+		</div>
+	</Modal>
+{/if}
 {#if showNewTodoModal}
 	<Modal Title="Create a New Todo" bind:showModal={showNewTodoModal}>
 		<div class="grid grid-cols-1 w-full">
@@ -981,6 +971,3 @@
 		</form>
 	</div>
 </Modal>
-
-<style>
-</style>
