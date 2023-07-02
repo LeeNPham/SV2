@@ -78,8 +78,8 @@
 	}
 
 	let newList: any[] = []
-	function initNotifications() {
-		for (let item of data.items) {
+	function initNotifications(todos) {
+		for (let item of todos) {
 			if (item.due_date != 'null' && item.completion != true) {
 				newList.push(item)
 			}
@@ -325,6 +325,7 @@
 					.then((response) => {
 						if (response.ok) {
 							console.log('User todo list updated successfully')
+							;(window as Window).location = '/home'
 							return response.json()
 						} else {
 							throw new Error('Failed to update user todo list')
@@ -332,6 +333,7 @@
 					})
 					.then((userData) => {
 						console.log('Data after updating user:', userData)
+						console.log(userData.todos)
 					})
 					.catch((error) => {
 						console.error('Error updating user todo list:', error)
@@ -379,6 +381,21 @@
 			})
 	}
 
+	// async function deleteTodo(id: string) {
+	// 	await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+	// 		method: 'DELETE',
+	// 		headers: {
+	// 			'Content-Type': 'application/json'
+	// 		}
+	// 	})
+	// 		.then(() => {
+	// 			;(window as Window).location = '/home'
+	// 		})
+	// 		.catch((_err) => {
+	// 			_err = !_err
+	// 		})
+	// }
+
 	async function deleteTodo(id: string) {
 		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
 			method: 'DELETE',
@@ -387,7 +404,51 @@
 			}
 		})
 			.then(() => {
-				;(window as Window).location = '/home'
+				fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+					method: 'GET', // Fetch the user's current todo list
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+					.then((response) => {
+						if (response.ok) {
+							return response.json()
+						} else {
+							throw new Error('Failed to fetch user todo list')
+						}
+					})
+					.then((userData) => {
+						const currentTodos = userData.todos || [] // Existing todos or empty array if none
+						const updatedTodos = currentTodos.filter((todoId) => todoId !== id) // Remove the deleted todo from the list
+						return fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+							method: 'PUT',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({
+								todos: updatedTodos
+							})
+						})
+					})
+					.then((response) => {
+						if (response.ok) {
+							console.log('User todo list updated successfully')
+							return response.json()
+						} else {
+							throw new Error('Failed to update user todo list')
+						}
+					})
+					.then((userData) => {
+						console.log('Data after updating user:', userData)
+						console.log(userData.todos)
+					})
+					.catch((error) => {
+						console.error('Error updating user todo list:', error)
+						return {
+							status: 301,
+							error: new Error('Could not update user todo list')
+						}
+					})
 			})
 			.catch((_err) => {
 				_err = !_err
@@ -492,13 +553,13 @@
 		return newCategories
 	}
 
-	onMount(() => {
-		let newItems = filterToMyTodos(data.stuff.todos, data.items)
+	let newItems = filterToMyTodos(data.stuff.todos, data.items)
 
-		let newCats = filterToMyCategories(data.stuff.categories, data.categories)
+	let newCats = filterToMyCategories(data.stuff.categories, data.categories)
+	onMount(() => {
 		searchableTodos = newItems
 		tasksCount = data.items.length
-		initNotifications()
+		initNotifications(newItems)
 		buildCategoriesWithTodos(newCats, newItems)
 	})
 </script>
