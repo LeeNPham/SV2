@@ -5,16 +5,15 @@ import { token, userId } from '$lib/stores'
 
 let accessToken = null
 
-if (typeof localStorage !== 'undefined') {
-	accessToken = localStorage.getItem('accessToken')
-}
+// if (typeof localStorage !== 'undefined') {
+// 	accessToken = localStorage.getItem('access_token')
+// }
 // Subscribe to updates of the token store
 token.subscribe((value) => {
 	accessToken = value.access_token
-
 	// Check if localStorage is available
 	if (typeof localStorage !== 'undefined') {
-		localStorage.setItem('accessToken', accessToken)
+		accessToken = localStorage.getItem('accessToken')
 	}
 })
 

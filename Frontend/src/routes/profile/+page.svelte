@@ -17,7 +17,7 @@
 	let userEmail = data.user.email
 	let userDescription = data.user.description
 
-	function goHome() {
+	const goHome = () => {
 		goto('/home')
 	}
 
