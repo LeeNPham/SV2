@@ -3,7 +3,6 @@
 	import Modal from '$lib/components/Modal.svelte'
 	import CircleIcon from '$lib/icons/CircleIcon.svelte'
 	import EllipsisIcon from '$lib/icons/EllipsisIcon.svelte'
-	// @ts-ignore
 	import CheckCircle from '$lib/icons/CheckCircle.svelte'
 	import CirclePlus from '$lib/icons/CirclePlus.svelte'
 	import BellIcon from '$lib/icons/BellIcon.svelte'
@@ -15,9 +14,7 @@
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
 	import { userId } from '$lib/stores.js'
-	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
-
-	export let data //grabs information from our +page.js
+	export let data
 
 	interface Todo {
 		id: string
@@ -50,12 +47,9 @@
 	let title = ''
 	let description = ''
 	let due_date: any
-
 	let category_id = ''
-
 	let completeCategories: any = []
 	let selectedCategory = 'All'
-
 	let current_date: any = new Date()
 
 	function checkDateStatus(dateArgument: any) {
@@ -407,47 +401,129 @@
 		showUpdateTodoModal = false
 	}
 
-	function createCategory() {
-		const currentTime = new Date()
-		const create_date = currentTime.toISOString().split('T')[0].toString()
-		const newCategory = {
-			title,
-			description,
-			create_date
-		}
+	async function createCategory() {
+		try {
+			const currentTime = new Date()
+			const create_date = currentTime.toISOString().split('T')[0].toString()
+			const newCategory = {
+				title,
+				description,
+				create_date
+			}
 
-		fetch('https://todo-test-api.onrender.com/api/category/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(newCategory)
-		})
-			.then(() => {
-				;(window as Window).location = '/home'
+			const res = await fetch('https://todo-test-api.onrender.com/api/category/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newCategory)
 			})
-			.catch(() => {
-				return {
-					status: 301,
-					error: new Error('Could not create a new category')
+
+			if (!res.ok) {
+				throw new Error('Failed to create a new category')
+			}
+
+			const data = await res.json()
+			const categoryId = data._id
+
+			const userResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
 				}
 			})
+
+			if (!userResponse.ok) {
+				throw new Error('Failed to fetch user data')
+			}
+
+			const userData = await userResponse.json()
+			const currentCategories = userData.categories || []
+			const updatedCategories = [...currentCategories, categoryId]
+
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					categories: updatedCategories
+				})
+			})
+
+			if (!putResponse.ok) {
+				throw new Error('Failed to update user category list')
+			}
+
+			console.log('User category list updated successfully')
+			console.log('Data after updating user:', userData)
+			console.log(userData.categories)
+
+			showNewCategoryModal = false
+			;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error creating a new category:', error)
+			return {
+				status: 301,
+				error: new Error('Could not create a new category')
+			}
+		}
 	}
 
 	async function deleteCategory(e: any) {
-		category_id = e.target.parentElement.id
-		await fetch(`https://todo-test-api.onrender.com/api/category/${category_id}`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json'
+		try {
+			const category_id = e.target.parentElement.id
+
+			await fetch(`https://todo-test-api.onrender.com/api/category/${category_id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+
+			if (!response.ok) {
+				throw new Error('Failed to fetch user data')
 			}
-		})
-			.then(() => {
-				;(window as Window).location = '/home'
+
+			const userData = await response.json()
+			const currentCategories = userData.categories || []
+			const updatedCategories = currentCategories.filter(
+				(categoryId: string) => categoryId !== category_id
+			)
+
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					categories: updatedCategories
+				})
 			})
-			.catch(() => {
-				console.log('there was an error deleting this')
-			})
+
+			if (!putResponse.ok) {
+				throw new Error('Failed to update user category list')
+			}
+
+			console.log('User category list updated successfully')
+			console.log('Data after updating user:', userData)
+			console.log(userData.categories)
+
+			;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error deleting category:', error)
+			return {
+				status: 301,
+				error: new Error('Could not update user category list')
+			}
+		}
 	}
 
 	async function toggleCheckbox(x: any, id: string) {
@@ -473,7 +549,7 @@
 		}
 	}
 
-	function filterToMyTodos(myTodos: any, todos: any[]) {
+	function filterToMyTodos(myTodos: any, todos: any[]): any[] {
 		let newTodos: any[] = []
 		if (!Array.isArray(myTodos)) {
 			console.log('myTodos is not an array')

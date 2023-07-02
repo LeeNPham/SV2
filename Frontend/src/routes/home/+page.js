@@ -3,11 +3,16 @@
 // it so that it gets served as a static asset in production
 import { token, userId } from '$lib/stores'
 
-let accessToken = typeof localStorage !== 'undefined' ? localStorage.getItem('accessToken') : null
+let accessToken = null
 
+if (typeof localStorage !== 'undefined') {
+	accessToken = localStorage.getItem('accessToken')
+}
 // Subscribe to updates of the token store
 token.subscribe((value) => {
 	accessToken = value.access_token
+
+	// Check if localStorage is available
 	if (typeof localStorage !== 'undefined') {
 		localStorage.setItem('accessToken', accessToken)
 	}
@@ -38,9 +43,17 @@ async function getAccountItems(fetch) {
 }
 
 async function getAccountDetails(fetch) {
+	const item =
+		accessToken ||
+		(typeof localStorage !== 'undefined' ? localStorage.getItem('accessToken') : null)
+	if (item !== null) {
+		console.log(item)
+	} else {
+		console.log('accessToken not found')
+	}
 	const response = await fetch('https://accounts-79lp.onrender.com/accounts/profile/', {
 		headers: {
-			Authorization: `Bearer ${accessToken}`
+			Authorization: `Bearer ${item}`
 		}
 	})
 	const data = await response.json()
