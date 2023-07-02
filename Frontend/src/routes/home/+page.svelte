@@ -515,7 +515,6 @@
 			console.log('User category list updated successfully')
 			console.log('Data after updating user:', userData)
 			console.log(userData.categories)
-
 			;(window as Window).location = '/home'
 		} catch (error) {
 			console.error('Error deleting category:', error)
@@ -548,11 +547,10 @@
 				})
 		}
 	}
+	let newTodos: any[] = []
 
-	function filterToMyTodos(myTodos: any, todos: any[]): any[] {
-		let newTodos: any[] = []
+	function filterToMyTodos(myTodos: any[], todos: any[]): any[] {
 		if (!Array.isArray(myTodos)) {
-			console.log('myTodos is not an array')
 			return newTodos
 		}
 		for (let i of myTodos) {
@@ -567,9 +565,6 @@
 	function filterToMyCategories(myCategories: any[], categories: any[]) {
 		let newCategories: any[] = []
 		if (!Array.isArray(myCategories)) {
-			console.log(
-				'myTodos is not an array, store the initially mounted value in either stores and check to see if available before updating this, we can subscribe to it later on as well'
-			)
 			return newCategories
 		}
 		for (let i of myCategories) {
