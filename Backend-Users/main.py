@@ -93,17 +93,17 @@ async def get_users():
     tags=["CRUD Users"],
 )
 async def post_user(user: UserInDb = Body(...)):
-
     existing_user = await fetch_one_user_by_username(user.username)
     if existing_user:
         raise HTTPException(400, "Username already exists")
-    user.username = user.username.lower()
-    user.hashed_password = get_password_hash(user.hashed_password)
-    user = jsonable_encoder(user)
-    response = await create_user(user)
-    if response:
-        return response
-    raise HTTPException(400, "Something went wrong / Bad Request")
+    else:
+        user.username = user.username.lower()
+        user.hashed_password = get_password_hash(user.hashed_password)
+        user = jsonable_encoder(user)
+        response = await create_user(user)
+        if response:
+            return response
+        raise HTTPException(400, "Something went wrong / Bad Request")
 
 
 @app.get(

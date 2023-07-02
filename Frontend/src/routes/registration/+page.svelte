@@ -39,7 +39,7 @@
 <main class="max-w-md mx-auto p-4 text-center">
 	<h1 class="text-white text-2xl font-bold mb-4">Register New User</h1>
 
-	<form on:submit|preventDefault={register} class="flex flex-col">
+	<form on:submit|preventDefault|once={register} class="flex flex-col">
 		<input
 			placeholder="Username"
 			type="text"
