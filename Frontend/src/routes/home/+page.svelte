@@ -14,6 +14,7 @@
 	import Fuse from 'fuse.js'
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
+	import { userId } from '$lib/stores.js'
 	// import DeleteIcon from '$lib/icons/DeleteIcon.svelte';
 
 	export let data //grabs information from our +page.js
@@ -50,6 +51,7 @@
 	let description = ''
 	let due_date: any
 
+	let myTodos = data.stuff.todos
 	let category_id = ''
 	let tasksCount = 0
 	let completeCategories: any = []
@@ -286,33 +288,68 @@
 			body: JSON.stringify(newTodo)
 		})
 			.then((res) => {
-				console.log(res)
-
-				window.location.assign('/home')
+				if (res.ok) {
+					return res.json()
+				} else {
+					throw new Error('Failed to create a new todo')
+				}
 			})
-			.catch(() => {
+			.then((data) => {
+				const objectId = data._id
+				fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+					method: 'GET', // Fetch the user's current todo list
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+					.then((response) => {
+						if (response.ok) {
+							return response.json()
+						} else {
+							throw new Error('Failed to fetch user todo list')
+						}
+					})
+					.then((userData) => {
+						const currentTodos = userData.todos || [] // Existing todos or empty array if none
+						const updatedTodos = [...currentTodos, objectId] // Append the new objectId
+						return fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+							method: 'PUT',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({
+								todos: updatedTodos
+							})
+						})
+					})
+					.then((response) => {
+						if (response.ok) {
+							console.log('User todo list updated successfully')
+							return response.json()
+						} else {
+							throw new Error('Failed to update user todo list')
+						}
+					})
+					.then((userData) => {
+						console.log('Data after updating user:', userData)
+					})
+					.catch((error) => {
+						console.error('Error updating user todo list:', error)
+						return {
+							status: 301,
+							error: new Error('Could not update user todo list')
+						}
+					})
+			})
+			.catch((error) => {
+				console.error('Error creating a new todo:', error)
 				return {
 					status: 301,
 					error: new Error('Could not create a new todo')
 				}
 			})
 
-		// fetch('https://todo-test-api.onrender.com/api/todo/', {
-		// 	method: 'PUT',
-		// 	headers: {
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify(newTodo)
-		// })
-		// 	.then(() => {
-		// 		;(window as Window).location = '/home'
-		// 	})
-		// 	.catch(() => {
-		// 		return {
-		// 			status: 301,
-		// 			error: new Error('Could not create a new todo')
-		// 		}
-		// 	})
+		showNewTodoModal = false
 	}
 
 	async function updateTodo(
@@ -457,8 +494,8 @@
 
 	onMount(() => {
 		let newItems = filterToMyTodos(data.stuff.todos, data.items)
-		let newCats = filterToMyCategories(data.stuff.categories, data.categories)
 
+		let newCats = filterToMyCategories(data.stuff.categories, data.categories)
 		searchableTodos = newItems
 		tasksCount = data.items.length
 		initNotifications()
@@ -837,50 +874,56 @@
 	</div>
 </Modal>
 
-<Modal Title="Create a New Todo" bind:showModal={showNewTodoModal}>
-	<div class="grid grid-cols-1 w-full">
-		<form
-			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
-			on:submit|preventDefault={createTodo}
-		>
-			<div class="text-md text-white font-bold">Category:</div>
+{#if showNewTodoModal}
+	<Modal Title="Create a New Todo" bind:showModal={showNewTodoModal}>
+		<div class="grid grid-cols-1 w-full">
+			<form
+				class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
+				on:submit|preventDefault={createTodo}
+			>
+				<div class="text-md text-white font-bold">Category:</div>
 
-			<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
-				<option disabled selected>Select a category</option>
-				{#each Object.keys(completeCategories) as categoryValue}
-					{#if categoryValue != 'All'}
-						<option value={categoryValue}>{categoryValue}</option>
-					{/if}
-				{/each}
-			</select>
+				<select bind:value={category} class="border border-gray-300 rounded-xl px-2 py-1">
+					<option disabled selected>Select a category</option>
+					{#each Object.keys(completeCategories) as categoryValue}
+						{#if categoryValue != 'All'}
+							<option value={categoryValue}>{categoryValue}</option>
+						{/if}
+					{/each}
+				</select>
 
-			<div class="text-md text-white font-bold">Title:</div>
-			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="New Title"
-				type="text"
-				bind:value={title}
-				required
-			/>
+				<div class="text-md text-white font-bold">Title:</div>
+				<input
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder="New Title"
+					type="text"
+					bind:value={title}
+					required
+				/>
 
-			<div class="text-md text-white font-bold">Description:</div>
-			<textarea
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="New Description"
-				bind:value={description}
-			/>
+				<div class="text-md text-white font-bold">Description:</div>
+				<textarea
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder="New Description"
+					bind:value={description}
+				/>
 
-			<div class="text-md text-white font-bold">Due Date:</div>
-			<input class="rounded-xl py-0 placeholder:text-gray-400" type="date" bind:value={due_date} />
-			<div>
-				<button
-					class="text-white bg-palette-dark hover:bg-palette-dark/50 shadow-md px-2 py-1 rounded-xl font-semibold"
-					type="submit">Create Todo</button
-				>
-			</div>
-		</form>
-	</div>
-</Modal>
+				<div class="text-md text-white font-bold">Due Date:</div>
+				<input
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					type="date"
+					bind:value={due_date}
+				/>
+				<div>
+					<button
+						class="text-white bg-palette-dark hover:bg-palette-dark/50 shadow-md px-2 py-1 rounded-xl font-semibold"
+						type="submit">Create Todo</button
+					>
+				</div>
+			</form>
+		</div>
+	</Modal>
+{/if}
 
 <Modal Title="Create a New Category" bind:showModal={showNewCategoryModal}>
 	<div class="grid grid-cols-1 w-full">

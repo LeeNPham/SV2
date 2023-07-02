@@ -1,7 +1,7 @@
 // @ts-nocheck
 // since there's no dynamic data here, we can prerender
 // it so that it gets served as a static asset in production
-import { token } from '$lib/stores'
+import { token, userId } from '$lib/stores'
 
 let accessToken = typeof localStorage !== 'undefined' ? localStorage.getItem('accessToken') : null
 
@@ -37,16 +37,29 @@ async function getAccountItems(fetch) {
 	return data
 }
 
+async function getAccountDetails(fetch) {
+	const response = await fetch('https://accounts-79lp.onrender.com/accounts/profile/', {
+		headers: {
+			Authorization: `Bearer ${accessToken}`
+		}
+	})
+	const data = await response.json()
+	userId.set(data._id)
+	return data
+}
+
 export async function load({ fetch }) {
-	const [todos, categories, stuff] = await Promise.all([
+	const [todos, categories, stuff, identity] = await Promise.all([
 		getTodos(fetch),
 		getCategories(fetch),
-		getAccountItems(fetch)
+		getAccountItems(fetch),
+		getAccountDetails(fetch)
 	])
 
 	return {
 		items: todos,
 		categories: categories,
-		stuff: stuff
+		stuff: stuff,
+		identity: identity
 	}
 }

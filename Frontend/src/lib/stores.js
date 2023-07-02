@@ -5,6 +5,7 @@ import { writable } from 'svelte/store'
 export const isLoggedIn = writable(false)
 
 export const token = writable({})
+export const userId = writable('')
 export const user_username = writable('')
 export const user_description = writable('')
 export const todosStore = writable([])
