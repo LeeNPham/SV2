@@ -381,21 +381,6 @@
 			})
 	}
 
-	// async function deleteTodo(id: string) {
-	// 	await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
-	// 		method: 'DELETE',
-	// 		headers: {
-	// 			'Content-Type': 'application/json'
-	// 		}
-	// 	})
-	// 		.then(() => {
-	// 			;(window as Window).location = '/home'
-	// 		})
-	// 		.catch((_err) => {
-	// 			_err = !_err
-	// 		})
-	// }
-
 	async function deleteTodo(id: string) {
 		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
 			method: 'DELETE',
