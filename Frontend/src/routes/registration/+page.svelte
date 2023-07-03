@@ -36,7 +36,7 @@
 	}
 </script>
 
-<main class="max-w-md mx-auto p-4 text-center">
+<main class="bg-palette-gray rounded-lg max-w-md mx-auto p-4 text-center">
 	<h1 class="text-white text-2xl font-bold mb-4">Register New User</h1>
 
 	<form on:submit|preventDefault|once={register} class="flex flex-col">
@@ -46,7 +46,7 @@
 			id="username"
 			bind:value={username}
 			required
-			class="px-4 py-2 mb-4 border rounded"
+			class="px-4 py-1 mb-4 border rounded"
 		/>
 
 		<input
@@ -55,7 +55,7 @@
 			id="email"
 			bind:value={email}
 			required
-			class="px-4 py-2 mb-4 border rounded"
+			class="px-4 py-1 mb-4 border rounded"
 		/>
 
 		<input
@@ -64,7 +64,7 @@
 			id="firstName"
 			bind:value={firstName}
 			required
-			class="px-4 py-2 mb-4 border rounded"
+			class="px-4 py-1 mb-4 border rounded"
 		/>
 
 		<input
@@ -73,7 +73,7 @@
 			id="lastName"
 			bind:value={lastName}
 			required
-			class="px-4 py-2 mb-4 border rounded"
+			class="px-4 py-1 mb-4 border rounded"
 		/>
 
 		<input
@@ -82,7 +82,7 @@
 			id="password"
 			bind:value={password}
 			required
-			class="px-4 py-2 mb-4 border rounded"
+			class="px-4 py-1 mb-4 border rounded"
 		/>
 
 		<textarea
@@ -92,6 +92,7 @@
 			class="px-4 py-2 mb-4 border rounded"
 		/>
 
+		<div class='flex flex-col gap-4' >
 		<button
 			type="submit"
 			class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
@@ -104,5 +105,7 @@
 		>
 			<a href="/">Login</a>
 		</button>
+	</div>
+
 	</form>
 </main>
