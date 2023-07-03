@@ -15,7 +15,12 @@ collection = database.upload
 
 
 async def upload_to_db(photo, photo_data):
-    document = {"filename": photo.filename, "data": photo_data}
+    content_type = photo.content_type
+    document = {
+        "filename": photo.filename,
+        "content_type": content_type,
+        "data": photo_data,
+    }
     result = await collection.insert_one(document)
     return result
 
@@ -24,9 +29,12 @@ async def get_file_from_db(file_id):
     document = await collection.find_one({"_id": ObjectId(file_id)})
     if document:
         file_data = document["data"]
-        headers = {
-            "Content-Disposition": f'attachment; filename="{document["filename"]}"'
-        }
+        # this type of header is to download, the other one is for viewing it
+        # remove content_type related details in the upload_to_db portion function above
+        # headers = {
+        #     "Content-Disposition": f'attachment; filename="{document["filename"]}"'
+        # }
+        headers = {"Content-Type": document["content_type"]}
         return StreamingResponse(BytesIO(file_data), headers=headers)
 
 
