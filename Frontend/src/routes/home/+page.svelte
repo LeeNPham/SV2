@@ -39,7 +39,7 @@
 	let showUpdateTodoModal = false
 	let showNewCategoryModal = false
 	let completion = false
-	let userFirstName = 'Lee'
+	let userFirstName = data.identity.first_name
 	let create_date = ''
 
 	let id = ''
