@@ -1,43 +1,18 @@
 <script lang="ts">
-	import { goto } from '$app/navigation'
-	import { token, user_username } from '$store/stores'
+    import { _handleLogin } from './+page';
 
-	let username = ''
-	let password = ''
+    let username = '';
+    let password = '';
 
-	async function handleLogin() {
-		const formData = new FormData()
-		formData.append('username', username)
-		formData.append('password', password)
-		await fetch('https://accounts-79lp.onrender.com/token', {
-			method: 'POST',
-			body: formData
-		})
-			.then((res) => {
-				if (res.ok) {
-					return res.json()
-				} else {
-					throw new Error('Could not Login/obtain token')
-				}
-			})
-			.then((data) => {
-				const { access_token } = data
-				user_username.set(username)
-				token.set({ access_token })
-				localStorage.setItem('accessToken', access_token)
-				document.cookie = `access_token=${access_token}; path=/;`
-				goto('/home')
-			})
-			.catch((error) => {
-				console.error(error)
-			})
-	}
+    async function login() {
+        await _handleLogin(username, password);
+    }
 </script>
 
 <div class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8 mb-4">
 	<h1 class="text-2xl font-bold mb-6 text-palette-dark">Login to see your Todos!</h1>
 
-	<form on:submit|preventDefault={handleLogin}>
+	<form on:submit|preventDefault={login}>
 		<div class="mb-4">
 			<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
 			<input

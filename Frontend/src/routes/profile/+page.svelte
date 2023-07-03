@@ -1,14 +1,14 @@
 <script>
 	import { goto } from '$app/navigation'
+	import { onMount } from 'svelte'
+	import { slide } from 'svelte/transition'
+	import { user_username } from '$store/stores'
 	import Categories from '$lib/icons/Categories.svelte'
 	import BooksmarksIcon from '$lib/icons/BooksmarksIcon.svelte'
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
-	import { slide } from 'svelte/transition'
 	import profileDefault from '$lib/images/profileDefault.jpg'
-	import { onMount } from 'svelte'
 	export let data
-	import { user_username } from '$store/stores'
 
 	let firstName = data.user.first_name
 	let lastName = data.user.last_name
@@ -27,7 +27,6 @@
 	}
 
 	onMount(async () => {
-		// console.log($user_username)
 		console.log(userID)
 		console.log(data)
 	})
