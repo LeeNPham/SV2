@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation'
-	import { token, user_username } from '$lib/stores'
+	import { token, user_username } from '$store/stores'
 
 	let username = ''
 	let password = ''

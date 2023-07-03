@@ -1,4 +1,4 @@
-import { user_username } from '$lib/stores'
+import { user_username } from '$store/stores'
 
 export const prerender = true
 

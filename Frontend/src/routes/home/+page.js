@@ -1,7 +1,7 @@
 // @ts-nocheck
 // since there's no dynamic data here, we can prerender
 // it so that it gets served as a static asset in production
-import { token, userId } from '$lib/stores'
+import { token, userId } from '$store/stores'
 
 let accessToken = null
 

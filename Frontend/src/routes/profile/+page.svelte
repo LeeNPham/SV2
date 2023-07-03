@@ -8,7 +8,7 @@
 	import profileDefault from '$lib/images/profileDefault.jpg'
 	import { onMount } from 'svelte'
 	export let data
-	import { user_username } from '$lib/stores'
+	import { user_username } from '$store/stores'
 
 	let firstName = data.user.first_name
 	let lastName = data.user.last_name
