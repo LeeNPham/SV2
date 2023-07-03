@@ -691,7 +691,7 @@
 									loading...
 								{:then newList}
 									{#each newList as notificationItem}
-										{#if notificationItem.condition != 'NA'}
+										{#if notificationItem.condition != 'NA' && notificationItem.condition != undefined}
 											<div
 												class=" bg-palette-medium w-full rounded-lg px-2 py-1 flex flex-row gap-2 items-center justify-between"
 											>
