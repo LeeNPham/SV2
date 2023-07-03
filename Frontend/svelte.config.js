@@ -11,6 +11,14 @@ const config = {
 			$lib: path.resolve('./src/lib'),
 			$src: path.resolve('./src')
 		}
+		// csp: {
+		//     directives: {
+		//         'script-src': ['self']
+		//     },
+		//     reportOnly: {
+		//         'script-src': ['self']
+		//     }
+		// }
 	},
 
 	preprocess: [
