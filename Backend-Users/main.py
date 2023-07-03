@@ -93,18 +93,8 @@ async def get_users():
     response_model=User,
     tags=["CRUD Users"],
 )
-async def post_user(
-    user: UserInDb = Body(...), profile_picture: UploadFile = File(None)
-):
-    # Process the file upload
-    if profile_picture is not None:
-        # Save the file to a location or perform any required processing
-        file_path = f"uploads/{profile_picture.filename}"
-        with open(file_path, "wb") as f:
-            f.write(await profile_picture.read())
-        user.profile_picture = file_path
+async def post_user(user: UserInDb = Body(...)):
 
-    # Continue with the user creation logic
     existing_user = await fetch_one_user_by_username(user.username)
     if existing_user:
         raise HTTPException(400, "Username already exists")
@@ -150,18 +140,8 @@ async def get_user_by_username(username: str):
     response_model=User,
     tags=["CRUD Users"],
 )
-async def put_user(
-    id: str, user: UpdateUserModel = Body(...), profile_picture: UploadFile = File(None)
-):
-    # Process the file upload
-    if profile_picture is not None:
-        # Save the file to a location or perform any required processing
-        file_path = f"uploads/{profile_picture.filename}"
-        with open(file_path, "wb") as f:
-            f.write(await profile_picture.read())
-        user.profile_picture = file_path
+async def put_user(id: str, user: UpdateUserModel = Body(...)):
 
-    # Continue with the user update logic
     user = {k: v for k, v in user.dict().items() if v is not None}
     if len(user) >= 1:
         response = await update_user(id, user)

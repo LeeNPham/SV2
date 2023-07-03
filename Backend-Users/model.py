@@ -31,7 +31,6 @@ class User(BaseModel):
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
-    profile_picture: Optional[str] = None  # Add the profile_picture field
 
     class Config:
         allow_population_by_field_name = True
@@ -76,8 +75,7 @@ class UserInDb(User):
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
-                "profile_picture": "path/to/profile/picture.jpg",
-                "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
+                "hashed_password": "Password123!",
             }
         }
 
@@ -91,7 +89,6 @@ class UpdateUserModel(BaseModel):
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
-    profile_picture: Optional[str] = None  # Add the profile_picture field
     hashed_password: Optional[str]
 
     class Config:
@@ -104,15 +101,14 @@ class UpdateUserModel(BaseModel):
                 "disabled": "false",
                 "first_name": "Lee",
                 "last_name": "Pham",
-                "description": "This is an example description for a user",
+                "description": "hello world, i like to code, i like to consider that im a real software engineer but im just actually having fun!",
                 "todos": [
                     "647c33b7257a0b5aa8bf7a3f",
                     "647c61bff3250a39f366376d",
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
-                "profile_picture": "path/to/profile/picture.jpg",
-                "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
+                "hashed_password": "Password123!",
             }
         }
 
