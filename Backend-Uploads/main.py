@@ -4,18 +4,18 @@ from database import (
     create_todo,
     update_todo,
     remove_todo,
+    upload_to_db,
+    get_file_from_db,
 )
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 from model import Todo, UpdateTodoModel
 
-# App object
+
 app = FastAPI()
 
-
-# Set up a settings.py file later to import these settings?
 origins = ["*"]
 
 app.add_middleware(
@@ -25,6 +25,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.post("/upload-photo", tags=["Uploads"])
+async def upload_photo(photo: UploadFile = File(...)):
+    photo_data = await photo.read()
+    response = await upload_to_db(photo, photo_data)
+    return {
+        "message": "Photo uploaded successfully",
+        "file_id": str(response.inserted_id),
+    }
+
+
+@app.get("/files/{file_id}", tags=["Uploads"])
+async def get_file(file_id: str):
+    response = await get_file_from_db(file_id)
+    if response:
+        return response
+    raise HTTPException(status_code=404, detail="File not found")
 
 
 @app.get("/api/todo", tags=["Todos"])
