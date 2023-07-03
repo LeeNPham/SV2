@@ -2,20 +2,22 @@
 	import { goto } from '$app/navigation'
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import { user_username } from '$store/stores'
+	import { user_username} from '$store/stores'
 	import Categories from '$lib/icons/Categories.svelte'
 	import BooksmarksIcon from '$lib/icons/BooksmarksIcon.svelte'
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import profileDefault from '$lib/images/profileDefault.jpg'
-	export let data
+	// export let data
 
-	let firstName = data.user.first_name
-	let lastName = data.user.last_name
-	let userID = data.user._id
-	let userName = $user_username
-	let userEmail = data.user.email
-	let userDescription = data.user.description
+
+	// let firstName = $userIdentity.first_name
+	// let lastName = $userIdentity.last_name
+	// let userID = $userIdentity._id
+	// let userName = $user_username
+	// let userEmail = $userIdentity.email
+	// let userDescription = $userIdentity.description
+
 
 	const goHome = () => {
 		goto('/home')
@@ -23,13 +25,25 @@
 
 	const logout = () => {
 		goto('/')
-		localStorage.setItem('', '')
+		localStorage.clear()
+
 	}
+	let firstName
+	let lastName
+	let userID
+	let userName
+	let userEmail
+	let userDescription
 
 	onMount(async () => {
-		// console.log($user_username)
-		console.log(userID)
-		console.log(data)
+		const userIdentity = JSON.parse(localStorage.getItem('userIdentity'));
+		console.log(userIdentity)
+		firstName = userIdentity.first_name
+		lastName = userIdentity.last_name
+		userID = userIdentity._id
+		userName = userIdentity.username
+		userEmail = userIdentity.email
+		userDescription = userIdentity.description
 	})
 </script>
 

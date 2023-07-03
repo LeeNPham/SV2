@@ -43,6 +43,7 @@ async function getAccountDetails(fetch) {
 		}
 	})
 	const data = await response.json()
+	localStorage.setItem('userIdentity', JSON.stringify(data))
 	userId.set(data._id)
 	return data
 }

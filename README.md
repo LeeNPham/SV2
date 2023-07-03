@@ -39,3 +39,7 @@
 
 
 upon logging in, I need to initialize a user by looking at their todos and categories, grabbing a full list of all todos and categories, and adding those lists into my store, from there, everytime a value is updated, i can update my local stores to update what information to render?
+
+upon refresh, no data is available on profile after logging in, todos and cats dont show but returning from profile does remount and render my data?
+
+getting an undefined reading for my initialized notifications

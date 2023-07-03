@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte'
+	import { goto } from '$app/navigation'
+	import { slide } from 'svelte/transition'
 	import Modal from '$lib/components/Modal.svelte'
 	import CircleIcon from '$lib/icons/CircleIcon.svelte'
 	import EllipsisIcon from '$lib/icons/EllipsisIcon.svelte'
@@ -8,12 +10,10 @@
 	import BellIcon from '$lib/icons/BellIcon.svelte'
 	import MagnifyingGlassIcon from '$lib/icons/MagnifyingGlassIcon.svelte'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
-	import { goto } from '$app/navigation'
-	import { slide } from 'svelte/transition'
 	import Fuse from 'fuse.js'
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
-	import { userId } from '$store/stores.js'
+	import { userId , userIdentity} from '$store/stores.js'
 	export let data
 
 	interface Todo {
@@ -577,9 +577,10 @@
 	}
 
 	let newItems = filterToMyTodos(data.stuff.todos, data.items)
-
 	let newCats = filterToMyCategories(data.stuff.categories, data.categories)
 	onMount(() => {
+		$userIdentity = data.identity
+		console.log($userIdentity)
 		searchableTodos = newItems
 		buildCategoriesWithTodos(newCats, newItems)
 	})
