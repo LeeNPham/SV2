@@ -4,17 +4,12 @@ from database import (
     create_todo,
     update_todo,
     remove_todo,
-    fetch_all_categories,
-    fetch_one_category,
-    create_category,
-    update_category,
-    remove_category,
 )
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
-from model import Todo, UpdateTodoModel, Category, UpdateCategoryModel
+from model import Todo, UpdateTodoModel
 
 # App object
 app = FastAPI()
@@ -30,9 +25,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# Todos Start
 
 
 @app.get("/api/todo", tags=["Todos"])
@@ -89,69 +81,3 @@ async def delete_todo(id: str):
     if response:
         return "Successfully deleted todo item"
     raise HTTPException(404, f"There is no TODO item with this id:{id}")
-
-
-# Todos End
-
-# Categories Start
-
-
-@app.get("/api/category", tags=["Categories"])
-async def get_categories():
-    response = await fetch_all_categories()
-    return response
-
-
-@app.post(
-    "/api/category",
-    response_description="Add a new category",
-    response_model=Category,
-    tags=["Categories"],
-)
-async def post_category(category: Category = Body(...)):
-    category = jsonable_encoder(category)
-    response = await create_category(category)
-    if response:
-        return response
-    raise HTTPException(400, "Something went wrong / Bad Request")
-
-
-@app.get(
-    "/api/category/{id}",
-    response_description="Get a single category",
-    response_model=Category,
-    tags=["Categories"],
-)
-async def get_category_by_id(id: str):
-    response = await fetch_one_category(id)
-    if response:
-        return response
-    raise HTTPException(404, f"ID {id} not found")
-
-
-@app.put(
-    "/api/category/{id}",
-    response_description="Update a category",
-    response_model=Category,
-    tags=["Categories"],
-)
-async def put_category(id: str, category: UpdateCategoryModel = Body(...)):
-    category = {k: v for k, v in category.dict().items() if v is not None}
-    if len(category) >= 1:
-        response = await update_category(id, category)
-    if response:
-        return response
-    raise HTTPException(404, f"There is no TODO item with this title {id}")
-
-
-@app.delete(
-    "/api/category/{id}", response_description="Delete a category", tags=["Categories"]
-)
-async def delete_category(id: str):
-    response = await remove_category(id)
-    if response:
-        return "Successfully deleted todo item"
-    raise HTTPException(404, f"There is no TODO item with this id:{id}")
-
-
-# Categories End
