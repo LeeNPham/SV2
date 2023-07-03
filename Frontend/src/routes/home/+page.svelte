@@ -13,7 +13,7 @@
 	import Fuse from 'fuse.js'
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
-	import { userId } from '$lib/stores.js'
+	import { userId } from '$store/stores.js'
 	export let data
 
 	interface Todo {
