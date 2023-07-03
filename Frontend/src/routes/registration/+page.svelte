@@ -103,7 +103,7 @@
 			type="button"
 			class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
 		>
-			<a href="/">Login</a>
+			<a href="/">Return to Login</a>
 		</button>
 	</div>
 
