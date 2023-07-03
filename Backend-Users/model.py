@@ -31,6 +31,7 @@ class User(BaseModel):
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
+    profile_picture: Optional[str] = None  # Add the profile_picture field
 
     class Config:
         allow_population_by_field_name = True
@@ -75,6 +76,7 @@ class UserInDb(User):
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
+                "profile_picture": "path/to/profile/picture.jpg",
                 "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
             }
         }
@@ -89,6 +91,7 @@ class UpdateUserModel(BaseModel):
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
+    profile_picture: Optional[str] = None  # Add the profile_picture field
     hashed_password: Optional[str]
 
     class Config:
@@ -108,6 +111,7 @@ class UpdateUserModel(BaseModel):
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
+                "profile_picture": "path/to/profile/picture.jpg",
                 "hashed_password": "$2b$12$9TObvxeCGi4Mo1X2Z0ejDuowhv/LG90pIWR6MuaQJEC8wf0yH1K0S",
             }
         }
