@@ -37,15 +37,18 @@ async function getAccountItems(fetch) {
 }
 
 async function getAccountDetails(fetch) {
-	const response = await fetch('https://accounts-79lp.onrender.com/accounts/profile/', {
-		headers: {
-			Authorization: `Bearer ${accessToken}`
-		}
-	})
-	const data = await response.json()
-	localStorage.setItem('userIdentity', JSON.stringify(data))
-	userId.set(data._id)
-	return data
+	let data = null
+	if (typeof localStorage !== 'undefined') {
+		const response = await fetch('https://accounts-79lp.onrender.com/accounts/profile/', {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			}
+		})
+		data = await response.json()
+		localStorage.setItem('userIdentity', JSON.stringify(data))
+		userId.set(data._id)
+		return data
+	}
 }
 
 export async function load({ fetch }) {

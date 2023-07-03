@@ -39,7 +39,7 @@
 	let showUpdateTodoModal = false
 	let showNewCategoryModal = false
 	let completion = false
-	let userFirstName = data.identity.first_name
+	let userFirstName = ''
 	let create_date = ''
 
 	let id = ''
@@ -580,6 +580,7 @@
 	let newCats = filterToMyCategories(data.stuff.categories, data.categories)
 	onMount(() => {
 		$userIdentity = data.identity
+		userFirstName = data.identity.first_name
 		console.log($userIdentity)
 		searchableTodos = newItems
 		buildCategoriesWithTodos(newCats, newItems)
