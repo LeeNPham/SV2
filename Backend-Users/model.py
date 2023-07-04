@@ -31,6 +31,7 @@ class User(BaseModel):
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
+    photo_id: Optional[str] = None
 
     class Config:
         allow_population_by_field_name = True
@@ -50,6 +51,7 @@ class User(BaseModel):
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
+                "photo_id": "64a388ecb30cf54357043921",
             }
         }
 
@@ -75,6 +77,7 @@ class UserInDb(User):
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
+                "photo_id": "64a388ecb30cf54357043921",
                 "hashed_password": "Password123!",
             }
         }
@@ -89,7 +92,8 @@ class UpdateUserModel(BaseModel):
     description: Optional[str] = None
     todos: Optional[list] = None
     categories: Optional[list] = None
-    hashed_password: Optional[str]
+    photo_id: Optional[str] = None
+    hashed_password: Optional[str] = None
 
     class Config:
         arbitrary_types_allowed = True
@@ -108,6 +112,7 @@ class UpdateUserModel(BaseModel):
                     "647c66cbf3250a39f366376e",
                 ],
                 "categories": ["647c619df3250a39f366376b", "647c61a7f3250a39f366376c"],
+                "photo_id": "64a388ecb30cf54357043921",
                 "hashed_password": "Password123!",
             }
         }
