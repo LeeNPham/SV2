@@ -1,13 +1,13 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation'
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import { user_username} from '$store/stores'
 	import Categories from '$lib/icons/Categories.svelte'
 	import BooksmarksIcon from '$lib/icons/BooksmarksIcon.svelte'
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import profileDefault from '$lib/images/profileDefault.jpg'
+
 	// export let data
 
 	const goHome = () => {
@@ -17,73 +17,69 @@
 	const logout = () => {
 		goto('/')
 		localStorage.clear()
-
 	}
-	let firstName
-	let lastName
-	let userID
-	let userName
-	let userEmail
-	let userDescription
-	let userImage
+
+	let firstName: string
+	let lastName: string
+	let userID: string
+	let userName: string
+	let userEmail: string
+	let userDescription: string
+	let userImage: string
 	let fileInput
 
-
-async function getProfileImage(photo_id) {
-	const response = await fetch(`https://backend-uploads.onrender.com/files/${photo_id}`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'image/jpg'
-		}
-	})
-	if (!response.ok) {
-		throw new Error('Failed to fetch user todo list')
-	}
-	const data = await response.blob()
-	console.log('data,', data)
-	return data
-}
-
-
-
-async function updateUserImageId(photo_ID) {
-	const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userID}`, {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					photo_id: photo_ID
-				})
-			})
-			if (!putResponse.ok) {
-				throw new Error('Failed to update user imageId')
+	async function getProfileImage(photo_id: string) {
+		const response = await fetch(`https://backend-uploads.onrender.com/files/${photo_id}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'image/jpg'
 			}
-}
+		})
+		if (!response.ok) {
+			throw new Error('Failed to fetch user todo list')
+		}
+		const data = await response.blob()
+		console.log('data,', data)
+		return data
+	}
 
-const handleFileUpload = async () => {
-	const file = fileInput.files[0]
-	if (file) {
-		const formData = new FormData()
-		formData.append('photo', file)
-		const response = await fetch('https://backend-uploads.onrender.com/upload-photo', {
+	async function updateUserImageId(photo_ID: string) {
+		const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userID}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				photo_id: photo_ID
+			})
+		})
+		if (!putResponse.ok) {
+			throw new Error('Failed to update user imageId')
+		}
+	}
+
+	const handleFileUpload = async () => {
+		const file = fileInput.files[0]
+		if (file) {
+			const formData = new FormData()
+			formData.append('photo', file)
+			const response = await fetch('https://backend-uploads.onrender.com/upload-photo', {
 				method: 'POST',
 				body: formData
 			})
-		if (response.ok) {
-			const data = await response.json()
-			const photoId = data.file_id
-			await updateUserImageId(photoId)
-		} else {
-			console.error('Failed to upload photo')
+			if (response.ok) {
+				const data = await response.json()
+				const photoId = data.file_id
+				await updateUserImageId(photoId)
+			} else {
+				console.error('Failed to upload photo')
+			}
 		}
 	}
-}
-
 
 	onMount(async () => {
 		fileInput = document.getElementById('profileImageInput')
-		const userIdentity = JSON.parse(localStorage.getItem('userIdentity'));
+		const userIdentity = JSON.parse(localStorage.getItem('userIdentity'))
 		console.log(userIdentity)
 		firstName = userIdentity.first_name
 		lastName = userIdentity.last_name
@@ -99,16 +95,26 @@ const handleFileUpload = async () => {
 	<div class="grid grid-cols-1 content-start font-semibold text-2xl text-left w-full px-4">
 		<div class="flex flex-row">
 			{#await getProfileImage(userImage)}
-				<img
-					class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
-					src={profileDefault}
-					alt=""
-				/>
+				<label for="profileImageInput">
+					<img
+						class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
+						src={profileDefault}
+						alt=""
+					/>
+				</label>
 			{:then profilePic}
-				<img
-					class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
-					src={URL.createObjectURL(profilePic)}
-					alt=""
+				<label for="profileImageInput">
+					<img
+						class="rounded-full aspect-square w-[90px] border-2 object-cover border-white shadow-white/50 shadow-lg"
+						src={URL.createObjectURL(profilePic)}
+						alt=""
+					/>
+				</label>
+				<input
+					type="file"
+					class="border bg-red-600 h-12 hidden"
+					id="profileImageInput"
+					on:change={handleFileUpload}
 				/>
 			{/await}
 
@@ -118,18 +124,10 @@ const handleFileUpload = async () => {
 			</div>
 		</div>
 
-
-
-
-
-
 		<div class="text-[40px] font-semibold text-white tracking-wide flex flex-col gap-4 py-14">
 			<div>{firstName}</div>
 			<div>{lastName}</div>
 		</div>
-
-		<input type="file" class='border bg-red-600 h-12' id="profileImageInput" on:change={handleFileUpload} />
-
 
 		<div class="grid grid-cols-1 h-[450px] content-between">
 			<div class="grid grid-cols-1 gap-4">
