@@ -10,15 +10,6 @@
 	import profileDefault from '$lib/images/profileDefault.jpg'
 	// export let data
 
-
-	// let firstName = $userIdentity.first_name
-	// let lastName = $userIdentity.last_name
-	// let userID = $userIdentity._id
-	// let userName = $user_username
-	// let userEmail = $userIdentity.email
-	// let userDescription = $userIdentity.description
-
-
 	const goHome = () => {
 		goto('/home')
 	}
@@ -34,6 +25,24 @@
 	let userName
 	let userEmail
 	let userDescription
+	let userImage
+	let profilePic
+
+async function getProfileImage(photo_id) {
+	const response = await fetch(`https://backend-uploads.onrender.com/files/${photo_id}`, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'image/jpg'
+		}
+	})
+	if (!response.ok) {
+		throw new Error('Failed to fetch user todo list')
+	}
+	const data = await response.blob()
+	console.log('data,', data)
+	return data
+}
+
 
 	onMount(async () => {
 		const userIdentity = JSON.parse(localStorage.getItem('userIdentity'));
@@ -44,17 +53,30 @@
 		userName = userIdentity.username
 		userEmail = userIdentity.email
 		userDescription = userIdentity.description
+		userImage = userIdentity.photo_id
+		profilePic = await getProfileImage(userImage)
 	})
 </script>
 
 <div class="min-w-[414px] flex justify-center h-full px-8 py-20">
 	<div class="grid grid-cols-1 content-start font-semibold text-2xl text-left w-full px-4">
 		<div class="flex flex-row">
-			<img
-				class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
-				src={profileDefault}
-				alt=""
-			/>
+			{#if profilePic}
+				<img
+					class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
+					src={URL.createObjectURL(profilePic)}
+					alt=""
+				/>
+
+				{:else}
+							<img
+					class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
+					src={profileDefault}
+					alt=""
+				/>
+			{/if}
+
+
 			<div class="grid grid-cols-1 content-start pt-12">
 				<span class="text-sm font-semibold pl-5 text-white tracking-wide">{userName}</span>
 				<span class="text-sm font-semibold pl-5 text-white tracking-wide">{userEmail}</span>
