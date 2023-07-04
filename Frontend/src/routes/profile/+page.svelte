@@ -26,6 +26,7 @@
 	let userDescription
 	let userImage
 	let fileInput
+	let profilePic
 
 	async function getProfileImage(photo_id) {
 		const response = await fetch(`https://backend-uploads.onrender.com/files/${photo_id}`, {
@@ -38,7 +39,7 @@
 			throw new Error('Failed to fetch user profile image')
 		}
 		const data = await response.blob()
-		return data
+		profilePic = data
 	}
 
 	async function updateUserImageId(photo_ID) {
@@ -86,21 +87,14 @@
 		userEmail = userIdentity.email
 		userDescription = userIdentity.description
 		userImage = userIdentity.photo_id
+		getProfileImage(userImage)
 	})
 </script>
 
 <div class="min-w-[414px] flex justify-center h-full px-8 py-20">
 	<div class="grid grid-cols-1 content-start font-semibold text-2xl text-left w-full px-4">
 		<div class="flex flex-row">
-			{#await getProfileImage(userImage)}
-				<label for="profileImageInput">
-					<img
-						class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
-						src={profileDefault}
-						alt=""
-					/>
-				</label>
-			{:then profilePic}
+			{#if profilePic}
 				<label for="profileImageInput">
 					<img
 						class="rounded-full aspect-square w-[90px] border-2 object-cover border-white shadow-white/50 shadow-lg"
@@ -108,7 +102,15 @@
 						alt=""
 					/>
 				</label>
-			{/await}
+			{:else}
+				<label for="profileImageInput">
+					<img
+						class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
+						src={profileDefault}
+						alt=""
+					/>
+				</label>
+			{/if}
 			<input
 				type="file"
 				class="border bg-red-600 h-12 hidden"

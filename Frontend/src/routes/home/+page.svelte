@@ -13,7 +13,7 @@
 	import Fuse from 'fuse.js'
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
-	import { userId , userIdentity} from '$store/stores.js'
+	import { userId, userIdentity } from '$store/stores.js'
 	export let data
 
 	interface Todo {
@@ -262,7 +262,6 @@
 				create_date,
 				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
 			}
-
 			const res = await fetch('https://todo-test-api.onrender.com/api/todo/', {
 				method: 'POST',
 				headers: {
@@ -270,29 +269,23 @@
 				},
 				body: JSON.stringify(newTodo)
 			})
-
 			if (!res.ok) {
 				throw new Error('Failed to create a new todo')
 			}
-
 			const data = await res.json()
 			const objectId = data._id
-
 			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
 				method: 'GET', // Fetch the user's current todo list
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			})
-
 			if (!response.ok) {
 				throw new Error('Failed to fetch user todo list')
 			}
-
 			const userData = await response.json()
 			const currentTodos = userData.todos || [] // Existing todos or empty array if none
 			const updatedTodos = [...currentTodos, objectId] // Append the new objectId
-
 			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
 				method: 'PUT',
 				headers: {
@@ -302,15 +295,12 @@
 					todos: updatedTodos
 				})
 			})
-
 			if (!putResponse.ok) {
 				throw new Error('Failed to update user todo list')
 			}
-
 			console.log('User todo list updated successfully')
 			console.log('Data after updating user:', userData)
 			console.log(userData.todos)
-
 			showNewTodoModal = false
 			;(window as Window).location = '/home'
 		} catch (error) {
@@ -339,7 +329,7 @@
 					category,
 					title,
 					description,
-					due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+					due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : null
 				})
 			})
 
