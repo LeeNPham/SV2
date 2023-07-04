@@ -1,13 +1,13 @@
-<script lang="ts">
+<script>
 	import { goto } from '$app/navigation'
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
+	import { user_username } from '$store/stores'
 	import Categories from '$lib/icons/Categories.svelte'
 	import BooksmarksIcon from '$lib/icons/BooksmarksIcon.svelte'
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import profileDefault from '$lib/images/profileDefault.jpg'
-
 	// export let data
 
 	const goHome = () => {
@@ -18,17 +18,16 @@
 		goto('/')
 		localStorage.clear()
 	}
-
-	let firstName: string
-	let lastName: string
-	let userID: string
-	let userName: string
-	let userEmail: string
-	let userDescription: string
-	let userImage: string
+	let firstName
+	let lastName
+	let userID
+	let userName
+	let userEmail
+	let userDescription
+	let userImage
 	let fileInput
 
-	async function getProfileImage(photo_id: string) {
+	async function getProfileImage(photo_id) {
 		const response = await fetch(`https://backend-uploads.onrender.com/files/${photo_id}`, {
 			method: 'GET',
 			headers: {
@@ -36,14 +35,13 @@
 			}
 		})
 		if (!response.ok) {
-			throw new Error('Failed to fetch user todo list')
+			throw new Error('Failed to fetch user profile image')
 		}
 		const data = await response.blob()
-		console.log('data,', data)
 		return data
 	}
 
-	async function updateUserImageId(photo_ID: string) {
+	async function updateUserImageId(photo_ID) {
 		const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userID}`, {
 			method: 'PUT',
 			headers: {
@@ -110,13 +108,13 @@
 						alt=""
 					/>
 				</label>
-				<input
-					type="file"
-					class="border bg-red-600 h-12 hidden"
-					id="profileImageInput"
-					on:change={handleFileUpload}
-				/>
 			{/await}
+			<input
+				type="file"
+				class="border bg-red-600 h-12 hidden"
+				id="profileImageInput"
+				on:change={handleFileUpload}
+			/>
 
 			<div class="grid grid-cols-1 content-start pt-12">
 				<span class="text-sm font-semibold pl-5 text-white tracking-wide">{userName}</span>
