@@ -35,7 +35,7 @@
 
 * [ ] Set up Notification ping
 * [ ] Set up APIGateway to allow for todos and category creation/deletion to be afixed to a users account, usage will be by reference only which might take more time but less calls in case we want to load balance the servers instead of housing them all on one array within the db system
-
+* [ ] After every update or action is completed, make sure to console.log the action that occured. updates, deletes, creations, so on
 
 
 upon logging in, I need to initialize a user by looking at their todos and categories, grabbing a full list of all todos and categories, and adding those lists into my store, from there, everytime a value is updated, i can update my local stores to update what information to render?

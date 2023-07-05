@@ -1,8 +1,9 @@
 <script>
+	// @ts-nocheck
 	import { goto } from '$app/navigation'
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import { user_username } from '$store/stores'
+	import { userIdentity, user_username } from '$store/stores'
 	import Categories from '$lib/icons/Categories.svelte'
 	import BooksmarksIcon from '$lib/icons/BooksmarksIcon.svelte'
 	import PieChart from '$lib/icons/PieChart.svelte'
@@ -55,6 +56,7 @@
 		if (!putResponse.ok) {
 			throw new Error('Failed to update user imageId')
 		}
+		console.log("we're done loading the image so refresh yo screen!")
 	}
 
 	const handleFileUpload = async () => {
@@ -69,7 +71,11 @@
 			if (response.ok) {
 				const data = await response.json()
 				const photoId = data.file_id
+				userIdentity.photo_id = photoId
+				console.log(userIdentity)
+				JSON.parse(localStorage.setItem('userIdentity', JSON.stringify(userIdentity)))
 				await updateUserImageId(photoId)
+				console.log('image successfully updated!')
 			} else {
 				console.error('Failed to upload photo')
 			}
@@ -78,7 +84,7 @@
 
 	onMount(async () => {
 		fileInput = document.getElementById('profileImageInput')
-		const userIdentity = JSON.parse(localStorage.getItem('userIdentity'))
+		let userIdentity = JSON.parse(localStorage.getItem('userIdentity'))
 		console.log(userIdentity)
 		firstName = userIdentity.first_name
 		lastName = userIdentity.last_name
