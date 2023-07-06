@@ -16,564 +16,545 @@
 	import { userId, userIdentity } from '$store/stores.js'
 	export let data
 
-	// interface Todo {
-	// 	id: string
-	// 	category: string
-	// 	completion: boolean
-	// 	create_date: string
-	// 	due_date: string
-	// 	title: string
-	// 	description: string
-	// 	_id: string
-	// }
+	interface Todo {
+		id: string
+		category: string
+		completion: boolean
+		create_date: string
+		due_date: string
+		title: string
+		description: string
+		_id: string
+	}
 
-	// interface Category {
-	// 	todos: Todo[]
-	// 	color: string
-	// 	count: number
-	// 	title?: string
-	// 	_id?: string
-	// }
+	interface Category {
+		todos: Todo[]
+		color: string
+		count: number
+		title?: string
+		_id?: string
+	}
 
-	// let showNewTodoModal = false
-	// let showUpdateTodoModal = false
-	// let showNewCategoryModal = false
-	// let completion = false
-	// let userFirstName = ''
-	// let create_date = ''
+	let showNewTodoModal = false
+	let showUpdateTodoModal = false
+	let showNewCategoryModal = false
+	let completion = false
+	let userFirstName = ''
+	let create_date = ''
+	let myTodos: any[] = []
 
-	// let id = ''
-	// let category = ''
-	// let title = ''
-	// let description = ''
-	// let due_date: any
-	// let category_id = ''
-	// let completeCategories: any = []
-	// let selectedCategory = 'All'
-	// let current_date: any = new Date()
+	let id = ''
+	let category = ''
+	let title = ''
+	let description = ''
+	let due_date: any
+	let category_id = ''
+	let completeCategories: any = []
+	let selectedCategory = 'All'
+	let current_date: any = new Date()
 
-	// function checkDateStatus(dateArgument: any) {
-	// 	const targetDate: any = new Date(dateArgument)
-	// 	const oneDay = 24 * 60 * 60 * 1000 // One day in milliseconds
+	function checkDateStatus(dateArgument: any) {
+		const targetDate: any = new Date(dateArgument)
+		const oneDay = 24 * 60 * 60 * 1000 // One day in milliseconds
 
-	// 	if (targetDate < current_date) {
-	// 		return 'Past Due:'
-	// 	} else if (Math.abs(targetDate - current_date) <= oneDay) {
-	// 		return 'Upcoming:'
-	// 	} else {
-	// 		return 'NA'
-	// 	}
-	// }
+		if (targetDate < current_date) {
+			return 'Past Due:'
+		} else if (Math.abs(targetDate - current_date) <= oneDay) {
+			return 'Upcoming:'
+		} else {
+			return 'NA'
+		}
+	}
+	function initNotifications(todos: any) {
+		todos.forEach((item: any) => {
+			if (item.due_date !== 'null' && !item.completion) {
+				item.condition = checkDateStatus(item.due_date)
+			}
+		})
+		return todos
+	}
+	let categoryColors = [
+		'border-category-cyan shadow shadow-category-cyan',
+		'border-category-pink shadow shadow-category-pink',
+		'border-category-blue shadow shadow-category-blue',
+		'border-category-green shadow shadow-category-green',
+		'border-category-yellow shadow shadow-category-yellow',
+		'border-category-orange shadow shadow-category-orange',
+		'border-category-purple shadow shadow-category-purple'
+	]
+	let addButtonCategoryColor = [
+		'fill-category-cyan shadow-xl shadow-category-cyan/60',
+		'fill-category-pink shadow-xl shadow-category-pink/60',
+		'fill-category-blue shadow-xl shadow-category-blue/60',
+		'fill-category-green shadow-xl shadow-category-green/60',
+		'fill-category-yellow shadow-xl shadow-category-yellow/60',
+		'fill-category-orange shadow-xl shadow-category-orange/60',
+		'fill-category-purple shadow-xl shadow-category-purple/60'
+	]
+	let colors = [
+		'fill-category-cyan',
+		'fill-category-pink',
+		'fill-category-blue',
+		'fill-category-green',
+		'fill-category-yellow',
+		'fill-category-orange',
+		'fill-category-purple'
+	]
+	let showSearch = false
+	function displaySearch() {
+		showSearch = !showSearch
+	}
+	let searchPattern: any
+	let fuse: any
+	interface Todos {
+		_id: string
+		category: string
+		title: string
+		description: string
+		completion: boolean
+		create_date: string
+		due_date: string
+	}
+	let todosList: Todos[]
+	let searchableTodos: Todos[]
+	const searchOptions = {
+		includeScore: true,
+		threshold: 0.5, // value 0 is very strict, value 1 is not strict, .6 is the default,
+		keys: ['title', 'description']
+	}
+	function search(Todos: any) {
+		fuse = new Fuse(Todos, searchOptions)
+	}
+	$: searchPattern && searchTodos()
+	const searchTodos = () => {
+		search(searchableTodos)
+		if (fuse) {
+			if (searchPattern) {
+				const searchResult = fuse.search(searchPattern)
+				const filteredTodos = searchResult.map((obj: any) => obj.item)
+				todosList = filteredTodos
+			} else {
+				todosList = []
+			}
+		}
+	}
+	let showNotifications = false
+	function displayNotifications() {
+		showNotifications = !showNotifications
+	}
+	function gotoProfile() {
+		goto('/profile')
+	}
+	function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
+		completeCategories['All'] = { todos: tasks }
+		for (let category of categories) {
+			if (!completeCategories.hasOwnProperty(category.title)) {
+				let key = category.title
+				completeCategories[key!] = {}
+			}
+		}
 
-	// function initNotifications(todos: any) {
-	// 	todos.forEach((item: any) => {
-	// 		if (item.due_date !== 'null' && !item.completion) {
-	// 			item.condition = checkDateStatus(item.due_date)
-	// 		}
-	// 	})
-	// 	return todos
-	// }
+		// Iterate over tasks and adds task to correlating categorys list value
+		for (let task of tasks) {
+			let newKey = task.category
+			if (completeCategories.hasOwnProperty(newKey)) {
+				if (!completeCategories[newKey].hasOwnProperty('todos')) {
+					completeCategories[newKey] = { todos: [task] }
+				} else {
+					completeCategories[newKey].todos.push(task)
+				}
+			}
+		}
 
-	// let categoryColors = [
-	// 	'border-category-cyan shadow shadow-category-cyan',
-	// 	'border-category-pink shadow shadow-category-pink',
-	// 	'border-category-blue shadow shadow-category-blue',
-	// 	'border-category-green shadow shadow-category-green',
-	// 	'border-category-yellow shadow shadow-category-yellow',
-	// 	'border-category-orange shadow shadow-category-orange',
-	// 	'border-category-purple shadow shadow-category-purple'
-	// ]
-	// let addButtonCategoryColor = [
-	// 	'fill-category-cyan shadow-xl shadow-category-cyan/60',
-	// 	'fill-category-pink shadow-xl shadow-category-pink/60',
-	// 	'fill-category-blue shadow-xl shadow-category-blue/60',
-	// 	'fill-category-green shadow-xl shadow-category-green/60',
-	// 	'fill-category-yellow shadow-xl shadow-category-yellow/60',
-	// 	'fill-category-orange shadow-xl shadow-category-orange/60',
-	// 	'fill-category-purple shadow-xl shadow-category-purple/60'
-	// ]
-	// let colors = [
-	// 	'fill-category-cyan',
-	// 	'fill-category-pink',
-	// 	'fill-category-blue',
-	// 	'fill-category-green',
-	// 	'fill-category-yellow',
-	// 	'fill-category-orange',
-	// 	'fill-category-purple'
-	// ]
+		// Iterate over tasks and add a styling object to the categories list value to add styling ability
+		let i = 0
+		for (let categoryObject in completeCategories) {
+			if (!completeCategories[categoryObject].hasOwnProperty('color')) {
+				completeCategories[categoryObject].color = colors[i]
+				completeCategories[categoryObject].categoryColor = categoryColors[i]
+				completeCategories[categoryObject].addButtonCategoryColor = addButtonCategoryColor[i]
+				i++
+			}
+		}
 
-	// let showSearch = false
-	// function displaySearch() {
-	// 	showSearch = !showSearch
-	// }
+		for (let categoryObject in completeCategories) {
+			if (
+				!completeCategories[categoryObject].hasOwnProperty('count') &&
+				completeCategories[categoryObject].todos != undefined
+			) {
+				let count = completeCategories[categoryObject].todos.length
+				completeCategories[categoryObject].count = count
+			} else {
+				completeCategories[categoryObject].count = 0
+			}
+		}
 
-	// let searchPattern: any
-	// let fuse: any
-	// interface Todos {
-	// 	_id: string
-	// 	category: string
-	// 	title: string
-	// 	description: string
-	// 	completion: boolean
-	// 	create_date: string
-	// 	due_date: string
-	// }
-	// let todosList: Todos[]
-	// let searchableTodos: Todos[]
-	// const searchOptions = {
-	// 	includeScore: true,
-	// 	threshold: 0.5, // value 0 is very strict, value 1 is not strict, .6 is the default,
-	// 	keys: ['title', 'description']
-	// }
+		let n = 0
+		for (let categoryObject in completeCategories) {
+			if (!completeCategories[categoryObject].hasOwnProperty('categoryId')) {
+				if (categoryObject != 'All') {
+					// console.log(categoryObject);
+					let idNumber = categories[n]._id
+					// console.log(idNumber);
+					completeCategories[categoryObject].categoryId = idNumber
+					n++
+				}
+			}
+		}
 
-	// function search(Todos: any) {
-	// 	fuse = new Fuse(Todos, searchOptions)
-	// }
+		// this is what I will use to do the rest of the rendering!
 
-	// $: searchPattern && searchTodos()
-	// const searchTodos = () => {
-	// 	search(searchableTodos)
-	// 	if (fuse) {
-	// 		if (searchPattern) {
-	// 			const searchResult = fuse.search(searchPattern)
-	// 			const filteredTodos = searchResult.map((obj: any) => obj.item)
-	// 			todosList = filteredTodos
-	// 		} else {
-	// 			todosList = []
-	// 		}
-	// 	}
-	// }
+		// console.log('complete categories with color assignment and number of todos per category!', {completeCategories})
+	}
 
-	// let showNotifications = false
-	// function displayNotifications() {
-	// 	showNotifications = !showNotifications
-	// }
+	function switchCategories(e: any) {
+		selectedCategory = e.currentTarget.id
+	}
 
-	// function gotoProfile() {
-	// 	goto('/profile')
-	// }
-	// function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
-	// 	completeCategories['All'] = { todos: tasks }
+	function displayShowNewTodoModal() {
+		id = ''
+		category = ''
+		title = ''
+		description = ''
+		due_date = ''
+		create_date = ''
+		showNewTodoModal = !showNewTodoModal
+	}
 
-	// 	for (let category of categories) {
-	// 		if (!completeCategories.hasOwnProperty(category.title)) {
-	// 			let key = category.title
-	// 			completeCategories[key!] = {}
-	// 		}
-	// 	}
+	function displayUpdateTodoModal(
+		idU: string,
+		categoryU: string,
+		titleU: string,
+		descriptionU: string,
+		due_dateU: string,
+		create_dateU: string
+	) {
+		id = idU
+		category = categoryU
+		title = titleU
+		description = descriptionU
+		due_date = due_dateU
+		create_date = create_dateU
+		showUpdateTodoModal = true
+	}
 
-	// 	// Iterate over tasks and adds task to correlating categorys list value
-	// 	for (let task of tasks) {
-	// 		let newKey = task.category
-	// 		if (completeCategories.hasOwnProperty(newKey)) {
-	// 			if (!completeCategories[newKey].hasOwnProperty('todos')) {
-	// 				completeCategories[newKey] = { todos: [task] }
-	// 			} else {
-	// 				completeCategories[newKey].todos.push(task)
-	// 			}
-	// 		}
-	// 	}
+	function displayCreateNewCategoryModal() {
+		showNewCategoryModal = true
+	}
 
-	// 	// Iterate over tasks and add a styling object to the categories list value to add styling ability
-	// 	let i = 0
-	// 	for (let categoryObject in completeCategories) {
-	// 		if (!completeCategories[categoryObject].hasOwnProperty('color')) {
-	// 			completeCategories[categoryObject].color = colors[i]
-	// 			completeCategories[categoryObject].categoryColor = categoryColors[i]
-	// 			completeCategories[categoryObject].addButtonCategoryColor = addButtonCategoryColor[i]
-	// 			i++
-	// 		}
-	// 	}
+	async function createTodo() {
+		try {
+			const currentTime = new Date()
+			const create_date = currentTime.toISOString().split('T')[0].toString()
+			const newTodo = {
+				category: category === 'All' ? '' : category,
+				title,
+				description,
+				completion,
+				create_date,
+				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+			}
+			const res = await fetch('https://todo-test-api.onrender.com/api/todo/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newTodo)
+			})
+			if (!res.ok) {
+				throw new Error('Failed to create a new todo')
+			}
+			const data = await res.json()
+			const objectId = data._id
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET', // Fetch the user's current todo list
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			if (!response.ok) {
+				throw new Error('Failed to fetch user todo list')
+			}
+			const userData = await response.json()
+			const currentTodos = userData.todos || [] // Existing todos or empty array if none
+			const updatedTodos = [...currentTodos, objectId] // Append the new objectId
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					todos: updatedTodos
+				})
+			})
+			if (!putResponse.ok) {
+				throw new Error('Failed to update user todo list')
+			}
+			console.log('User todo list updated successfully')
+			console.log('Data after updating user:', userData)
+			console.log(userData.todos)
+			showNewTodoModal = false
+			;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error creating a new todo:', error)
+			return {
+				status: 301,
+				error: new Error('Could not create a new todo')
+			}
+		}
+	}
 
-	// 	for (let categoryObject in completeCategories) {
-	// 		if (
-	// 			!completeCategories[categoryObject].hasOwnProperty('count') &&
-	// 			completeCategories[categoryObject].todos != undefined
-	// 		) {
-	// 			let count = completeCategories[categoryObject].todos.length
-	// 			completeCategories[categoryObject].count = count
-	// 		} else {
-	// 			completeCategories[categoryObject].count = 0
-	// 		}
-	// 	}
+	async function updateTodo(
+		id: string,
+		category: string,
+		title: string,
+		description: string,
+		due_date: string
+	) {
+		try {
+			const response = await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					category,
+					title,
+					description,
+					due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : null
+				})
+			})
+			if (!response.ok) {
+				throw new Error('Failed to update the todo')
+			}
+			window.location.assign('/home')
+		} catch (error) {
+			console.error('Error updating the todo:', error)
+			return {
+				status: 301,
+				error: new Error('Could not update the todo')
+			}
+		}
+	}
 
-	// 	let n = 0
-	// 	for (let categoryObject in completeCategories) {
-	// 		if (!completeCategories[categoryObject].hasOwnProperty('categoryId')) {
-	// 			if (categoryObject != 'All') {
-	// 				// console.log(categoryObject);
-	// 				let idNumber = categories[n]._id
-	// 				// console.log(idNumber);
-	// 				completeCategories[categoryObject].categoryId = idNumber
-	// 				n++
-	// 			}
-	// 		}
-	// 	}
+	async function deleteTodo(id: string) {
+		try {
+			await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET', // Fetch the user's current todo list
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			if (!response.ok) {
+				throw new Error('Failed to fetch user todo list')
+			}
+			const userData = await response.json()
+			const currentTodos = userData.todos || [] // Existing todos or empty array if none
+			const updatedTodos = currentTodos.filter((todoId: string) => todoId !== id) // Remove the deleted todo from the list
+			const updateResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					todos: updatedTodos
+				})
+			})
+			if (!updateResponse.ok) {
+				throw new Error('Failed to update user todo list')
+			}
+			const updatedUserData = await updateResponse.json()
+			console.log('Data after updating user:', updatedUserData)
+			console.log(updatedUserData.todos)
+		} catch (error) {
+			return {
+				status: 301,
+				error: new Error('Could not update user todo list')
+			}
+		}
+		showUpdateTodoModal = false
+	}
 
-	// 	// this is what I will use to do the rest of the rendering!
+	async function createCategory() {
+		try {
+			const currentTime = new Date()
+			const create_date = currentTime.toISOString().split('T')[0].toString()
+			const newCategory = {
+				title,
+				description,
+				create_date
+			}
+			const res = await fetch('https://todo-test-api.onrender.com/api/category/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(newCategory)
+			})
+			if (!res.ok) {
+				throw new Error('Failed to create a new category')
+			}
+			const data = await res.json()
+			const categoryId = data._id
+			const userResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			if (!userResponse.ok) {
+				throw new Error('Failed to fetch user data')
+			}
+			const userData = await userResponse.json()
+			const currentCategories = userData.categories || []
+			const updatedCategories = [...currentCategories, categoryId]
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					categories: updatedCategories
+				})
+			})
+			if (!putResponse.ok) {
+				throw new Error('Failed to update user category list')
+			}
+			console.log('User category list updated successfully')
+			console.log('Data after updating user:', userData)
+			console.log(userData.categories)
+			showNewCategoryModal = false
+			;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error creating a new category:', error)
+			return {
+				status: 301,
+				error: new Error('Could not create a new category')
+			}
+		}
+	}
 
-	// 	// console.log('complete categories with color assignment and number of todos per category!', {completeCategories})
-	// }
+	async function deleteCategory(e: any) {
+		try {
+			const category_id = e.target.parentElement.id
 
-	// function switchCategories(e: any) {
-	// 	selectedCategory = e.currentTarget.id
-	// }
+			await fetch(`https://todo-test-api.onrender.com/api/category/${category_id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-	// function displayShowNewTodoModal() {
-	// 	id = ''
-	// 	category = ''
-	// 	title = ''
-	// 	description = ''
-	// 	due_date = ''
-	// 	create_date = ''
-	// 	showNewTodoModal = !showNewTodoModal
-	// }
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-	// function displayUpdateTodoModal(
-	// 	idU: string,
-	// 	categoryU: string,
-	// 	titleU: string,
-	// 	descriptionU: string,
-	// 	due_dateU: string,
-	// 	create_dateU: string
-	// ) {
-	// 	id = idU
-	// 	category = categoryU
-	// 	title = titleU
-	// 	description = descriptionU
-	// 	due_date = due_dateU
-	// 	create_date = create_dateU
-	// 	showUpdateTodoModal = true
-	// }
+			if (!response.ok) {
+				throw new Error('Failed to fetch user data')
+			}
 
-	// function displayCreateNewCategoryModal() {
-	// 	showNewCategoryModal = true
-	// }
+			const userData = await response.json()
+			const currentCategories = userData.categories || []
+			const updatedCategories = currentCategories.filter(
+				(categoryId: string) => categoryId !== category_id
+			)
 
-	// async function createTodo() {
-	// 	try {
-	// 		const currentTime = new Date()
-	// 		const create_date = currentTime.toISOString().split('T')[0].toString()
-	// 		const newTodo = {
-	// 			category: category === 'All' ? '' : category,
-	// 			title,
-	// 			description,
-	// 			completion,
-	// 			create_date,
-	// 			due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
-	// 		}
-	// 		const res = await fetch('https://todo-test-api.onrender.com/api/todo/', {
-	// 			method: 'POST',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify(newTodo)
-	// 		})
-	// 		if (!res.ok) {
-	// 			throw new Error('Failed to create a new todo')
-	// 		}
-	// 		const data = await res.json()
-	// 		const objectId = data._id
-	// 		const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'GET', // Fetch the user's current todo list
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to fetch user todo list')
-	// 		}
-	// 		const userData = await response.json()
-	// 		const currentTodos = userData.todos || [] // Existing todos or empty array if none
-	// 		const updatedTodos = [...currentTodos, objectId] // Append the new objectId
-	// 		const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				todos: updatedTodos
-	// 			})
-	// 		})
-	// 		if (!putResponse.ok) {
-	// 			throw new Error('Failed to update user todo list')
-	// 		}
-	// 		console.log('User todo list updated successfully')
-	// 		console.log('Data after updating user:', userData)
-	// 		console.log(userData.todos)
-	// 		showNewTodoModal = false
-	// 		;(window as Window).location = '/home'
-	// 	} catch (error) {
-	// 		console.error('Error creating a new todo:', error)
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not create a new todo')
-	// 		}
-	// 	}
-	// }
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					categories: updatedCategories
+				})
+			})
 
-	// async function updateTodo(
-	// 	id: string,
-	// 	category: string,
-	// 	title: string,
-	// 	description: string,
-	// 	due_date: string
-	// ) {
-	// 	try {
-	// 		const response = await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				category,
-	// 				title,
-	// 				description,
-	// 				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : null
-	// 			})
-	// 		})
+			if (!putResponse.ok) {
+				throw new Error('Failed to update user category list')
+			}
 
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to update the todo')
-	// 		}
+			console.log('User category list updated successfully')
+			console.log('Data after updating user:', userData)
+			console.log(userData.categories)
+			;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error deleting category:', error)
+			return {
+				status: 301,
+				error: new Error('Could not update user category list')
+			}
+		}
+	}
 
-	// 		window.location.assign('/home')
-	// 	} catch (error) {
-	// 		console.error('Error updating the todo:', error)
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not update the todo')
-	// 		}
-	// 	}
-	// }
+	async function toggleCheckbox(x: any, id: string) {
+		x = !x
+		updateCompletion()
 
-	// async function deleteTodo(id: string) {
-	// 	try {
-	// 		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
-	// 			method: 'DELETE',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-	// 		const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'GET', // Fetch the user's current todo list
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to fetch user todo list')
-	// 		}
-	// 		const userData = await response.json()
-	// 		const currentTodos = userData.todos || [] // Existing todos or empty array if none
-	// 		const updatedTodos = currentTodos.filter((todoId: string) => todoId !== id) // Remove the deleted todo from the list
-	// 		const updateResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				todos: updatedTodos
-	// 			})
-	// 		})
-	// 		if (!updateResponse.ok) {
-	// 			throw new Error('Failed to update user todo list')
-	// 		}
-	// 		const updatedUserData = await updateResponse.json()
-	// 		console.log('Data after updating user:', updatedUserData)
-	// 		console.log(updatedUserData.todos)
-	// 	} catch (error) {
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not update user todo list')
-	// 		}
-	// 	}
-	// 	showUpdateTodoModal = false
-	// }
+		async function updateCompletion() {
+			await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					completion: x
+				})
+			})
+				.then((_res) => {
+					goto('/home')
+				})
+				.catch((_err) => {
+					_err = !_err
+				})
+		}
+	}
 
-	// async function createCategory() {
-	// 	try {
-	// 		const currentTime = new Date()
-	// 		const create_date = currentTime.toISOString().split('T')[0].toString()
-	// 		const newCategory = {
-	// 			title,
-	// 			description,
-	// 			create_date
-	// 		}
+	function filterToMyTodos(myTodos: string[], todos: Todos[]): Todos[] {
+		let newTodos: Todos[] = []
+		if (!Array.isArray(myTodos)) {
+			return newTodos
+		}
+		for (let i of myTodos) {
+			const todo = todos.find((todo) => todo._id === i)
+			if (todo) {
+				newTodos.push(todo)
+			}
+		}
+		return newTodos
+	}
 
-	// 		const res = await fetch('https://todo-test-api.onrender.com/api/category/', {
-	// 			method: 'POST',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify(newCategory)
-	// 		})
+	function filterToMyCategories(myCategories: any[], categories: any[]) {
+		let newCategories: any[] = []
+		if (!Array.isArray(myCategories)) {
+			return newCategories
+		}
+		for (let i of myCategories) {
+			const category = categories.find((category) => category._id === i)
+			if (category) {
+				newCategories.push(category)
+			}
+		}
+		return newCategories
+	}
 
-	// 		if (!res.ok) {
-	// 			throw new Error('Failed to create a new category')
-	// 		}
-
-	// 		const data = await res.json()
-	// 		const categoryId = data._id
-
-	// 		const userResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-
-	// 		if (!userResponse.ok) {
-	// 			throw new Error('Failed to fetch user data')
-	// 		}
-
-	// 		const userData = await userResponse.json()
-	// 		const currentCategories = userData.categories || []
-	// 		const updatedCategories = [...currentCategories, categoryId]
-
-	// 		const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				categories: updatedCategories
-	// 			})
-	// 		})
-
-	// 		if (!putResponse.ok) {
-	// 			throw new Error('Failed to update user category list')
-	// 		}
-
-	// 		console.log('User category list updated successfully')
-	// 		console.log('Data after updating user:', userData)
-	// 		console.log(userData.categories)
-
-	// 		showNewCategoryModal = false
-	// 		;(window as Window).location = '/home'
-	// 	} catch (error) {
-	// 		console.error('Error creating a new category:', error)
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not create a new category')
-	// 		}
-	// 	}
-	// }
-
-	// async function deleteCategory(e: any) {
-	// 	try {
-	// 		const category_id = e.target.parentElement.id
-
-	// 		await fetch(`https://todo-test-api.onrender.com/api/category/${category_id}`, {
-	// 			method: 'DELETE',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-
-	// 		const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to fetch user data')
-	// 		}
-
-	// 		const userData = await response.json()
-	// 		const currentCategories = userData.categories || []
-	// 		const updatedCategories = currentCategories.filter(
-	// 			(categoryId: string) => categoryId !== category_id
-	// 		)
-
-	// 		const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				categories: updatedCategories
-	// 			})
-	// 		})
-
-	// 		if (!putResponse.ok) {
-	// 			throw new Error('Failed to update user category list')
-	// 		}
-
-	// 		console.log('User category list updated successfully')
-	// 		console.log('Data after updating user:', userData)
-	// 		console.log(userData.categories)
-	// 		;(window as Window).location = '/home'
-	// 	} catch (error) {
-	// 		console.error('Error deleting category:', error)
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not update user category list')
-	// 		}
-	// 	}
-	// }
-
-	// async function toggleCheckbox(x: any, id: string) {
-	// 	x = !x
-	// 	updateCompletion()
-
-	// 	async function updateCompletion() {
-	// 		await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				completion: x
-	// 			})
-	// 		})
-	// 			.then((_res) => {
-	// 				goto('/home')
-	// 			})
-	// 			.catch((_err) => {
-	// 				_err = !_err
-	// 			})
-	// 	}
-	// }
-	// let newTodos: any[] = []
-
-	// function filterToMyTodos(myTodos: any[], todos: any[]): any[] {
-	// 	if (!Array.isArray(myTodos)) {
-	// 		return newTodos
-	// 	}
-	// 	for (let i of myTodos) {
-	// 		const todo = todos.find((todo) => todo._id === i)
-	// 		if (todo) {
-	// 			newTodos.push(todo)
-	// 		}
-	// 	}
-	// 	return newTodos
-	// }
-
-	// function filterToMyCategories(myCategories: any[], categories: any[]) {
-	// 	let newCategories: any[] = []
-	// 	if (!Array.isArray(myCategories)) {
-	// 		return newCategories
-	// 	}
-	// 	for (let i of myCategories) {
-	// 		const category = categories.find((category) => category._id === i)
-	// 		if (category) {
-	// 			newCategories.push(category)
-	// 		}
-	// 	}
-	// 	return newCategories
-	// }
-
-	// let newItems = filterToMyTodos(data.stuff.todos, data.items)
-	// let newCats = filterToMyCategories(data.stuff.categories, data.categories)
 	onMount(() => {
-		// $userIdentity = data.identity
-		console.log(data)
-		// userFirstName = data.identity.first_name
-		// searchableTodos = newItems
-		// buildCategoriesWithTodos(newCats, newItems)
+		$userIdentity = data.identity
+		userFirstName = data.identity.first_name
+		myTodos = filterToMyTodos(data.identity.todos, data.todos)
+		let myCategories = filterToMyCategories(data.identity.categories, data.categories)
+		console.log(myTodos)
+		console.log(myCategories)
+		searchableTodos = myTodos
+		buildCategoriesWithTodos(myCategories, myTodos)
 	})
 </script>
 
@@ -581,9 +562,8 @@
 	<title>Lee's Todo App</title>
 	<meta name="description" content="Svelte demo app" />
 </svelte:head>
-<div>hello world</div>
 
-<!-- <div
+<div
 	class="relative bg-palette-medium p-10 h-screen w-full rounded-3xl grid grid-cols-1 content-between"
 >
 	<div class="min-w-[335px]">
@@ -677,7 +657,7 @@
 									Notifications
 								</div>
 								<hr class="border-palette-dark" />
-								{#await initNotifications(newItems)}
+								{#await initNotifications(myTodos)}
 									loading...
 								{:then newList}
 									{#each newList as notificationItem}
@@ -715,7 +695,6 @@
 				</div>
 			</div>
 		</div>
-
 
 		<h1 class="text-4xl font-semibold text-white pb-5">What's up, {userFirstName}!</h1>
 
@@ -784,7 +763,6 @@
 				</div>
 			</div>
 		</div>
-
 
 		<div class="static grid grid-cols-1 justify-start">
 			<div class="text-palette-lightgray text-xs tracking-widest pb-5">TODAY'S TASKS</div>
@@ -882,10 +860,10 @@
 			{/if}
 		{/each}
 	</label>
-</div> -->
+</div>
 
 <!-- New Modals -->
-<!--
+
 {#if showUpdateTodoModal}
 	<Modal Title="Update your Todo" bind:showModal={showUpdateTodoModal}>
 		<div class="grid grid-cols-1 w-full">
@@ -1031,4 +1009,4 @@
 			</button>
 		</form>
 	</div>
-</Modal> -->
+</Modal>
