@@ -4,6 +4,7 @@
 	import { slide } from 'svelte/transition'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	export let data
+	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 
 	let myCategories: any[] = []
 
@@ -44,15 +45,10 @@
 	class="min-w-[414px] flex flex-col justify-center h-screen px-8 py-10 bg-slate-400 rounded-3xl"
 >
 	<div class="flex flex-row items-start justify-between bg-gray-700 h-1/10">
-		<button class="flex items-center" type="button" on:click={goProfile}>
-			<div class="text-white">Profile</div>
-			<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
-		</button>
+		<a href="/profile" class="text-white">Profile</a>
+		<MenuIcon Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-8 w-8" />
 
-		<button class="flex items-center" type="button" on:click={goHome}>
-			<div class="text-white">Home</div>
-			<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
-		</button>
+		<a href="/home" class="text-white">Home</a>
 	</div>
 	<div class="flex justify-center text-white font-bold text-3xl">My Categories</div>
 	<button class="text-white bg-palette-dark rounded-lg my-2 py-2">+ Category</button>
