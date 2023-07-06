@@ -15,7 +15,16 @@ from utils import (
     verify_password,
 )
 from datetime import timedelta
-from fastapi import FastAPI, File, HTTPException, status, Body, Depends, UploadFile
+from fastapi import (
+    FastAPI,
+    File,
+    HTTPException,
+    status,
+    Body,
+    Depends,
+    UploadFile,
+    Response,
+)
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
@@ -50,7 +59,9 @@ app.add_middleware(
 
 # Tokens
 @app.post("/token", response_model=Token, tags=["Tokens"])
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(
+    response: Response, form_data: OAuth2PasswordRequestForm = Depends()
+):
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -64,6 +75,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
     # print(f"access token {access_token}")
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return {"access_token": access_token, "token_type": "bearer"}
 
 
@@ -74,9 +86,12 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 
 
 @app.get("/accounts/profile/items", tags=["User Authentication"])
-async def read_own_items(current_user: User = Depends(get_current_active_user)):
+async def read_own_items(
+    response: Response, current_user: User = Depends(get_current_active_user)
+):
     # print(current_user.todos)
     # print(current_user.categories)
+    response.headers["Access-Control-Allow-Origin"] = "*"  # Add this line
     return {"todos": current_user.todos, "categories": current_user.categories}
 
 
