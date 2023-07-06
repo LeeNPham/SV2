@@ -12,17 +12,14 @@ from utils import (
     authenticate_user,
     create_access_token,
     get_password_hash,
-    verify_password,
 )
 from datetime import timedelta
 from fastapi import (
     FastAPI,
-    File,
     HTTPException,
     status,
     Body,
     Depends,
-    UploadFile,
     Response,
 )
 from fastapi.responses import JSONResponse
@@ -30,7 +27,6 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 
-# from model import User, UserInDb, UpdateUserModel
 
 from model import User, UserInDb, UpdateUserModel, Token, TokenData
 import os
@@ -41,11 +37,9 @@ load_dotenv()
 
 
 access_token_expire_minutes = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
-# App object
+
 app = FastAPI()
 
-
-# Set up a settings.py file later to import these settings?
 origins = ["*"]
 
 app.add_middleware(
@@ -70,11 +64,9 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=access_token_expire_minutes)
-    # print(f"access token expires in {access_token_expires}")
     access_token = create_access_token(
         data={"sub": user.username}, expires_delta=access_token_expires
     )
-    # print(f"access token {access_token}")
     response.headers["Access-Control-Allow-Origin"] = "*"
     return {"access_token": access_token, "token_type": "bearer"}
 
@@ -89,9 +81,7 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 async def read_own_items(
     response: Response, current_user: User = Depends(get_current_active_user)
 ):
-    # print(current_user.todos)
-    # print(current_user.categories)
-    response.headers["Access-Control-Allow-Origin"] = "*"  # Add this line
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return {"todos": current_user.todos, "categories": current_user.categories}
 
 
