@@ -45,8 +45,8 @@
 	class="min-w-[414px] flex flex-col justify-center h-screen px-8 py-10 bg-slate-400 rounded-3xl"
 >
 	<div class="flex flex-row items-start justify-between bg-gray-700 h-1/10">
-		<a href="/profile" class="text-white">Profile</a>
 		<MenuIcon Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-8 w-8" />
+		<a href="/profile" class="text-white">Profile</a>
 
 		<a href="/home" class="text-white">Home</a>
 	</div>
