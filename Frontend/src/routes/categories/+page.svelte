@@ -35,20 +35,21 @@
 	})
 </script>
 
-<button class="flex items-center" type="button" on:click={goProfile}>
-	<div class="text-white">Profile</div>
-	<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
-</button>
+<div class="min-w-[414px] flex flex-col justify-center h-screen px-8 py-20 bg-slate-400">
+	<div class="flex flex-row justify-between bg-gray-700 h-1/5">
+		<button class="flex items-center" type="button" on:click={goProfile}>
+			<div class="text-white">Profile</div>
+			<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
+		</button>
 
-<button class="flex items-center" type="button" on:click={goHome}>
-	<div class="text-white">Home</div>
-	<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
-</button>
-
-<div class="min-w-[414px] flex justify-center h-full px-8 py-20">
-	<div class="grid grid-cols-1 w-full px-4 gap-10 bg-blue-400">
+		<button class="flex items-center" type="button" on:click={goHome}>
+			<div class="text-white">Home</div>
+			<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
+		</button>
+	</div>
+	<div class="grid grid-cols-1 w-full px-4 gap-5 bg-blue-400 h-4/5 content-start py-10">
 		{#each myCategories as category}
-			<div class="w-full bg-red-600 border-2 rounded-xl">{category.title}</div>
+			<div class="w-full bg-red-600 border-2 rounded-xl h-20">{category.title}</div>
 		{/each}
 	</div>
 </div>
