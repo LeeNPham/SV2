@@ -8,6 +8,7 @@
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import profileDefault from '$lib/images/profileDefault.jpg'
+	export let data
 
 	const goHome = () => {
 		goto('/home')
@@ -99,16 +100,15 @@
 	}
 
 	onMount(async () => {
+		// console.log(data.user)
 		fileInput = document.getElementById('profileImageInput') as HTMLInputElement
-		let userIdentity = JSON.parse(localStorage.getItem('userIdentity'))
-		console.log(userIdentity)
-		firstName = userIdentity.first_name
-		lastName = userIdentity.last_name
-		userID = userIdentity._id
-		userName = userIdentity.username
-		userEmail = userIdentity.email
-		userDescription = userIdentity.description
-		userImage = userIdentity.photo_id
+		firstName = data.user.first_name
+		lastName = data.user.last_name
+		userID = data.user._id
+		userName = data.user.username
+		userEmail = data.user.email
+		userDescription = data.user.description
+		userImage = data.user.photo_id
 		getProfileImage(userImage)
 	})
 </script>
