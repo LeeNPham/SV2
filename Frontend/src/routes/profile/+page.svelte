@@ -34,7 +34,8 @@
 				method: 'GET',
 				headers: {
 					'Content-Type': 'image/jpg'
-				}
+				},
+				mode: 'no-cors'
 			})
 			if (!response.ok) {
 				throw new Error('Failed to fetch user profile image')
