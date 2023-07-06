@@ -16,7 +16,6 @@
 
 	const logout = () => {
 		goto('/')
-		localStorage.clear()
 	}
 
 	let firstName: string
