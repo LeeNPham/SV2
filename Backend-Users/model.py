@@ -1,9 +1,10 @@
 # from typing import Optional
 from pydantic import BaseModel, Field
 
-# from bson.objectid import ObjectId
+from bson.objectid import ObjectId
 from typing import Optional
-from bson import ObjectId
+
+# from bson import ObjectId
 
 
 class PyObjectId(ObjectId):
