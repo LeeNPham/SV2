@@ -15,6 +15,7 @@
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
 	import { userId, userIdentity } from '$store/stores.js'
 	export let data
+	import NavMenu from '$lib/components/NavMenu.svelte'
 
 	interface Todo {
 		id: string
@@ -568,13 +569,7 @@
 >
 	<div class="min-w-[335px]">
 		<div class="h-[90px] w-full flex flex-row justify-between">
-			<div>
-				<button on:click={gotoProfile} type="button">
-					<MenuIcon
-						Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-8 w-8"
-					/></button
-				>
-			</div>
+			<NavMenu />
 			<div
 				on:mouseleave={() => {
 					showSearch = false

@@ -5,6 +5,7 @@
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	export let data
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
+	import NavMenu from '$lib/components/NavMenu.svelte'
 
 	let myCategories: any[] = []
 
@@ -42,19 +43,14 @@
 </script>
 
 <div
-	class="min-w-[414px] flex flex-col justify-center h-screen px-8 py-10 bg-slate-400 rounded-3xl"
+	class="min-w-[414px] flex flex-col justify-center h-screen px-8 py-10 bg-palette-medium rounded-3xl"
 >
-	<div class="flex flex-row items-start justify-between bg-gray-700 h-1/10">
-		<MenuIcon Class="fill-palette-lightgray hover:fill-palette-lightgray/50 h-8 w-8" />
-		<a href="/profile" class="text-white">Profile</a>
-
-		<a href="/home" class="text-white">Home</a>
+	<div class="flex flex-row items-start justify-between h-1/10">
+		<NavMenu />
 	</div>
-	<div class="flex justify-center text-white font-bold text-3xl">My Categories</div>
+	<div class="flex justify-center tracking-wider text-white font-bold text-3xl">My Categories</div>
 	<button class="text-white bg-palette-dark rounded-lg my-2 py-2">+ Category</button>
-	<div
-		class="grid grid-cols-2 w-full gap-5 bg-palette-lightgray h-4/5 content-start py-10 overflow-y-scroll"
-	>
+	<div class="grid grid-cols-2 w-full gap-5 h-4/5 content-start py-10 overflow-y-scroll">
 		<!-- {#each myCategories as category}
 			<div class="w-full bg-red-600 border-2 rounded-xl h-20">{category.title}</div>
 		{/each} -->
