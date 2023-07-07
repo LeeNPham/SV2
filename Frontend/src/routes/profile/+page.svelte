@@ -8,6 +8,7 @@
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import profileDefault from '$lib/images/profileDefault.jpg'
+	import NavMenu from '$lib/components/NavMenu.svelte'
 	export let data
 
 	const goHome = () => {
@@ -113,8 +114,13 @@
 	})
 </script>
 
-<div class="min-w-[414px] flex justify-center h-full px-8 py-20">
+<div
+	class="min-w-[414px] flex justify-center h-screen px-8 pt-10 pb-20 rounded-3xl bg-palette-medium"
+>
 	<div class="grid grid-cols-1 content-start font-semibold text-2xl text-left w-full px-4">
+		<div class="flex flex-row justify-start mb-5">
+			<NavMenu />
+		</div>
 		<div class="flex flex-row">
 			{#if profilePic}
 				<label for="profileImageInput">
@@ -154,7 +160,7 @@
 		<div class="grid grid-cols-1 h-[450px] content-between">
 			<div class="grid grid-cols-1 gap-4">
 				<div class="flex flex-row gap-4 items-center">
-					<BooksmarksIcon Class="fill-palette-gray hover:fill-palette-gray h-5 w-5 ml-0.5" />
+					<BooksmarksIcon Class="fill-palette-dark hover:fill-palette-gray h-5 w-5 ml-0.5" />
 					<div
 						in:slide={{ axis: 'x', duration: 500 }}
 						class=" text-[17px] tracking-wider text-slate-200 font-normal"
@@ -163,7 +169,7 @@
 					</div>
 				</div>
 				<div class="flex flex-row gap-4 items-center">
-					<Categories Class="fill-palette-gray hover:fill-palette-gray h-6 w-6" />
+					<Categories Class="fill-palette-dark hover:fill-palette-gray h-6 w-6" />
 					<div
 						in:slide={{ axis: 'x', duration: 500 }}
 						class=" text-[17px] tracking-wider text-slate-200 font-normal"
@@ -172,7 +178,7 @@
 					</div>
 				</div>
 				<div class="flex flex-row gap-4 items-center">
-					<PieChart Class="fill-palette-gray hover:fill-palette-gray h-6 w-6" />
+					<PieChart Class="fill-palette-dark hover:fill-palette-gray h-6 w-6" />
 					<div
 						in:slide={{ axis: 'x', duration: 500 }}
 						class=" text-[17px] tracking-wider text-slate-200 font-normal"
@@ -205,7 +211,3 @@
 		</div>
 	</div>
 </div>
-
-<button class="absolute right-10 top-20" type="button" on:click={goHome}>
-	<ChevronWithLeftCircle Class="fill-palette-gray/80 h-14 w-14" />
-</button>
