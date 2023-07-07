@@ -210,7 +210,7 @@
 				class="w-full bg-palette-dark text-white rounded-2xl h-[130px] shadow-inner overflow-clip p-3"
 			>
 				<div class="flex flex-col px-2">
-					<div class="w-full font-bold text-center">{category.title}</div>
+					<div class="w-full font-bold text-center whitespace-nowrap">{category.title}</div>
 					<div class="text-left text-palette-lightgray indent-4 text-sm">
 						{category.description}
 					</div>

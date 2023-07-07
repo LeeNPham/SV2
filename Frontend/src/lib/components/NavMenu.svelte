@@ -1,14 +1,8 @@
 <script>
-	import { goto } from '$app/navigation'
 	import {
 		Drawer,
-		Button,
 		CloseButton,
 		Sidebar,
-		SidebarBrand,
-		SidebarCta,
-		SidebarDropdownItem,
-		SidebarDropdownWrapper,
 		SidebarGroup,
 		SidebarItem,
 		SidebarWrapper
@@ -16,9 +10,10 @@
 	import { sineIn } from 'svelte/easing'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import Categories from '$lib/icons/Categories.svelte'
+	import { categoriesCountStore } from '$store/stores'
 
 	let hidden2 = true
-	let spanClass = 'flex-1 ml-3 whitespace-nowrap'
+
 	let transitionParams = {
 		x: -320,
 		duration: 200,
@@ -110,7 +105,7 @@
 						<svelte:fragment slot="subtext">
 							<span
 								class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-primary-600 bg-primary-200 rounded-full dark:bg-primary-900 dark:text-primary-200"
-								>3</span
+								>{$categoriesCountStore}</span
 							>
 						</svelte:fragment>
 					</SidebarItem>

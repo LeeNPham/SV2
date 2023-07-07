@@ -9,11 +9,10 @@
 	import CirclePlus from '$lib/icons/CirclePlus.svelte'
 	import BellIcon from '$lib/icons/BellIcon.svelte'
 	import MagnifyingGlassIcon from '$lib/icons/MagnifyingGlassIcon.svelte'
-	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import Fuse from 'fuse.js'
 	import BellNoticeIcon from '$lib/icons/BellNoticeIcon.svelte'
 	import AlarmIcon from '$lib/icons/AlarmIcon.svelte'
-	import { userId, userIdentity } from '$store/stores.js'
+	import { userIdentity, categoriesCountStore } from '$store/stores.js'
 	export let data
 	import NavMenu from '$lib/components/NavMenu.svelte'
 
@@ -41,6 +40,7 @@
 	let showNewCategoryModal = false
 	let completion = false
 	let userFirstName = ''
+	let userId = ''
 	let create_date = ''
 	let myTodos: any[] = []
 
@@ -143,9 +143,7 @@
 	function displayNotifications() {
 		showNotifications = !showNotifications
 	}
-	function gotoProfile() {
-		goto('/profile')
-	}
+
 	function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
 		completeCategories['All'] = { todos: tasks }
 		for (let category of categories) {
@@ -267,7 +265,7 @@
 			}
 			const data = await res.json()
 			const objectId = data._id
-			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'GET', // Fetch the user's current todo list
 				headers: {
 					'Content-Type': 'application/json'
@@ -279,7 +277,7 @@
 			const userData = await response.json()
 			const currentTodos = userData.todos || [] // Existing todos or empty array if none
 			const updatedTodos = [...currentTodos, objectId] // Append the new objectId
-			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -346,7 +344,7 @@
 					'Content-Type': 'application/json'
 				}
 			})
-			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'GET', // Fetch the user's current todo list
 				headers: {
 					'Content-Type': 'application/json'
@@ -358,7 +356,7 @@
 			const userData = await response.json()
 			const currentTodos = userData.todos || [] // Existing todos or empty array if none
 			const updatedTodos = currentTodos.filter((todoId: string) => todoId !== id) // Remove the deleted todo from the list
-			const updateResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const updateResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -403,7 +401,7 @@
 			}
 			const data = await res.json()
 			const categoryId = data._id
-			const userResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const userResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
@@ -415,7 +413,7 @@
 			const userData = await userResponse.json()
 			const currentCategories = userData.categories || []
 			const updatedCategories = [...currentCategories, categoryId]
-			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -452,7 +450,7 @@
 				}
 			})
 
-			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
@@ -469,7 +467,7 @@
 				(categoryId: string) => categoryId !== category_id
 			)
 
-			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${$userId}`, {
+			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -549,11 +547,13 @@
 
 	onMount(() => {
 		$userIdentity = data.identity
+		userId = data.identity._id
 		userFirstName = data.identity.first_name
 		myTodos = filterToMyTodos(data.identity.todos, data.todos)
 		let myCategories = filterToMyCategories(data.identity.categories, data.categories)
-		console.log(myTodos)
-		console.log(myCategories)
+		// console.log(myTodos)
+		// console.log(myCategories)
+		$categoriesCountStore = myCategories.length
 		searchableTodos = myTodos
 		buildCategoriesWithTodos(myCategories, myTodos)
 	})
