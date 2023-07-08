@@ -11,14 +11,6 @@
 	import NavMenu from '$lib/components/NavMenu.svelte'
 	export let data
 
-	const goHome = () => {
-		goto('/home')
-	}
-
-	const logout = () => {
-		goto('/')
-	}
-
 	let firstName: string
 	let lastName: string
 	let userID: string
@@ -200,13 +192,6 @@
 				/>
 				<div class="text-[14px] font-normal text-palette-gray">Good</div>
 				<div class="text-white text-[18px] tracking-wider">Consistency</div>
-			</div>
-			<div>
-				<button
-					on:click={logout}
-					type="button"
-					class="px-2 py-1 text-white bg-palette-lightgray rounded-md">Logout</button
-				>
 			</div>
 		</div>
 	</div>

@@ -18,7 +18,6 @@
 	import NavMenu from '$lib/components/NavMenu.svelte'
 
 	interface Todo {
-		id: string
 		category: string
 		completion: boolean
 		create_date: string
@@ -412,6 +411,7 @@
 				throw new Error('Failed to fetch user data')
 			}
 			const userData = await userResponse.json()
+			console.log('this is my userdata to see if im getting a positive res', userData)
 			const currentCategories = userData.categories || []
 			const updatedCategories = [...currentCategories, categoryId]
 			const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {

@@ -6,7 +6,7 @@ export const prerender = true
 // async function getAccountDetails(accessToken) {
 // 	let data = null
 // 	if (typeof localStorage !== 'undefined') {
-// 		const response = await fetch(`${PUBLIC_BACKEND-USERS}/accounts/profile/`, {
+// 		const response = await fetch(`${PUBLIC_BACKEND-USERS}/accounts/profile`, {
 // 			headers: {
 // 				Authorization: `Bearer ${accessToken}`
 // 			}
@@ -35,8 +35,9 @@ export const load = async ({ fetch }) => {
 		let accessToken
 		if (browser) {
 			accessToken = document.cookie.split('=')[1]
+			console.log('accesstoken within my homes +page.js', accessToken)
 		}
-		const response = await fetch(`${PUBLIC_BACKEND_USERS}/accounts/profile/`, {
+		const response = await fetch(`${PUBLIC_BACKEND_USERS}/accounts/profile`, {
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			}

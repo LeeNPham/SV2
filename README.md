@@ -31,6 +31,7 @@
   * [x] userdescription
   * [ ] categories
   * [ ] todos
+  * [ ] creating a new todo, deletes all of my categories?
 
 
 * [ ] Set up Notification ping

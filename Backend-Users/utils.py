@@ -58,10 +58,13 @@ async def get_current_user(token: str = Depends(oauth_2_scheme)):
         if username is None:
             raise credential_exception
         token_data = TokenData(username=username)
+        print(token_data)
     except JWTError:
+        print("error2")
         raise credential_exception
     user = await fetch_one_user_by_username(username=token_data.username)
     if user is None:
+        print("error3")
         raise credential_exception
     return user
 
