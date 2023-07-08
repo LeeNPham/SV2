@@ -35,7 +35,7 @@ export const load = async ({ fetch }) => {
 		let accessToken
 		if (browser) {
 			accessToken = document.cookie.split('=')[1]
-			console.log('accesstoken within my homes +page.js', accessToken)
+			console.log('accesstoken within my homes +page.js', accessToken.split('.'))
 		}
 		const response = await fetch(`${PUBLIC_BACKEND_USERS}/accounts/profile`, {
 			headers: {
