@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { PUBLIC_BACKEND_USERS } from '$env/static/public'
 	import { goto } from '$app/navigation'
 	let username = ''
 	let password = ''
@@ -17,7 +18,7 @@
 			hashed_password: password
 		}
 
-		fetch('https://accounts-79lp.onrender.com/api/user/', {
+		fetch(`${PUBLIC_BACKEND_USERS}/api/user/`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -92,20 +93,19 @@
 			class="px-4 py-2 mb-4 border rounded"
 		/>
 
-		<div class='flex flex-col gap-4' >
-		<button
-			type="submit"
-			class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
-		>
-			Register
-		</button>
-		<button
-			type="button"
-			class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
-		>
-			<a href="/">Return to Login</a>
-		</button>
-	</div>
-
+		<div class="flex flex-col gap-4">
+			<button
+				type="submit"
+				class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
+			>
+				Register
+			</button>
+			<button
+				type="button"
+				class="px-4 py-2 bg-palette-dark text-white rounded cursor-pointer hover:bg-palette-dark/50"
+			>
+				<a href="/">Return to Login</a>
+			</button>
+		</div>
 	</form>
 </main>

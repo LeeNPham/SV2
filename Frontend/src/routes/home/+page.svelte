@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte'
 	import { goto } from '$app/navigation'
 	import { slide } from 'svelte/transition'
+	import { PUBLIC_BACKEND_USERS, PUBLIC_BACKEND_TODOS } from '$env/static/public'
 	import Modal from '$lib/components/Modal.svelte'
 	import CircleIcon from '$lib/icons/CircleIcon.svelte'
 	import EllipsisIcon from '$lib/icons/EllipsisIcon.svelte'
@@ -253,7 +254,7 @@
 				create_date,
 				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
 			}
-			const res = await fetch('https://todo-test-api.onrender.com/api/todo/', {
+			const res = await fetch(`${PUBLIC_BACKEND_TODOS}/api/todo/`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -265,7 +266,7 @@
 			}
 			const data = await res.json()
 			const objectId = data._id
-			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const response = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'GET', // Fetch the user's current todo list
 				headers: {
 					'Content-Type': 'application/json'
@@ -277,7 +278,7 @@
 			const userData = await response.json()
 			const currentTodos = userData.todos || [] // Existing todos or empty array if none
 			const updatedTodos = [...currentTodos, objectId] // Append the new objectId
-			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -311,7 +312,7 @@
 		due_date: string
 	) {
 		try {
-			const response = await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+			const response = await fetch(`${PUBLIC_BACKEND_TODOS}/api/todo/${id}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -338,13 +339,13 @@
 
 	async function deleteTodo(id: string) {
 		try {
-			await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+			await fetch(`${PUBLIC_BACKEND_TODOS}/api/todo/${id}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			})
-			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const response = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'GET', // Fetch the user's current todo list
 				headers: {
 					'Content-Type': 'application/json'
@@ -356,7 +357,7 @@
 			const userData = await response.json()
 			const currentTodos = userData.todos || [] // Existing todos or empty array if none
 			const updatedTodos = currentTodos.filter((todoId: string) => todoId !== id) // Remove the deleted todo from the list
-			const updateResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const updateResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -389,7 +390,7 @@
 				description,
 				create_date
 			}
-			const res = await fetch('https://todo-test-api.onrender.com/api/category/', {
+			const res = await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -401,7 +402,7 @@
 			}
 			const data = await res.json()
 			const categoryId = data._id
-			const userResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const userResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
@@ -413,7 +414,7 @@
 			const userData = await userResponse.json()
 			const currentCategories = userData.categories || []
 			const updatedCategories = [...currentCategories, categoryId]
-			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -443,14 +444,14 @@
 		try {
 			const category_id = e.target.parentElement.id
 
-			await fetch(`https://todo-test-api.onrender.com/api/category/${category_id}`, {
+			await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${category_id}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'
 				}
 			})
 
-			const response = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const response = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
@@ -467,7 +468,7 @@
 				(categoryId: string) => categoryId !== category_id
 			)
 
-			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userId}`, {
+			const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -499,7 +500,7 @@
 		updateCompletion()
 
 		async function updateCompletion() {
-			await fetch(`https://todo-test-api.onrender.com/api/todo/${id}`, {
+			await fetch(`${PUBLIC_BACKEND_TODOS}/api/todo/${id}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'

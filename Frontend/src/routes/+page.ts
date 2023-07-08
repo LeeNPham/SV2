@@ -1,4 +1,5 @@
 import { goto } from '$app/navigation'
+import { PUBLIC_BACKEND_USERS } from '$env/static/public'
 
 export async function _handleLogin(username: string, password: string) {
 	const formData = new FormData()
@@ -6,7 +7,7 @@ export async function _handleLogin(username: string, password: string) {
 	formData.append('password', password)
 
 	try {
-		const response = await fetch('https://accounts-79lp.onrender.com/token', {
+		const response = await fetch(`${PUBLIC_BACKEND_USERS}/token`, {
 			method: 'POST',
 			body: formData
 		})

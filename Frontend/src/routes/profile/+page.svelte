@@ -3,10 +3,10 @@
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
 	import { userIdentity } from '$store/stores'
+	import { PUBLIC_BACKEND_USERS, PUBLIC_BACKEND_UPLOADS } from '$env/static/public'
 	import Categories from '$lib/icons/Categories.svelte'
 	import BooksmarksIcon from '$lib/icons/BooksmarksIcon.svelte'
 	import PieChart from '$lib/icons/PieChart.svelte'
-	import ChevronWithLeftCircle from '$lib/icons/ChevronWithLeftCircle.svelte'
 	import profileDefault from '$lib/images/profileDefault.jpg'
 	import NavMenu from '$lib/components/NavMenu.svelte'
 	export let data
@@ -31,7 +31,7 @@
 
 	async function getProfileImage(photo_id: string): Promise<void> {
 		try {
-			const response = await fetch(`https://backend-uploads.onrender.com/files/${photo_id}`, {
+			const response = await fetch(`${PUBLIC_BACKEND_UPLOADS}/files/${photo_id}`, {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'image/jpg'
@@ -50,7 +50,7 @@
 
 	async function updateUserImageId(photo_ID: string): Promise<void> {
 		try {
-			const putResponse = await fetch(`https://accounts-79lp.onrender.com/api/user/${userID}`, {
+			const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userID}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -76,7 +76,7 @@
 			if (file) {
 				const formData = new FormData()
 				formData.append('photo', file)
-				const response = await fetch('https://backend-uploads.onrender.com/upload-photo', {
+				const response = await fetch(`${PUBLIC_BACKEND_UPLOADS}/upload-photo`, {
 					method: 'POST',
 					body: formData
 				})
