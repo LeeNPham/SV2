@@ -113,7 +113,7 @@
 		<div class="flex flex-row justify-start mb-5">
 			<NavMenu />
 		</div>
-		<div class="flex flex-row">
+		<div class="flex flex-row w-full h-full bg-palette-dark rounded-xl p-3">
 			{#if profilePic}
 				<label for="profileImageInput">
 					<img
@@ -144,7 +144,7 @@
 			</div>
 		</div>
 
-		<div class="text-[40px] font-semibold text-white tracking-wide flex flex-col gap-4 py-14">
+		<div class="text-[40px] font-semibold text-white tracking-wide flex flex-col gap-4 py-10">
 			<div>{firstName}</div>
 			<div>{lastName}</div>
 		</div>
@@ -152,7 +152,9 @@
 		<div class="grid grid-cols-1 h-[450px] content-between">
 			<div class="grid grid-cols-1 gap-4">
 				<div class="flex flex-row gap-4 items-center">
-					<BooksmarksIcon Class="fill-palette-dark hover:fill-palette-gray h-5 w-5 ml-0.5" />
+					<BooksmarksIcon
+						Class="fill-palette-dark stroke stroke-palette-dark hover:fill-palette-gray h-5 w-5 ml-0.5"
+					/>
 					<div
 						in:slide={{ axis: 'x', duration: 500 }}
 						class=" text-[17px] tracking-wider text-slate-200 font-normal"
@@ -180,7 +182,7 @@
 				</div>
 				<textarea
 					name="userDescription"
-					class="text-sm font-semibold pl-5 text-white focus:ring-0 focus:border-0 border-0 tracking-wide rounded-md bg-palette-medium"
+					class="text-sm font-semibold pl-5 text-white min-h-[100px] focus:ring-0 focus:border-0 border-0 tracking-wide rounded-md bg-palette-dark"
 					>{userDescription}</textarea
 				>
 			</div>
@@ -188,9 +190,9 @@
 			<div>
 				<div
 					in:slide={{ axis: 'x', duration: 500 }}
-					class="w-2/3 h-[120px] border border-white bg-white/10"
+					class="w-2/3 h-[120px] rounded-xl bg-gradient-to-l from-indigo-500 to-palette-dark shadow-lg shadow-black/80"
 				/>
-				<div class="text-[14px] font-normal text-palette-gray">Good</div>
+				<div class="text-[14px] font-normal text-palette-lightgray">Good</div>
 				<div class="text-white text-[18px] tracking-wider">Consistency</div>
 			</div>
 		</div>
