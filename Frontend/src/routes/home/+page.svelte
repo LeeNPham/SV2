@@ -372,6 +372,9 @@
 			const updatedUserData = await updateResponse.json()
 			console.log('Data after updating user:', updatedUserData)
 			console.log(updatedUserData.todos)
+			if (updateResponse.ok) {
+				window.location.assign('/home')
+			}
 		} catch (error) {
 			return {
 				status: 301,
