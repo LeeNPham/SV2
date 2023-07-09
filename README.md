@@ -29,17 +29,22 @@
 * [ ] Set up stores values such that client can house their own data for offline use
   * [x] username
   * [x] userdescription
-  * [ ] categories
-  * [ ] todos
-  * [ ] creating a new todo, deletes all of my categories?
+  * [x] categories
+  * [x] todos
 
 
-* [ ] Set up Notification ping
-* [ ] Set up APIGateway to allow for todos and category creation/deletion to be afixed to a users account, usage will be by reference only which might take more time but less calls in case we want to load balance the servers instead of housing them all on one array within the db system
+* [ ] Set up Notification ping, occurs only once during login
+* [ ] Set up APIGateway to allow for todos and category creation/deletion to be afixed to a users account, usage will be by reference only which might take more time but less calls in case we want to load balance the servers instead of housing them all on one array within the db system, look into creating client side js functions we can call to within routes
 * [ ] After every update or action is completed, make sure to console.log the action that occured. updates, deletes, creations, so on
-* [ ] BUG, currently users are unable to create a new category/new todos list because its returning an empty array, return an empty array as the value if null
-* [ ] display wrong username and password if it doesnt match
+* [x] BUG, currently users are unable to create a new category/new todos list because its returning an empty array, return an empty array as the value if null
+  * [x] was due to backend defaulting values on updates
+* [ ] display wrong username and password if it doesnt match on login
+
+
 * [ ] set up forgot password
+* [ ] implement refresh tokens { min: 30- "no activity,logs out", max: 240-"constant activity, forced logout" }
+  * [ ] Consider the user, do i want my most recent refresh token to occur during their latest activity or do i want it to occur every half hour, it's easier to track just fetch pings from the user, so we should instead have refresh tokens be derived from their ussage during such time, up to the max. currently, our max is at 30 minutes
+  * [ ]
 
 
 upon logging in, I need to initialize a user by looking at their todos and categories, grabbing a full list of all todos and categories, and adding those lists into my store, from there, everytime a value is updated, i can update my local stores to update what information to render?
