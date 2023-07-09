@@ -83,6 +83,7 @@
 					localStorage.setItem('userIdentity', JSON.stringify(userIdentity))
 					await updateUserImageId(photoId)
 					console.log('Image successfully updated!')
+					window.location.assign('/profile')
 				} else {
 					console.error('Failed to upload photo')
 				}
