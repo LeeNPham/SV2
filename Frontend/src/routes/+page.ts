@@ -3,7 +3,7 @@ import { PUBLIC_BACKEND_USERS } from '$env/static/public'
 
 export async function _handleLogin(username: string, password: string) {
 	const formData = new FormData()
-	formData.append('username', username)
+	formData.append('username', username.toLowerCase())
 	formData.append('password', password)
 
 	try {
