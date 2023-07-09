@@ -10,7 +10,7 @@
 	import { sineIn } from 'svelte/easing'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import Categories from '$lib/icons/Categories.svelte'
-	import { categoriesCountStore } from '$store/stores'
+	import { categoriesCountStore, isLoggedIn } from '$store/stores'
 	import { goto } from '$app/navigation'
 	import HouseIcon from '$lib/icons/HouseIcon.svelte'
 	import ProfileIcon from '$lib/icons/ProfileIcon.svelte'
@@ -23,19 +23,9 @@
 		easing: sineIn
 	}
 
-	function goProfile() {
-		goto('/profile')
-	}
-
-	function goHome() {
-		goto('/home')
-	}
-
-	function goCategories() {
-		goto('/categories')
-	}
 	const logout = () => {
-		goto('/')
+		hidden2 = true
+		$isLoggedIn = false
 	}
 </script>
 
@@ -96,7 +86,7 @@
 
 				<a
 					href="/"
-					on:click={() => (hidden2 = true)}
+					on:click={logout}
 					class="flex flex-row items-center gap-4 hover:bg-palette-medium rounded-xl px-2 py-1"
 				>
 					<svg

@@ -8,6 +8,7 @@ export const userId = writable('')
 export const userIdentity = writable({})
 export const user_username = writable('')
 export const user_description = writable('')
+
 export const myTodos = writable([])
-export const categoriesStore = writable([])
+export const myCategories = writable([])
 export const categoriesCountStore = writable(0)
