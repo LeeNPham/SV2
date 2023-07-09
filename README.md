@@ -32,6 +32,9 @@
   * [x] categories
   * [x] todos
 
+* [ ] turn categories page categories into component cards to house the data, link to their items, and allow the user to edit them from there, if not, then route them to the main page with their list of todos
+* [ ]
+
 
 * [ ] Set up Notification ping, occurs only once during login
 * [ ] Set up APIGateway to allow for todos and category creation/deletion to be afixed to a users account, usage will be by reference only which might take more time but less calls in case we want to load balance the servers instead of housing them all on one array within the db system, look into creating client side js functions we can call to within routes
