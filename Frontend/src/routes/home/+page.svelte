@@ -556,8 +556,6 @@
 		userFirstName = data.identity.first_name
 		myTodos = filterToMyTodos(data.identity.todos, data.todos)
 		myCategories = filterToMyCategories(data.identity.categories, data.categories)
-		// console.log(myTodos)
-		// console.log(myCategories)
 		$categoriesCountStore = myCategories.length
 		searchableTodos = myTodos
 		buildCategoriesWithTodos(myCategories, myTodos)
