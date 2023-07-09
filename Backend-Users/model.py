@@ -29,8 +29,8 @@ class User(BaseModel):
     first_name: str = None
     last_name: str = None
     description: Optional[str] = None
-    todos: Optional[list] = []
-    categories: Optional[list] = []
+    todos: Optional[list]
+    categories: Optional[list]
     photo_id: Optional[str] = None
 
     class Config:
@@ -90,8 +90,8 @@ class UpdateUserModel(BaseModel):
     first_name: Optional[str]
     last_name: Optional[str]
     description: Optional[str] = None
-    todos: Optional[list] = []
-    categories: Optional[list] = []
+    todos: Optional[list]
+    categories: Optional[list]
     photo_id: Optional[str] = None
     hashed_password: Optional[str] = None
 
