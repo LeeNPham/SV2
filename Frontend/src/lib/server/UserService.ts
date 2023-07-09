@@ -1,10 +1,7 @@
 import { get } from 'svelte/store'
 import { realm, identity } from '$lib/stores'
-import CommonService from '$lib/tozny/CommonService'
-import { env } from '$env/dynamic/public'
-/**
- * Utility class for user related functions
- * */
+import {} from '$env/dynamic/public'
+
 class UserService {
 	async addUser(data: any, registrationToken: any) {
 		if (registrationToken) {

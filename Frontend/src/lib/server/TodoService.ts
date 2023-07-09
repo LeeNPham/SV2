@@ -1,9 +1,5 @@
 import { get } from 'svelte/store'
 import { PUBLIC_BACKEND_TODOS } from '$env/static/public'
-
-/**
- * Utility class for todo related functions
- * */
 class TodoService {
 	async createTodo(todoData: any) {
 		const user: any = get(identity)
