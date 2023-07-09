@@ -26,12 +26,12 @@ class User(BaseModel):
     username: str
     email: str
     disabled: Optional[bool] = False
-    first_name: str = None
-    last_name: str = None
-    description: Optional[str] = None
+    first_name: str
+    last_name: str
+    description: Optional[str]
     todos: Optional[list]
     categories: Optional[list]
-    photo_id: Optional[str] = None
+    photo_id: Optional[str]
 
     class Config:
         allow_population_by_field_name = True
@@ -89,11 +89,11 @@ class UpdateUserModel(BaseModel):
     disabled: Optional[bool] = False
     first_name: Optional[str]
     last_name: Optional[str]
-    description: Optional[str] = None
+    description: Optional[str]
     todos: Optional[list]
     categories: Optional[list]
-    photo_id: Optional[str] = None
-    hashed_password: Optional[str] = None
+    photo_id: Optional[str]
+    hashed_password: Optional[str]
 
     class Config:
         arbitrary_types_allowed = True
