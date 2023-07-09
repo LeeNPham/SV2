@@ -43,6 +43,7 @@
 	let userId = ''
 	let create_date = ''
 	let myTodos: any[] = []
+	let myCategories: any[] = []
 
 	let id = ''
 	let category = ''
@@ -551,7 +552,7 @@
 		userId = data.identity._id
 		userFirstName = data.identity.first_name
 		myTodos = filterToMyTodos(data.identity.todos, data.todos)
-		let myCategories = filterToMyCategories(data.identity.categories, data.categories)
+		myCategories = filterToMyCategories(data.identity.categories, data.categories)
 		// console.log(myTodos)
 		// console.log(myCategories)
 		$categoriesCountStore = myCategories.length

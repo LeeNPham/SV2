@@ -201,11 +201,7 @@
 		>+ Category</button
 	>
 	<div class="grid grid-cols-2 w-full gap-4 h-4/5 content-start py-8 overflow-y-scroll">
-		<!-- {#each myCategories as category}
-			<div class="w-full bg-red-600 border-2 rounded-xl h-20">{category.title}</div>
-		{/each} -->
-
-		{#each dummyData as category}
+		{#each myCategories as category}
 			<div
 				class="w-full bg-palette-dark text-white rounded-2xl h-[130px] shadow-inner overflow-clip p-3"
 			>
@@ -217,5 +213,18 @@
 				</div>
 			</div>
 		{/each}
+
+		<!-- {#each dummyData as category}
+			<div
+				class="w-full bg-palette-dark text-white rounded-2xl h-[130px] shadow-inner overflow-clip p-3"
+			>
+				<div class="flex flex-col px-2">
+					<div class="w-full font-bold text-center whitespace-nowrap">{category.title}</div>
+					<div class="text-left text-palette-lightgray indent-4 text-sm">
+						{category.description}
+					</div>
+				</div>
+			</div>
+		{/each} -->
 	</div>
 </div>
