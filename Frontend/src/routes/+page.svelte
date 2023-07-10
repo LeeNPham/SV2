@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { _handleLogin } from './+page';
+	import { goto } from '$app/navigation'
+	import { _handleLogin } from './+page'
 
-    let username = '';
-    let password = '';
+	let username = ''
+	let password = ''
 
-    async function login() {
-        await _handleLogin(username, password);
-    }
+	async function login() {
+		await _handleLogin(username, password)
+		goto('/home')
+	}
 </script>
 
 <div class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8 mb-4">
