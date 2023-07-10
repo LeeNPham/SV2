@@ -37,8 +37,8 @@
 	}
 </script>
 
-<main class="bg-palette-gray rounded-lg max-w-md mx-auto p-4 text-center">
-	<h1 class="text-white text-2xl font-bold mb-4">Register New User</h1>
+<main class="bg-palette-lightgray rounded-lg max-w-md mx-auto p-4 text-center">
+	<h1 class="text-palette-dark text-2xl font-bold mb-4">Register New User</h1>
 
 	<form on:submit|preventDefault|once={register} class="flex flex-col">
 		<input
