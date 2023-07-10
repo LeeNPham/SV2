@@ -111,7 +111,7 @@
 	class="min-w-[414px] flex justify-center h-screen px-8 pt-10 pb-20 rounded-3xl bg-palette-medium"
 >
 	<div class="grid grid-cols-1 content-start font-semibold text-2xl text-left w-full px-4">
-		<div class="flex flex-row justify-start mb-5">
+		<div class="flex flex-row justify-start mb-5 text-[16px]">
 			<NavMenu />
 		</div>
 		<div class="flex flex-row w-full h-full bg-palette-dark rounded-xl p-3">
