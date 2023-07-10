@@ -22,9 +22,16 @@
 		showNewCategoryModal = true
 	}
 
-	function displayUpdateCategoryModal(id: string) {
+	interface Category {
+		_id: string
+		title: string
+		description: string
+	}
+	function displayUpdateCategoryModal(categoryToUpdate: Category) {
 		showUpdateCategoryModal = true
-		updateId = id
+		updateId = categoryToUpdate._id
+		updateTitle = categoryToUpdate.title
+		updateDescription = categoryToUpdate.description
 	}
 
 	async function createCategory() {
@@ -83,29 +90,29 @@
 	}
 
 	async function updateCategory() {
-		console.log({ updateId })
-		// try {
-		// 	const response = await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${id}`, {
-		// 		method: 'PUT',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify({
-		// 			title,
-		// 			description
-		// 		})
-		// 	})
-		// 	if (!response.ok) {
-		// 		throw new Error('Failed to update the todo')
-		// 	}
-		// 	window.location.assign('/home')
-		// } catch (error) {
-		// 	console.error('Error updating the todo:', error)
-		// 	return {
-		// 		status: 301,
-		// 		error: new Error('Could not update the todo')
-		// 	}
-		// }
+		console.log({ updateId }, { updateTitle }, { updateDescription })
+		try {
+			const response = await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${updateId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					title: updateTitle,
+					description: updateDescription
+				})
+			})
+			if (!response.ok) {
+				throw new Error('Failed to update the category')
+			}
+			window.location.assign('/categories')
+		} catch (error) {
+			console.error('Error updating the category:', error)
+			return {
+				status: 301,
+				error: new Error('Could not update the category')
+			}
+		}
 	}
 
 	async function deleteCategory(e: any) {
@@ -219,9 +226,7 @@
 						</div>
 					</div>
 					<div class="flex flex-row w-full justify-end items-end h-auto">
-						<button on:click={() => displayUpdateCategoryModal(category._id)}>
-							<EllipsisIcon /></button
-						>
+						<button on:click={() => displayUpdateCategoryModal(category)}> <EllipsisIcon /></button>
 					</div>
 				</div>
 			</div>
@@ -270,7 +275,7 @@
 			<div class="text-md text-white font-bold">Category Name:</div>
 			<input
 				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="Category Name"
+				placeholder={updateTitle}
 				type="text"
 				bind:value={updateTitle}
 				required
@@ -279,7 +284,7 @@
 			<div class="text-md text-white font-bold">Description:</div>
 			<textarea
 				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="Description Details"
+				placeholder={updateDescription}
 				bind:value={updateDescription}
 			/>
 

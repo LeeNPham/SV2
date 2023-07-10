@@ -20,6 +20,7 @@ class PyObjectId(ObjectId):
     def __modify_schema__(cls, field_schema):
         field_schema.update(type="string")
 
+
 # Todo Models Start
 
 
@@ -43,7 +44,7 @@ class Todo(BaseModel):
                 "description": "This is a description",
                 "completion": "True",
                 "create_date": "2008-09-15",
-                "due_date": '2008-09-15'
+                "due_date": "2008-09-15",
             }
         }
 
@@ -52,7 +53,7 @@ class UpdateTodoModel(BaseModel):
     category: Optional[str]
     title: Optional[str]
     description: Optional[str]
-    completion:  Optional[bool]
+    completion: Optional[bool]
     create_date: Optional[str]
     due_date: Optional[str]
 
@@ -66,9 +67,11 @@ class UpdateTodoModel(BaseModel):
                 "description": "This is a description",
                 "completion": "True",
                 "create_date": "2008-09-15",
-                "due_date": '2008-09-15'
+                "due_date": "2008-09-15",
             }
         }
+
+
 # Todo Models End
 
 # Category Models Start
@@ -77,7 +80,7 @@ class UpdateTodoModel(BaseModel):
 class Category(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     title: str
-    description: str
+    description: Optional[str]
     create_date: str
 
     class Config:
@@ -88,15 +91,15 @@ class Category(BaseModel):
             "example": {
                 "title": "My Title",
                 "description": "This is a description",
-                "create_date": "2008-09-15"
+                "create_date": "2008-09-15",
             }
         }
 
 
 class UpdateCategoryModel(BaseModel):
-    title: str
-    description: str
-    create_date: str
+    title: Optional[str]
+    description: Optional[str]
+    create_date: Optional[str]
 
     class Config:
         arbitrary_types_allowed = True
@@ -105,6 +108,6 @@ class UpdateCategoryModel(BaseModel):
             "example": {
                 "title": "My Title",
                 "description": "This is a description",
-                "create_date": "2008-09-15"
+                "create_date": "2008-09-15",
             }
         }
