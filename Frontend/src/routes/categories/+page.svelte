@@ -265,7 +265,7 @@
 	</div>
 </Modal>
 
-<Modal Title="Update Category" bind:showModal={showUpdateCategoryModal}>
+<Modal Title="Update {updateTitle}" bind:showModal={showUpdateCategoryModal}>
 	<div class="grid grid-cols-1 w-full">
 		<form
 			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl"
@@ -273,7 +273,7 @@
 		>
 			<div class="text-md text-white font-bold">Category Name:</div>
 			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
+				class="rounded-xl py-0 placeholder:text-gray-200 text-gray-900"
 				placeholder={updateTitle}
 				type="text"
 				bind:value={updateTitle}
@@ -282,7 +282,7 @@
 
 			<div class="text-md text-white font-bold">Description:</div>
 			<textarea
-				class="rounded-xl py-0 placeholder:text-gray-400"
+				class="rounded-xl py-0 placeholder:text-gray-200 text-gray-900"
 				placeholder={updateDescription}
 				bind:value={updateDescription}
 			/>
