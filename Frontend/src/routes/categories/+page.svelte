@@ -85,52 +85,25 @@
 	async function updateCategory() {
 		console.log({ updateId })
 		// try {
-		// 	const updatedCategory = {
-		// 		title,
-		// 		description
-		// 	}
-		// 	const res = await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${updateId}`, {
-		// 		method: 'PUT',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		},
-		// 		body: JSON.stringify(updatedCategory)
-		// 	})
-		// 	if (!res.ok) {
-		// 		throw new Error('Failed to create a new category')
-		// 	}
-		// 	const data = await res.json()
-		// 	const categoryId = data._id
-		// 	const userResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
-		// 		method: 'GET',
-		// 		headers: {
-		// 			'Content-Type': 'application/json'
-		// 		}
-		// 	})
-		// 	if (!userResponse.ok) {
-		// 		throw new Error('Failed to fetch user data')
-		// 	}
-		// 	const userData = await userResponse.json()
-		// 	const currentCategories = userData.categories || []
-		// 	const updatedCategories = [...currentCategories, categoryId]
-		// 	const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
+		// 	const response = await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${id}`, {
 		// 		method: 'PUT',
 		// 		headers: {
 		// 			'Content-Type': 'application/json'
 		// 		},
 		// 		body: JSON.stringify({
-		// 			categories: updatedCategories
+		// 			title,
+		// 			description
 		// 		})
 		// 	})
-		// 	if (!putResponse.ok) {
-		// 		throw new Error('Failed to update user category list')
+		// 	if (!response.ok) {
+		// 		throw new Error('Failed to update the todo')
 		// 	}
-		// 	showNewCategoryModal = false
-		// 	window.location.assign('/categories')
+		// 	window.location.assign('/home')
 		// } catch (error) {
+		// 	console.error('Error updating the todo:', error)
 		// 	return {
 		// 		status: 301,
-		// 		error: new Error('Could not create a new category')
+		// 		error: new Error('Could not update the todo')
 		// 	}
 		// }
 	}
