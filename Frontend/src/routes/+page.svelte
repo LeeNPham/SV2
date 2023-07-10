@@ -4,15 +4,24 @@
 
 	let username = ''
 	let password = ''
+	let showWrongAccountDetails = false
 
 	async function login() {
-		await _handleLogin(username, password)
-		goto('/home')
+		const res = await _handleLogin(username, password)
+		if (res == false) {
+			showWrongAccountDetails = true
+		} else {
+			goto('/home')
+		}
 	}
 </script>
 
-<div class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8 mb-4">
+<div class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8">
 	<h1 class="text-2xl font-bold mb-6 text-palette-dark">Login to see your Todos!</h1>
+
+	{#if showWrongAccountDetails}
+		<div class="flex flex-row w-[270px] text-red-700">Wrong username/password combination"</div>
+	{/if}
 
 	<form on:submit|preventDefault={login}>
 		<div class="mb-4">

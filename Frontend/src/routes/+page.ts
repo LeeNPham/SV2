@@ -16,11 +16,11 @@ export async function _handleLogin(username: string, password: string) {
 			const data = await response.json()
 			const { access_token } = data
 			document.cookie = `access_token=${access_token}; path=/;`
-			goto('/home')
+			// goto('/home')
 		} else {
 			throw new Error('Could not Login/obtain token')
 		}
 	} catch (error) {
-		console.error(error)
+		return false
 	}
 }
