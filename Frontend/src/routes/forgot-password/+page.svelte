@@ -18,9 +18,7 @@
 			body: JSON.stringify({ hashed_password: password })
 		})
 			.then(() => {
-				//$2b$12$ccIxRIp4uy9sMk9djjAqZe57NNsiN9v6CKvCjecwxQr8JfcH.BP/K
-				//
-				// goto('/')
+				goto('/')
 			})
 			.catch(() => {
 				return {
