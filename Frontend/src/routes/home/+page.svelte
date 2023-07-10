@@ -169,6 +169,10 @@
 		// Iterate over tasks and add a styling object to the categories list value to add styling ability
 		let i = 0
 		for (let categoryObject in completeCategories) {
+			if (i == 7) {
+				i = 0
+			}
+
 			if (!completeCategories[categoryObject].hasOwnProperty('color')) {
 				completeCategories[categoryObject].color = colors[i]
 				completeCategories[categoryObject].categoryColor = categoryColors[i]
@@ -193,9 +197,7 @@
 		for (let categoryObject in completeCategories) {
 			if (!completeCategories[categoryObject].hasOwnProperty('categoryId')) {
 				if (categoryObject != 'All') {
-					// console.log(categoryObject);
 					let idNumber = categories[n]._id
-					// console.log(idNumber);
 					completeCategories[categoryObject].categoryId = idNumber
 					n++
 				}
