@@ -90,7 +90,6 @@
 	}
 
 	async function updateCategory() {
-		console.log({ updateId }, { updateTitle }, { updateDescription })
 		try {
 			const response = await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${updateId}`, {
 				method: 'PUT',
