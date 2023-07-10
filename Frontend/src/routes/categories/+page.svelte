@@ -117,7 +117,6 @@
 	async function deleteCategory(e: any) {
 		try {
 			const category_id = e.target.parentElement.id
-
 			await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${category_id}`, {
 				method: 'DELETE',
 				headers: {
@@ -213,9 +212,7 @@
 									class=""
 									type="button"
 								>
-									<div class="">
-										<DeleteCategoryIcon {category} />
-									</div>
+									<DeleteCategoryIcon {category} />
 								</button>
 							</div>
 							<div>{category.title}</div>
