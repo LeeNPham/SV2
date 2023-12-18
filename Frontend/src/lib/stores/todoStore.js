@@ -3,99 +3,76 @@ import { writable } from 'svelte/store'
 import { db } from '$lib/firebase/firebase.client'
 import { addDoc, deleteDoc, updateDoc, getDoc, getDocs, collection, doc } from 'firebase/firestore'
 
-export const reviewStore = writable({
+export const todoStore = writable({
 	isLoading: true,
-	reviews: [], // Store review data as an array
-	currentReview: null
+	todos: [], // Store todo data as an array
+	currentTodo: null
 })
 
-export const reviewHandlers = {
-	getReviews: async () => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			reviews.push({ id: doc.id, ...doc.data() })
-		})
-		reviewStore.set({ isLoading: false, reviews })
+export const todoHandlers = {
+	createTodo: async (todoData) => {
+		const todosRef = collection(db, 'todos')
+		const newTodoRef = await addDoc(todosRef, todoData)
+		return newTodoRef.id
 	},
 
-	getReview: async (reviewId) => {
-		const reviewRef = doc(db, 'reviews', reviewId)
-		const reviewDoc = await getDoc(reviewRef)
-		if (reviewDoc.exists()) {
-			const reviewData = reviewDoc.data()
-			reviewStore.set({ isLoading: false, currentReview: { id: reviewDoc.id, ...reviewData } })
+	getTodos: async () => {
+		const todosRef = collection(db, 'todos')
+		const snapshot = await getDocs(todosRef)
+		const todos = []
+		snapshot.forEach((doc) => {
+			todos.push({ id: doc.id, ...doc.data() })
+		})
+		todoStore.set({ isLoading: false, todos })
+	},
+
+	getTodo: async (todoId) => {
+		const todoRef = doc(db, 'todos', todoId)
+		const todoDoc = await getDoc(todoRef)
+		if (todoDoc.exists()) {
+			const todoData = todoDoc.data()
+			todoStore.set({ isLoading: false, currentTodo: { id: todoDoc.id, ...todoData } })
 		} else {
-			reviewStore.set({ isLoading: false, currentReview: null })
+			todoStore.set({ isLoading: false, currentTodo: null })
 		}
 	},
-	getReviewsByTechnicianId: async (technicianId) => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			if (
-				doc?._document?.data?.value?.mapValue?.fields?.technicianId?.stringValue === technicianId
-			) {
-				reviews.push({ id: doc.id, ...doc.data() })
-			}
-		})
-		return reviews
+
+	updateTodo: async (todoId, todoData) => {
+		const todoRef = doc(db, 'todos', todoId)
+		await updateDoc(todoRef, todoData)
 	},
 
-	getReviewsBySalonId: async (salonId) => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			if (doc?._document?.data?.value?.mapValue?.fields?.salonId?.stringValue === salonId) {
-				reviews.push({ id: doc.id, ...doc.data() })
-			}
-		})
-		return reviews
-	},
+	deleteTodo: async (todoId) => {
+		const todoRef = doc(db, 'todos', todoId)
+		await deleteDoc(todoRef)
+	}
 
-	getReviewsByReviewerId: async (reviewerId) => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			if (doc?._document?.data?.value?.mapValue?.fields?.reviewerId?.stringValue === reviewerId) {
-				reviews.push({ id: doc.id, ...doc.data() })
-			}
-		})
-		return reviews
-	},
+	// getTodosByTechnicianId: async (technicianId) => {
+	// 	const todosRef = collection(db, 'todos')
+	// 	const snapshot = await getDocs(todosRef)
+	// 	const todos = []
+	// 	snapshot.forEach((doc) => {
+	// 		if (
+	// 			doc?._document?.data?.value?.mapValue?.fields?.technicianId?.stringValue === technicianId
+	// 		) {
+	// 			todos.push({ id: doc.id, ...doc.data() })
+	// 		}
+	// 	})
+	// 	return todos
+	// },
 
 	/**
-	 * How to create a review
+	 * How to create a todo
 	 *
-		await reviewHandlers.createReview({
+		await todoHandlers.createTodo({
 			date: '11-20-2023',
 			description:
 				'This is the best salon ever. I would come back and get my hair done here again!!!',
 			rating: 5,
-			reviewerName: 'Carlos Rodriguez',
-			reviewerId: 'kxnDFRkYu5No72KXZOyekAxv0ao1',
+			todoerName: 'Carlos Rodriguez',
+			todoerId: 'kxnDFRkYu5No72KXZOyekAxv0ao1',
 			technicianId: 'x5wC5QUT0mQuGFyXc4iLRYHEf5A3',
 			salonId: 'ZgsmBp7Rt3RIEMcazi3n'
 		});
 	 */
-
-	createReview: async (reviewData) => {
-		const reviewsRef = collection(db, 'reviews')
-		const newReviewRef = await addDoc(reviewsRef, reviewData)
-		return newReviewRef.id
-	},
-
-	updateReview: async (reviewId, reviewData) => {
-		const reviewRef = doc(db, 'reviews', reviewId)
-		await updateDoc(reviewRef, reviewData)
-	},
-
-	deleteReview: async (reviewId) => {
-		const reviewRef = doc(db, 'reviews', reviewId)
-		await deleteDoc(reviewRef)
-	}
 }

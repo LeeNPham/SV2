@@ -3,99 +3,65 @@ import { writable } from 'svelte/store'
 import { db } from '$lib/firebase/firebase.client'
 import { addDoc, deleteDoc, updateDoc, getDoc, getDocs, collection, doc } from 'firebase/firestore'
 
-export const reviewStore = writable({
+export const categoryStore = writable({
 	isLoading: true,
-	reviews: [], // Store review data as an array
-	currentReview: null
+	categories: [], // Store category data as an array
+	currentCategory: null
 })
 
-export const reviewHandlers = {
-	getReviews: async () => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			reviews.push({ id: doc.id, ...doc.data() })
-		})
-		reviewStore.set({ isLoading: false, reviews })
+export const categoryHandlers = {
+	createCategory: async (categoryData) => {
+		const categoriesRef = collection(db, 'categories')
+		const newCategoryRef = await addDoc(categoriesRef, categoryData)
+		return newCategoryRef.id
 	},
 
-	getReview: async (reviewId) => {
-		const reviewRef = doc(db, 'reviews', reviewId)
-		const reviewDoc = await getDoc(reviewRef)
-		if (reviewDoc.exists()) {
-			const reviewData = reviewDoc.data()
-			reviewStore.set({ isLoading: false, currentReview: { id: reviewDoc.id, ...reviewData } })
+	getCategories: async () => {
+		const categoriesRef = collection(db, 'categories')
+		const snapshot = await getDocs(categoriesRef)
+		const categories = []
+		snapshot.forEach((doc) => {
+			categories.push({ id: doc.id, ...doc.data() })
+		})
+		categoryStore.set({ isLoading: false, categories })
+	},
+
+	getCategory: async (categoryId) => {
+		const categoryRef = doc(db, 'categories', categoryId)
+		const categoryDoc = await getDoc(categoryRef)
+		if (categoryDoc.exists()) {
+			const categoryData = categoryDoc.data()
+			categoryStore.set({
+				isLoading: false,
+				currentCategory: { id: categoryDoc.id, ...categoryData }
+			})
 		} else {
-			reviewStore.set({ isLoading: false, currentReview: null })
+			categoryStore.set({ isLoading: false, currentCategory: null })
 		}
 	},
-	getReviewsByTechnicianId: async (technicianId) => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			if (
-				doc?._document?.data?.value?.mapValue?.fields?.technicianId?.stringValue === technicianId
-			) {
-				reviews.push({ id: doc.id, ...doc.data() })
-			}
-		})
-		return reviews
+
+	updateCategory: async (categoryId, categoryData) => {
+		const categoryRef = doc(db, 'categories', categoryId)
+		await updateDoc(categoryRef, categoryData)
 	},
 
-	getReviewsBySalonId: async (salonId) => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			if (doc?._document?.data?.value?.mapValue?.fields?.salonId?.stringValue === salonId) {
-				reviews.push({ id: doc.id, ...doc.data() })
-			}
-		})
-		return reviews
-	},
-
-	getReviewsByReviewerId: async (reviewerId) => {
-		const reviewsRef = collection(db, 'reviews')
-		const snapshot = await getDocs(reviewsRef)
-		const reviews = []
-		snapshot.forEach((doc) => {
-			if (doc?._document?.data?.value?.mapValue?.fields?.reviewerId?.stringValue === reviewerId) {
-				reviews.push({ id: doc.id, ...doc.data() })
-			}
-		})
-		return reviews
-	},
+	deleteCategory: async (categoryId) => {
+		const categoryRef = doc(db, 'categories', categoryId)
+		await deleteDoc(categoryRef)
+	}
 
 	/**
-	 * How to create a review
+	 * How to create a category
 	 *
-		await reviewHandlers.createReview({
+		await categoryHandlers.createCategory({
 			date: '11-20-2023',
 			description:
 				'This is the best salon ever. I would come back and get my hair done here again!!!',
 			rating: 5,
-			reviewerName: 'Carlos Rodriguez',
-			reviewerId: 'kxnDFRkYu5No72KXZOyekAxv0ao1',
+			categoryerName: 'Carlos Rodriguez',
+			categoryerId: 'kxnDFRkYu5No72KXZOyekAxv0ao1',
 			technicianId: 'x5wC5QUT0mQuGFyXc4iLRYHEf5A3',
 			salonId: 'ZgsmBp7Rt3RIEMcazi3n'
 		});
 	 */
-
-	createReview: async (reviewData) => {
-		const reviewsRef = collection(db, 'reviews')
-		const newReviewRef = await addDoc(reviewsRef, reviewData)
-		return newReviewRef.id
-	},
-
-	updateReview: async (reviewId, reviewData) => {
-		const reviewRef = doc(db, 'reviews', reviewId)
-		await updateDoc(reviewRef, reviewData)
-	},
-
-	deleteReview: async (reviewId) => {
-		const reviewRef = doc(db, 'reviews', reviewId)
-		await deleteDoc(reviewRef)
-	}
 }
