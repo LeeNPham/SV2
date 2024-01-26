@@ -15,7 +15,7 @@
 	let displayLoginValidator = false
 	let forgotPassword = false
 	let registerStep = 1
-	const nonAuthRoutes = ['/', '/home', '/aboutUs']
+	const nonAuthRoutes = ['/', '/home', '/aboutUs', '/profile', '/registration', '/categories']
 	let user
 
 	userStore.subscribe((curr) => {
