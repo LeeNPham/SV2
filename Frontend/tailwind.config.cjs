@@ -38,6 +38,21 @@ const config = {
 					700: '#eb4f27',
 					800: '#d3330a',
 					900: '#d3330a'
+				},
+				adamas: {
+					pink: '#FF999A',
+					blue: '#BCCEFF',
+					darkblue: '#9EB6FF',
+					hyperlink: '#2563eb',
+					lightblue: '#EEF3FF',
+					green: '#34A853',
+					tan: '#EFE9E0',
+					lighttan: '#F9F6F3',
+					black: '#1E1E1E',
+					warning: '#ff4545',
+					purple: '#C3A5F6',
+					lightpurple: '#EDE4FC',
+					gray: '#F1F5FF'
 				}
 
 				// pink
@@ -105,6 +120,6 @@ const config = {
 			}
 		}
 	}
-};
+}
 
-module.exports = config;
+module.exports = config

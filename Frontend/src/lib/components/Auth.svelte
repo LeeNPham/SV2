@@ -162,8 +162,10 @@
 	}
 </script>
 
-<div class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8 max-w-[350px]">
-	<h1 class="text-2xl font-bold mb-6 text-palette-dark">Login to see your Todos!</h1>
+<div
+	class="bg-palette-lightgray shadow-md rounded-xl px-8 pt-6 pb-8 max-w-[350px] text-center flex flex-col w-full items-center justify-center"
+>
+	<h1 class="text-2xl font-bold mb-6 text-palette-dark">Task Manager SV2</h1>
 
 	<!-- Register -->
 	{#if register}
@@ -177,7 +179,7 @@
 				<p class="text-sm text-gray-600 ml-[1px]">Enter all the required details</p>
 			{/if}
 
-			<form class="flex flex-col gap-2 mt-8 w-5/6" action="">
+			<form class="flex flex-col gap-2 mt-8 w-full items-center justify-center" action="">
 				<label for="email" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
 				<input
 					type="text"
@@ -196,7 +198,7 @@
 				<PasswordInput bind:value={confirmPassword} />
 
 				<div class="text-xs mt-2">
-					By creating an account, you agree to Adamas
+					By creating an account, you agree to SV2
 					<a href="/termsOfUse" class="font-bold text-adamas-blue">Terms of Use</a> and
 					<a href="/privacyPolicy" class="font-bold text-adamas-blue">Privacy Policy</a>
 				</div>
