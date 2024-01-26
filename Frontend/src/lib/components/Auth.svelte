@@ -378,7 +378,7 @@
 	{:else if !register && !forgotPassword}
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
-			class="flex flex-row justify-center items-center gap-2 mt-10 ml-24 text-sm text-gray-600 cursor-pointer"
+			class="flex flex-row justify-center items-center gap-2 mt-10 text-sm text-gray-600"
 			on:click={() => {
 				register = true
 				displayLoginValidator = false
@@ -388,7 +388,7 @@
 			Don't have an account?
 			<p
 				class="cursor-pointer font-bold text-center
-			text-[#9EB9FF] underline hover:text-[#aec3fc]"
+			text-[#333c53] underline hover:text-[#2c3a5f]"
 			>
 				Register
 			</p>
@@ -406,7 +406,7 @@
 		>
 			<p
 				class="cursor-pointer font-bold text-center
-			text-[#9EB9FF] underline hover:text-[#aec3fc]"
+			text-[#333c53] underline hover:text-[#2c3a5f]"
 			>
 				Log In
 			</p>
