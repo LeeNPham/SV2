@@ -1,6 +1,10 @@
 <script lang="ts">
+	//@ts-nocheck
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
+	import { authStore } from '$lib/stores/authStore'
+	import { userHandlers, userStore } from '$lib/stores/userStore'
+	import { todoHandlers } from '$lib/stores/todoStore'
 
 	import Modal from '$lib/components/Modal.svelte'
 	import CircleIcon from '$lib/icons/CircleIcon.svelte'
@@ -53,6 +57,17 @@
 	let completeCategories: any = []
 	let selectedCategory = 'All'
 	let current_date: any = new Date()
+	let userData: any
+
+	authStore.subscribe((curr) => {
+		userFirstName = curr?.currentUser.displayName.split(' ')[0]
+		userId = curr?.currentUser.uid
+	})
+
+	userStore.subscribe((curr) => {
+		userData = curr?.currentUser
+		console.log('userData inside of home page', { userData })
+	})
 
 	function checkDateStatus(dateArgument: any) {
 		const targetDate: any = new Date(dateArgument)
@@ -66,6 +81,7 @@
 			return 'NA'
 		}
 	}
+
 	function initNotifications(todos: any) {
 		todos.forEach((item: any) => {
 			if (item.due_date !== 'null' && !item.completion) {
@@ -74,6 +90,7 @@
 		})
 		return todos
 	}
+
 	let categoryColors = [
 		'border-category-cyan shadow shadow-category-cyan',
 		'border-category-pink shadow shadow-category-pink',
@@ -83,6 +100,7 @@
 		'border-category-orange shadow shadow-category-orange',
 		'border-category-purple shadow shadow-category-purple'
 	]
+
 	let addButtonCategoryColor = [
 		'fill-category-cyan shadow-xl shadow-category-cyan/60',
 		'fill-category-pink shadow-xl shadow-category-pink/60',
@@ -92,6 +110,7 @@
 		'fill-category-orange shadow-xl shadow-category-orange/60',
 		'fill-category-purple shadow-xl shadow-category-purple/60'
 	]
+
 	let colors = [
 		'fill-category-cyan',
 		'fill-category-pink',
@@ -101,10 +120,13 @@
 		'fill-category-orange',
 		'fill-category-purple'
 	]
+
 	let showSearch = false
+
 	function displaySearch() {
 		showSearch = !showSearch
 	}
+
 	let searchPattern: any
 	let fuse: any
 	interface Todos {
@@ -118,14 +140,17 @@
 	}
 	let todosList: Todos[]
 	let searchableTodos: Todos[]
+
 	const searchOptions = {
 		includeScore: true,
 		threshold: 0.5, // value 0 is very strict, value 1 is not strict, .6 is the default,
 		keys: ['title', 'description']
 	}
+
 	function search(Todos: any) {
 		fuse = new Fuse(Todos, searchOptions)
 	}
+
 	$: searchPattern && searchTodos()
 	const searchTodos = () => {
 		search(searchableTodos)
@@ -139,74 +164,75 @@
 			}
 		}
 	}
+
 	let showNotifications = false
 	function displayNotifications() {
 		showNotifications = !showNotifications
 	}
 
-	// function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
-	// 	completeCategories['All'] = { todos: tasks }
-	// 	for (let category of categories) {
-	// 		if (!completeCategories.hasOwnProperty(category.title)) {
-	// 			let key = category.title
-	// 			completeCategories[key!] = {}
-	// 		}
-	// 	}
+	function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
+		completeCategories['All'] = { todos: tasks }
+		for (let category of categories) {
+			if (!completeCategories.hasOwnProperty(category.title)) {
+				let key = category.title
+				completeCategories[key!] = {}
+			}
+		}
 
-	// 	// Iterate over tasks and adds task to correlating categorys list value
-	// 	for (let task of tasks) {
-	// 		let newKey = task.category
-	// 		if (completeCategories.hasOwnProperty(newKey)) {
-	// 			if (!completeCategories[newKey].hasOwnProperty('todos')) {
-	// 				completeCategories[newKey] = { todos: [task] }
-	// 			} else {
-	// 				completeCategories[newKey].todos.push(task)
-	// 			}
-	// 		}
-	// 	}
+		// Iterate over tasks and adds task to correlating categorys list value
+		for (let task of tasks) {
+			let newKey = task.category
+			if (completeCategories.hasOwnProperty(newKey)) {
+				if (!completeCategories[newKey].hasOwnProperty('todos')) {
+					completeCategories[newKey] = { todos: [task] }
+				} else {
+					completeCategories[newKey].todos.push(task)
+				}
+			}
+		}
 
-	// 	// Iterate over tasks and add a styling object to the categories list value to add styling ability
-	// 	let i = 0
-	// 	for (let categoryObject in completeCategories) {
-	// 		if (i == 7) {
-	// 			i = 0
-	// 		}
+		// Iterate over tasks and add a styling object to the categories list value to add styling ability
+		let i = 0
+		for (let categoryObject in completeCategories) {
+			if (i == 7) {
+				i = 0
+			}
 
-	// 		if (!completeCategories[categoryObject].hasOwnProperty('color')) {
-	// 			completeCategories[categoryObject].color = colors[i]
-	// 			completeCategories[categoryObject].categoryColor = categoryColors[i]
-	// 			completeCategories[categoryObject].addButtonCategoryColor = addButtonCategoryColor[i]
-	// 			i++
-	// 		}
-	// 	}
+			if (!completeCategories[categoryObject].hasOwnProperty('color')) {
+				completeCategories[categoryObject].color = colors[i]
+				completeCategories[categoryObject].categoryColor = categoryColors[i]
+				completeCategories[categoryObject].addButtonCategoryColor = addButtonCategoryColor[i]
+				i++
+			}
+		}
 
-	// 	for (let categoryObject in completeCategories) {
-	// 		if (
-	// 			!completeCategories[categoryObject].hasOwnProperty('count') &&
-	// 			completeCategories[categoryObject].todos != undefined
-	// 		) {
-	// 			let count = completeCategories[categoryObject].todos.length
-	// 			completeCategories[categoryObject].count = count
-	// 		} else {
-	// 			completeCategories[categoryObject].count = 0
-	// 		}
-	// 	}
+		for (let categoryObject in completeCategories) {
+			if (
+				!completeCategories[categoryObject].hasOwnProperty('count') &&
+				completeCategories[categoryObject].todos != undefined
+			) {
+				let count = completeCategories[categoryObject].todos.length
+				completeCategories[categoryObject].count = count
+			} else {
+				completeCategories[categoryObject].count = 0
+			}
+		}
 
-	// 	let n = 0
-	// 	for (let categoryObject in completeCategories) {
-	// 		if (!completeCategories[categoryObject].hasOwnProperty('categoryId')) {
-	// 			if (categoryObject != 'All') {
-	// 				let idNumber = categories[n]._id
-	// 				completeCategories[categoryObject].categoryId = idNumber
-	// 				n++
-	// 			}
-	// 		}
-	// 	}
+		let n = 0
+		for (let categoryObject in completeCategories) {
+			if (!completeCategories[categoryObject].hasOwnProperty('categoryId')) {
+				if (categoryObject != 'All') {
+					let idNumber = categories[n]._id
+					completeCategories[categoryObject].categoryId = idNumber
+					n++
+				}
+			}
+		}
 
-	// 	// this is what I will use to do the rest of the rendering!
+		// this is what I will use to do the rest of the rendering!
 
-	// 	// console.log('complete categories with color assignment and number of todos per category!', {completeCategories})
-	// }
+		// console.log('complete categories with color assignment and number of todos per category!', {completeCategories})
+	}
 
 	function switchCategories(e: any) {
 		selectedCategory = e.currentTarget.id
@@ -243,67 +269,40 @@
 		showNewCategoryModal = true
 	}
 
-	// async function createTodo() {
-	// 	try {
-	// 		const currentTime = new Date()
-	// 		const create_date = currentTime.toISOString().split('T')[0].toString()
-	// 		const newTodo = {
-	// 			category: category === 'All' ? '' : category,
-	// 			title,
-	// 			description,
-	// 			completion,
-	// 			create_date,
-	// 			due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
-	// 		}
-	// 		const res = await fetch(`${PUBLIC_BACKEND_TODOS}/api/todo/`, {
-	// 			method: 'POST',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify(newTodo)
-	// 		})
-	// 		if (!res.ok) {
-	// 			throw new Error('Failed to create a new todo')
-	// 		}
-	// 		const data = await res.json()
-	// 		const objectId = data._id
-	// 		const response = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
-	// 			method: 'GET', // Fetch the user's current todo list
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to fetch user todo list')
-	// 		}
-	// 		const userData = await response.json()
-	// 		const currentTodos = userData.todos || [] // Existing todos or empty array if none
-	// 		const updatedTodos = [...currentTodos, objectId] // Append the new objectId
-	// 		const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				todos: updatedTodos
-	// 			})
-	// 		})
-	// 		if (!putResponse.ok) {
-	// 			throw new Error('Failed to update user todo list')
-	// 		}
-	// 		console.log('User todo list updated successfully')
-	// 		console.log('Data after updating user:', userData)
-	// 		console.log(userData.todos)
-	// 		showNewTodoModal = false
-	// 		;(window as Window).location = '/home'
-	// 	} catch (error) {
-	// 		console.error('Error creating a new todo:', error)
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not create a new todo')
-	// 		}
-	// 	}
-	// }
+	//MODIFY TO CREATE A TODO
+	async function createTodo() {
+		try {
+			const currentTime = new Date()
+			const create_date = currentTime.toISOString().split('T')[0].toString()
+			const newTodo = {
+				category: category === 'All' ? '' : category,
+				title,
+				description,
+				completion,
+				create_date,
+				due_date: due_date ? new Date(due_date).toISOString().split('T')[0].toString() : 'null'
+			}
+
+			const newTodoId = await todoHandlers.createTodo(newTodo)
+
+			const currentTodos = userData.todos
+
+			const updatedTodos = [...currentTodos, newTodoId] // Append the new objectId
+
+			userData.todos = updatedTodos
+
+			userHandlers.updateUser(userId, userData)
+
+			showNewTodoModal = false
+			window.location.href = '/home'
+		} catch (error) {
+			console.error('Error creating a new todo:', error)
+			return {
+				status: 301,
+				error: new Error('Could not create a new todo')
+			}
+		}
+	}
 
 	// async function updateTodo(
 	// 	id: string,
@@ -551,13 +550,9 @@
 		return newCategories
 	}
 
-	onMount(() => {
-		// $userIdentity = data.identity
-		// userId = data.identity._id
-		// userFirstName = data.identity.first_name
+	onMount(async () => {
 		// myTodos = filterToMyTodos(data.identity.todos, data.todos)
 		// myCategories = filterToMyCategories(data.identity.categories, data.categories)
-		// $categoriesCountStore = myCategories.length
 		// searchableTodos = myTodos
 		// buildCategoriesWithTodos(myCategories, myTodos)
 	})
@@ -930,15 +925,13 @@
 		</div>
 	</Modal>
 {/if}
+
 {#if showNewTodoModal}
 	<Modal Title="Create a New Todo" bind:showModal={showNewTodoModal}>
 		<div class="grid grid-cols-1 w-full">
-			<!-- <form
-				class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
-				on:submit|preventDefault={createTodo}
-			> -->
 			<form
 				class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-10 rounded-3xl"
+				on:submit|preventDefault={createTodo}
 			>
 				<div class="text-md text-white font-bold">Category:</div>
 

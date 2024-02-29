@@ -21,7 +21,7 @@
 
 	authStore.subscribe((curr) => {
 		user = curr?.currentUser
-		console.log('user', user)
+		// console.log('user', user)
 	})
 
 	onMount(async () => {
