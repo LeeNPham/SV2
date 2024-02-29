@@ -1,13 +1,18 @@
 <script lang="ts">
+	//@ts-nocheck
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
-	import { PUBLIC_BACKEND_USERS, PUBLIC_BACKEND_TODOS } from '$env/static/public'
 	import Modal from '$lib/components/Modal.svelte'
 	export let data
 	import NavMenu from '$lib/components/NavMenu.svelte'
 	import DeleteCategoryIcon from '$lib/icons/DeleteCategoryIcon.svelte'
 	import EllipsisIcon from '$lib/icons/EllipsisIcon.svelte'
+	import { userHandlers, userStore } from '$lib/stores/userStore.js'
+	import { authStore } from '$lib/stores/authStore.js'
+	import { categoryStore } from '$lib/stores/categoryStore.js'
 
+	let identity: any
+	let categories: any
 	let userId = ''
 	let title = ''
 	let description = ''
@@ -17,6 +22,19 @@
 	let updateId = ''
 	let updateTitle = ''
 	let updateDescription = ''
+	let allCategories
+
+	authStore.subscribe((curr) => {
+		userId = curr?.currentUser?.uid
+	})
+
+	categoryStore.subscribe((curr) => {
+		categories = curr?.categories
+	})
+	userStore.subscribe((curr) => {
+		identity = curr?.currentUser
+		myCategories = filterToMyCategories(curr?.currentUser?.categories, categories)
+	})
 
 	function displayCreateNewCategoryModal() {
 		showNewCategoryModal = true
@@ -180,8 +198,7 @@
 	}
 
 	onMount(async () => {
-		userId = data.identity._id
-		myCategories = filterToMyCategories(data.identity.categories, data.categories)
+		await userHandlers.getUser(userId)
 	})
 </script>
 
