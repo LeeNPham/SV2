@@ -56,7 +56,7 @@
 						phoneNumber: '',
 						todos: [],
 						admin: false,
-						categories: [],
+						categories: ['All'],
 						address: { streetAddress: '', unitNumber: '', state: '', city: '', zipCode: '' }
 					}
 					await setDoc(userRef, dataToSetToStore, {
