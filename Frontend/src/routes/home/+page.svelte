@@ -551,6 +551,7 @@
 	}
 
 	onMount(async () => {
+		await userHandlers.getUser(userId)
 		// myTodos = filterToMyTodos(data.identity.todos, data.todos)
 		// myCategories = filterToMyCategories(data.identity.categories, data.categories)
 		// searchableTodos = myTodos
