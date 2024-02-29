@@ -9,25 +9,19 @@
 	import { getDoc, setDoc, doc } from 'firebase/firestore'
 
 	import Auth from '$lib/components/Auth.svelte'
-	import { userStore } from '$lib/stores/userStore'
+	import { goto } from '$app/navigation'
 
 	let register = false
 	let displayLoginValidator = false
 	let forgotPassword = false
-	let registerStep = 1
-	const nonAuthRoutes = [
-		'/',
-		'/home',
-		'/aboutUs',
-		'/profile',
-		'/registration',
-		'/categories',
-		'/termsOfUse'
-	]
+
+	const nonAuthRoutes = ['/', '/aboutUs', '/registration', '/termsOfUse', '/forgot-password']
+
 	let user
 
-	userStore.subscribe((curr) => {
+	authStore.subscribe((curr) => {
 		user = curr?.currentUser
+		console.log('user', user)
 	})
 
 	onMount(async () => {
@@ -37,7 +31,7 @@
 			const currentPath = window.location.pathname
 
 			if (!user && !nonAuthRoutes.includes(currentPath)) {
-				window.location.href = '/home'
+				window.location.href = '/'
 				return
 			}
 
@@ -49,6 +43,7 @@
 				let dataToSetToStore
 				const docRef = doc(db, 'users', user.uid)
 				const docSnap = await getDoc(docRef)
+
 				if (!docSnap.exists()) {
 					console.log('Creating/initializing first time User')
 					const userRef = doc(db, 'users', user.uid)
@@ -75,6 +70,7 @@
 				authStore.update((curr) => {
 					return { ...curr, currentUser: user, data: dataToSetToStore, isLoading: false }
 				})
+				goto('/home')
 			}
 		})
 		return unsubscribe

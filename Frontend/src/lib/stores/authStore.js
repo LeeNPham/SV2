@@ -40,12 +40,15 @@ export const authHandlers = {
 	login: async (email, password) => {
 		await signInWithEmailAndPassword(auth, email, password)
 	},
+
 	loginWithGoogle: async () => {
 		await signInWithPopup(auth, googleProvider)
 	},
+
 	loginWithFacebook: async () => {
 		await signInWithPopup(auth, facebookProvider)
 	},
+
 	loginWithApple: async () => {
 		try {
 			const result = await signInWithPopup(auth, appleProvider)
@@ -61,9 +64,11 @@ export const authHandlers = {
 			return error
 		}
 	},
+
 	loginWithTwitter: async () => {
 		await signInWithPopup(auth, twitterProvider)
 	},
+
 	checkEmailExists: async (email) => {
 		try {
 			const signInMethods = await fetchSignInMethodsForEmail(auth, email)
@@ -75,6 +80,7 @@ export const authHandlers = {
 			return error
 		}
 	},
+
 	linkWithCredential: async (user, newCredential) => {
 		try {
 			const result = await linkWithCredential(user, newCredential)
@@ -83,6 +89,7 @@ export const authHandlers = {
 			return error
 		}
 	},
+
 	getSignInMethods: async (email) => {
 		try {
 			const methods = await fetchSignInMethodsForEmail(auth, email)
@@ -92,15 +99,18 @@ export const authHandlers = {
 			throw error
 		}
 	},
+
 	logout: async () => {
 		await signOut(auth)
 	},
 	resetPassword: async (email) => {
 		await sendPasswordResetEmail(auth, email)
 	},
+
 	confirmPasswordReset: async (oobCode, newPassword) => {
 		await confirmPasswordReset(auth, oobCode, newPassword)
 	},
+
 	updateEmail: async (email) => {
 		authStore.update((curr) => {
 			return {
@@ -113,9 +123,11 @@ export const authHandlers = {
 		})
 		await updateEmail(auth.currentUser, email)
 	},
+
 	updatePassword: async (password) => {
 		await updatePassword(auth.currentUser, password)
 	},
+
 	//displayName can be interchanged with photoURL
 	updateProfile: async (displayName) => {
 		await updateProfile(auth.currentUser, displayName)

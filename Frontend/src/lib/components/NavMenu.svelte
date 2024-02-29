@@ -10,10 +10,10 @@
 	import { sineIn } from 'svelte/easing'
 	import MenuIcon from '$lib/icons/MenuIcon.svelte'
 	import Categories from '$lib/icons/Categories.svelte'
-	import { categoriesCountStore, isLoggedIn } from '$store/stores'
 	import { goto } from '$app/navigation'
 	import HouseIcon from '$lib/icons/HouseIcon.svelte'
 	import ProfileIcon from '$lib/icons/ProfileIcon.svelte'
+	import { authHandlers } from '$lib/stores/authStore'
 
 	let hidden2 = true
 
@@ -24,8 +24,9 @@
 	}
 
 	const logout = () => {
+		authHandlers.logout()
 		hidden2 = true
-		$isLoggedIn = false
+		window.location.href = '/'
 	}
 </script>
 
@@ -78,10 +79,10 @@
 				>
 					<Categories Class="fill-palette-dark hover:fill-palette-gray h-[25px] w-[25px] ml-0.5" />
 					<div class="font-semibold">Categories</div>
-					<span
+					<!-- <span
 						class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-primary-600 bg-primary-200 rounded-full dark:bg-primary-900 dark:text-primary-200"
 						>{$categoriesCountStore}</span
-					>
+					> -->
 				</a>
 
 				<a
