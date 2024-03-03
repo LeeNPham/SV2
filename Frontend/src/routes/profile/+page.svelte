@@ -1,4 +1,5 @@
 <script lang="ts">
+	//@ts-nocheck
 	import { onMount } from 'svelte'
 	import { slide } from 'svelte/transition'
 	import Categories from '$lib/icons/Categories.svelte'
@@ -6,6 +7,8 @@
 	import PieChart from '$lib/icons/PieChart.svelte'
 	import profileDefault from '$lib/images/profileDefault.jpg'
 	import NavMenu from '$lib/components/NavMenu.svelte'
+	import { userHandlers, userStore } from '$lib/stores/userStore'
+	import { authStore } from '$lib/stores/authStore'
 	// export let data
 
 	let firstName: string
@@ -16,26 +19,21 @@
 	let userDescription: string
 	let userImage: string
 	let fileInput: HTMLInputElement
-	let profilePic: Blob | undefined
+	let userData
 
-	// async function getProfileImage(photo_id: string): Promise<void> {
-	// 	try {
-	// 		const response = await fetch(`${PUBLIC_BACKEND_UPLOADS}/files/${photo_id}`, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'image/jpg'
-	// 			}
-	// 			// mode: 'no-cors'
-	// 		})
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to fetch user profile image')
-	// 		}
-	// 		const data = await response.blob()
-	// 		profilePic = data
-	// 	} catch (error) {
-	// 		console.error('Failed to get profile image:', error)
-	// 	}
-	// }
+	userStore.subscribe((curr) => {
+		userData = curr?.currentUser
+		console.log(userData)
+		userID = curr?.currentUser?.id
+		firstName = curr?.currentUser?.displayName?.split(' ')[0]
+		lastName = curr?.currentUser?.displayName?.split(' ')[1]
+		userName = curr?.currentUser?.displayName
+		userImage = curr?.currentUser?.profileImage
+		userEmail = curr?.currentUser?.email
+		userDescription = curr?.currentUser?.description
+			? curr?.currentUser?.description
+			: 'This is my profile description'
+	})
 
 	// async function updateUserImageId(photo_ID: string): Promise<void> {
 	// 	try {
@@ -59,48 +57,39 @@
 	// 	}
 	// }
 
-	// const handleFileUpload = async (): Promise<void> => {
-	// 	try {
-	// 		const file = fileInput.files?.[0]
-	// 		if (file) {
-	// 			const formData = new FormData()
-	// 			formData.append('photo', file)
-	// 			const response = await fetch(`${PUBLIC_BACKEND_UPLOADS}/upload-photo`, {
-	// 				method: 'POST',
-	// 				body: formData
-	// 			})
-
-	// 			if (response.ok) {
-	// 				const data = await response.json()
-	// 				const photoId = data.file_id
-	// 				userIdentity.update((user) => {
-	// 					return { ...user, photo_id: photoId }
-	// 				})
-	// 				console.log(userIdentity)
-	// 				localStorage.setItem('userIdentity', JSON.stringify(userIdentity))
-	// 				await updateUserImageId(photoId)
-	// 				console.log('Image successfully updated!')
-	// 				window.location.assign('/profile')
-	// 			} else {
-	// 				console.error('Failed to upload photo')
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		console.error('Error occurred during file upload:', error)
-	// 	}
-	// }
+	const handleFileUpload = async (): Promise<void> => {
+		try {
+			// add a way for user images to be uploaded, most likely through the userStore using userHandlers and add a profile image value, use setStorage
+			// const file = fileInput.files?.[0]
+			// if (file) {
+			// 	const formData = new FormData()
+			// 	formData.append('photo', file)
+			// 	const response = await fetch(`${PUBLIC_BACKEND_UPLOADS}/upload-photo`, {
+			// 		method: 'POST',
+			// 		body: formData
+			// 	})
+			// 	if (response.ok) {
+			// 		const data = await response.json()
+			// 		const photoId = data.file_id
+			// 		userIdentity.update((user) => {
+			// 			return { ...user, photo_id: photoId }
+			// 		})
+			// 		console.log(userIdentity)
+			// 		localStorage.setItem('userIdentity', JSON.stringify(userIdentity))
+			// 		await updateUserImageId(photoId)
+			// 		console.log('Image successfully updated!')
+			// 		window.location.assign('/profile')
+			// 	} else {
+			// 		console.error('Failed to upload photo')
+			// 	}
+			// }
+		} catch (error) {
+			console.error('Error occurred during file upload:', error)
+		}
+	}
 
 	onMount(async () => {
-		console.log('hello world')
-		// fileInput = document.getElementById('profileImageInput') as HTMLInputElement
-		// firstName = data.user.first_name
-		// lastName = data.user.last_name
-		// userID = data.user._id
-		// userName = data.user.username
-		// userEmail = data.user.email
-		// userDescription = data.user.description
-		// userImage = data.user.photo_id
-		// getProfileImage(userImage)
+		await userHandlers.getUser()
 	})
 </script>
 
@@ -112,29 +101,29 @@
 			<NavMenu />
 		</div>
 		<div class="flex flex-row w-full h-full bg-palette-dark rounded-xl p-3">
-			{#if profilePic}
-				<!-- <label for="profileImageInput">
+			{#if userImage}
+				<label for="profileImageInput">
 					<img
 						class="rounded-full aspect-square w-[90px] border-2 object-cover border-white shadow-white/50 shadow-lg"
-						src={URL.createObjectURL(profilePic)}
+						src={userImage}
 						alt=""
 					/>
-				</label> -->
+				</label>
 			{:else}
 				<label for="profileImageInput">
-					<!-- <img
+					<img
 						class="rounded-full aspect-square w-[90px] border-2 border-white shadow-white/50 shadow-lg"
 						src={profileDefault}
 						alt=""
-					/> -->
+					/>
 				</label>
 			{/if}
-			<!-- <input
+			<input
 				type="file"
 				class="border bg-red-600 h-12 hidden"
 				id="profileImageInput"
 				on:change={handleFileUpload}
-			/> -->
+			/>
 
 			<div class="grid grid-cols-1 content-start pt-12">
 				<span class="text-sm font-semibold pl-5 text-white tracking-wide">{userName}</span>

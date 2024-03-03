@@ -10,6 +10,7 @@
 
 	import Auth from '$lib/components/Auth.svelte'
 	import { goto } from '$app/navigation'
+	import { userHandlers } from '$lib/stores/userStore'
 
 	let register = false
 	let displayLoginValidator = false
@@ -18,6 +19,7 @@
 	const nonAuthRoutes = ['/', '/aboutUs', '/registration', '/termsOfUse', '/forgot-password']
 
 	let user
+	let userId
 
 	authStore.subscribe((curr) => {
 		user = curr?.currentUser
@@ -49,14 +51,14 @@
 					const userRef = doc(db, 'users', user.uid)
 					dataToSetToStore = {
 						email: user.email,
-						profileImage:
-							'https://media.istockphoto.com/id/522855255/vector/male-profile-flat-blue-simple-icon-with-long-shadow.jpg', //?
+						profileImage: '', //?
 						displayName: user.displayName,
 						uid: user.uid,
 						phoneNumber: '',
 						todos: [],
 						admin: false,
 						categories: ['All'],
+						description: '',
 						address: { streetAddress: '', unitNumber: '', state: '', city: '', zipCode: '' }
 					}
 					await setDoc(userRef, dataToSetToStore, {
