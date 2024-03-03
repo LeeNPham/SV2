@@ -4,7 +4,8 @@
 	import { slide } from 'svelte/transition'
 	import { authStore } from '$lib/stores/authStore'
 	import { userHandlers, userStore } from '$lib/stores/userStore'
-	import { todoHandlers } from '$lib/stores/todoStore'
+	import { todoHandlers, todoStore } from '$lib/stores/todoStore'
+	import { categoryHandlers, categoryStore } from '$lib/stores/categoryStore'
 
 	import Modal from '$lib/components/Modal.svelte'
 	import CircleIcon from '$lib/icons/CircleIcon.svelte'
@@ -45,6 +46,8 @@
 	let userFirstName = ''
 	let userId = ''
 	let create_date = ''
+	let todos: any[] = []
+	let categories: any[] = []
 	let myTodos: any[] = []
 	let myCategories: any[] = []
 
@@ -66,7 +69,27 @@
 
 	userStore.subscribe((curr) => {
 		userData = curr?.currentUser
-		console.log('userData inside of home page', { userData })
+		myCategories = curr?.currentUser?.categories
+		myTodos = curr?.currentUser?.todos
+		console.log({ userData }, { myTodos }, { myCategories })
+	})
+
+	$: {
+		if (myCategories.length > 0 && myTodos.length > 0) {
+			buildCategoriesWithTodos(myCategories, myTodos)
+		}
+	}
+
+	todoStore.subscribe((curr) => {
+		todos = curr?.todos
+		console.log({ todos })
+		myTodos = filterToMyTodos(myTodos, todos)
+	})
+
+	categoryStore.subscribe((curr) => {
+		categories = curr?.categories
+		console.log({ categories })
+		myCategories = filterToMyCategories(myCategories, categories)
 	})
 
 	function checkDateStatus(dateArgument: any) {
@@ -171,6 +194,8 @@
 	}
 
 	function buildCategoriesWithTodos(categories: Category[], tasks: Todo[]) {
+		console.log('buildCategoriesWithTodos categories line 198', categories)
+		console.log('buildCategoriesWithTodos categories line 199', tasks)
 		completeCategories['All'] = { todos: tasks }
 		for (let category of categories) {
 			if (!completeCategories.hasOwnProperty(category.title)) {
@@ -231,7 +256,9 @@
 
 		// this is what I will use to do the rest of the rendering!
 
-		// console.log('complete categories with color assignment and number of todos per category!', {completeCategories})
+		console.log('complete categories with color assignment and number of todos per category!', {
+			completeCategories
+		})
 	}
 
 	function switchCategories(e: any) {
@@ -294,7 +321,7 @@
 			userHandlers.updateUser(userId, userData)
 
 			showNewTodoModal = false
-			window.location.href = '/home'
+			// window.location.href = '/home'
 		} catch (error) {
 			console.error('Error creating a new todo:', error)
 			return {
@@ -384,143 +411,75 @@
 	// 	showUpdateTodoModal = false
 	// }
 
-	// async function createCategory() {
-	// 	try {
-	// 		const currentTime = new Date()
-	// 		const create_date = currentTime.toISOString().split('T')[0].toString()
-	// 		const newCategory = {
-	// 			title,
-	// 			description,
-	// 			create_date
-	// 		}
-	// 		const res = await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/`, {
-	// 			method: 'POST',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify(newCategory)
-	// 		})
-	// 		if (!res.ok) {
-	// 			throw new Error('Failed to create a new category')
-	// 		}
-	// 		const data = await res.json()
-	// 		const categoryId = data._id
-	// 		const userResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
-	// 		if (!userResponse.ok) {
-	// 			throw new Error('Failed to fetch user data')
-	// 		}
-	// 		const userData = await userResponse.json()
-	// 		console.log('this is my userdata to see if im getting a positive res', userData)
-	// 		const currentCategories = userData.categories || []
-	// 		const updatedCategories = [...currentCategories, categoryId]
-	// 		const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				categories: updatedCategories
-	// 			})
-	// 		})
-	// 		if (!putResponse.ok) {
-	// 			throw new Error('Failed to update user category list')
-	// 		}
-	// 		console.log('User category list updated successfully')
-	// 		console.log('Data after updating user:', userData)
-	// 		console.log(userData.categories)
-	// 		showNewCategoryModal = false
-	// 		;(window as Window).location = '/home'
-	// 	} catch (error) {
-	// 		console.error('Error creating a new category:', error)
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not create a new category')
-	// 		}
-	// 	}
-	// }
+	async function createCategory() {
+		try {
+			const currentTime = new Date()
+			const create_date = currentTime.toISOString().split('T')[0].toString()
+			const newCategory = {
+				title,
+				description,
+				create_date
+			}
+			console.log({ newCategory })
 
-	// async function deleteCategory(e: any) {
-	// 	try {
-	// 		const category_id = e.target.parentElement.id
+			const newCategoryId = await categoryHandlers.createCategory(newCategory)
 
-	// 		await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${category_id}`, {
-	// 			method: 'DELETE',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
+			const currentCategories = userData.categories
 
-	// 		const response = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			}
-	// 		})
+			const updatedCategories = [...currentCategories, newCategoryId]
 
-	// 		if (!response.ok) {
-	// 			throw new Error('Failed to fetch user data')
-	// 		}
+			userData.categories = updatedCategories
 
-	// 		const userData = await response.json()
-	// 		const currentCategories = userData.categories || []
-	// 		const updatedCategories = currentCategories.filter(
-	// 			(categoryId: string) => categoryId !== category_id
-	// 		)
+			userHandlers.updateUser(userId, userData)
 
-	// 		const putResponse = await fetch(`${PUBLIC_BACKEND_USERS}/api/user/${userId}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				categories: updatedCategories
-	// 			})
-	// 		})
+			showNewCategoryModal = false
+			// ;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error creating a new category:', error)
+			return {
+				status: 301,
+				error: new Error('Could not create a new category')
+			}
+		}
+	}
 
-	// 		if (!putResponse.ok) {
-	// 			throw new Error('Failed to update user category list')
-	// 		}
+	async function deleteCategory(e: any) {
+		try {
+			const category_id = e.target.parentElement.id
 
-	// 		console.log('User category list updated successfully')
-	// 		console.log('Data after updating user:', userData)
-	// 		console.log(userData.categories)
-	// 		;(window as Window).location = '/home'
-	// 	} catch (error) {
-	// 		console.error('Error deleting category:', error)
-	// 		return {
-	// 			status: 301,
-	// 			error: new Error('Could not update user category list')
-	// 		}
-	// 	}
-	// }
+			await fetch(`${PUBLIC_BACKEND_TODOS}/api/category/${category_id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 
-	// async function toggleCheckbox(x: any, id: string) {
-	// 	x = !x
-	// 	updateCompletion()
+			await categoryHandlers.deleteCategory(category_id)
 
-	// 	async function updateCompletion() {
-	// 		await fetch(`${PUBLIC_BACKEND_TODOS}/api/todo/${id}`, {
-	// 			method: 'PUT',
-	// 			headers: {
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				completion: x
-	// 			})
-	// 		})
-	// 			.then((_res) => {
-	// 				goto('/home')
-	// 			})
-	// 			.catch((_err) => {
-	// 				_err = !_err
-	// 			})
-	// 	}
-	// }
+			userData.categories.filter((categoryId: string) => categoryId !== category_id)
+
+			await userHandlers.updateUser(userId, userData)
+
+			console.log('Data after updating user:', userData)
+			console.log(userData.categories)
+			// ;(window as Window).location = '/home'
+		} catch (error) {
+			console.error('Error deleting category:', error)
+			return {
+				status: 301,
+				error: new Error('Could not update user category list')
+			}
+		}
+	}
+
+	async function toggleCheckbox(x: any, id: string) {
+		x = !x
+		updateCompletion()
+
+		async function updateCompletion() {
+			await todoHandlers.updateTodoCompletion(id, x)
+		}
+	}
 
 	function filterToMyTodos(myTodos: string[], todos: Todos[]): Todos[] {
 		let newTodos: Todos[] = []
@@ -552,9 +511,11 @@
 
 	onMount(async () => {
 		await userHandlers.getUser(userId)
-		// myTodos = filterToMyTodos(data.identity.todos, data.todos)
-		// myCategories = filterToMyCategories(data.identity.categories, data.categories)
-		// searchableTodos = myTodos
+		await todoHandlers.getTodos()
+		await categoryHandlers.getCategories()
+		// myTodos = filterToMyTodos(myTodos, todos)
+		// myCategories = filterToMyCategories(myCategories, categories)
+		searchableTodos = myTodos
 		// buildCategoriesWithTodos(myCategories, myTodos)
 	})
 </script>
@@ -707,22 +668,22 @@
 								type="button"
 							>
 								{#if category != 'All'}
-									<!-- <button
+									<button
 										on:click={deleteCategory}
 										id={category != 'All' ? categoryId : ''}
 										class="absolute right-5 top-5"
 										type="button"
-									> -->
-									<svg
-										viewBox="0 0 576 512"
-										role="img"
-										id={category != 'All' ? categoryId : ''}
-										class="h-5 w-f fill-red-600 hover:fill-red-600/50"
-										><title>Delete</title><path
-											d="M576 384c0 35.3-28.7 64-64 64H205.3c-17 0-33.3-6.7-45.3-18.7L9.372 278.6C3.371 272.6 0 264.5 0 256c0-8.5 3.372-16.6 9.372-22.6L160 82.75C172 70.74 188.3 64 205.3 64H512c35.3 0 64 28.65 64 64v256zM271 208.1l47.1 47.9-47.1 47c-9.3 9.4-9.3 24.6 0 33.1 9.4 10.2 24.6 10.2 33.1 0l47.9-46.2 47 46.2c9.4 10.2 24.6 10.2 33.1 0 10.2-8.5 10.2-23.7 0-33.1l-46.2-47 46.2-47.9c10.2-8.5 10.2-23.7 0-33.1-8.5-9.3-23.7-9.3-33.1 0l-47 47.1-47.9-47.1c-8.5-9.3-23.7-9.3-33.1 0-9.3 9.4-9.3 24.6 0 33.1z"
-										/></svg
 									>
-									<!-- </button> -->
+										<svg
+											viewBox="0 0 576 512"
+											role="img"
+											id={category != 'All' ? categoryId : ''}
+											class="h-5 w-f fill-red-600 hover:fill-red-600/50"
+											><title>Delete</title><path
+												d="M576 384c0 35.3-28.7 64-64 64H205.3c-17 0-33.3-6.7-45.3-18.7L9.372 278.6C3.371 272.6 0 264.5 0 256c0-8.5 3.372-16.6 9.372-22.6L160 82.75C172 70.74 188.3 64 205.3 64H512c35.3 0 64 28.65 64 64v256zM271 208.1l47.1 47.9-47.1 47c-9.3 9.4-9.3 24.6 0 33.1 9.4 10.2 24.6 10.2 33.1 0l47.9-46.2 47 46.2c9.4 10.2 24.6 10.2 33.1 0 10.2-8.5 10.2-23.7 0-33.1l-46.2-47 46.2-47.9c10.2-8.5 10.2-23.7 0-33.1-8.5-9.3-23.7-9.3-33.1 0l-47 47.1-47.9-47.1c-8.5-9.3-23.7-9.3-33.1 0-9.3 9.4-9.3 24.6 0 33.1z"
+											/></svg
+										>
+									</button>
 								{/if}
 								<div
 									class="grid grid-cols-1 content-between min-w-[200px] bg-palette-dark h-[120px] rounded-3xl shadow-lg p-5 {selectedCategory ==
@@ -778,24 +739,24 @@
 										{#if todo.completion == true}
 											<label for={todo._id}>
 												<CheckCircle Class="h-6 w-6 {color}" />
-												<!-- <input
+												<input
 													class="hidden"
 													id={todo._id}
 													type="checkbox"
 													on:change={() => toggleCheckbox(todo.completion, todo._id)}
 													bind:checked={todo.completion}
-												/> -->
+												/>
 											</label>
 										{:else}
 											<label for={todo._id}>
 												<CircleIcon Class="h-6 w-6 {color}" />
-												<!-- <input
+												<input
 													class="hidden"
 													id={todo._id}
 													type="checkbox"
 													on:change={() => toggleCheckbox(todo.completion, todo._id)}
 													bind:checked={todo.completion}
-												/> -->
+												/>
 											</label>
 										{/if}
 										<div class="grid grid-cols-1 px-2">
@@ -981,32 +942,33 @@
 <Modal Title="Create a New Category" bind:showModal={showNewCategoryModal}>
 	<div class="grid grid-cols-1 w-full">
 		<form class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl">
-			<!-- <form
-			class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl"
-			on:submit|preventDefault={createCategory}
-		> -->
-			<div class="text-md text-white font-bold">Category Name:</div>
-			<input
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="Category Name"
-				type="text"
-				bind:value={title}
-				required
-			/>
-
-			<div class="text-md text-white font-bold">Description:</div>
-			<textarea
-				class="rounded-xl py-0 placeholder:text-gray-400"
-				placeholder="Description Details"
-				bind:value={description}
-			/>
-
-			<button
-				class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
-				type="submit"
+			<form
+				class="flex flex-col w-auto justify-self-center gap-2 bg-palette-medium p-20 rounded-3xl"
+				on:submit|preventDefault={createCategory}
 			>
-				Create Category
-			</button>
+				<div class="text-md text-white font-bold">Category Name:</div>
+				<input
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder="Category Name"
+					type="text"
+					bind:value={title}
+					required
+				/>
+
+				<div class="text-md text-white font-bold">Description:</div>
+				<textarea
+					class="rounded-xl py-0 placeholder:text-gray-400"
+					placeholder="Description Details"
+					bind:value={description}
+				/>
+
+				<button
+					class="text-white bg-palette-blueglow hover:bg-palette-medium shadow-md px-2 py-1 rounded-xl font-semibold"
+					type="submit"
+				>
+					Create Category
+				</button>
+			</form>
 		</form>
 	</div>
 </Modal>

@@ -42,6 +42,13 @@ export const todoHandlers = {
 		await updateDoc(todoRef, todoData)
 	},
 
+	updateTodoCompletion: async (todoId, completion) => {
+		const todoRef = doc(db, 'todos', todoId)
+		let todoDoc = await getDoc(todoRef)
+		todoDoc.completion = completion
+		await updateDoc(todoRef, todoDoc)
+	},
+
 	deleteTodo: async (todoId) => {
 		const todoRef = doc(db, 'todos', todoId)
 		await deleteDoc(todoRef)

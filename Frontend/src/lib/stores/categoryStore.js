@@ -49,19 +49,4 @@ export const categoryHandlers = {
 		const categoryRef = doc(db, 'categories', categoryId)
 		await deleteDoc(categoryRef)
 	}
-
-	/**
-	 * How to create a category
-	 *
-		await categoryHandlers.createCategory({
-			date: '11-20-2023',
-			description:
-				'This is the best salon ever. I would come back and get my hair done here again!!!',
-			rating: 5,
-			categoryerName: 'Carlos Rodriguez',
-			categoryerId: 'kxnDFRkYu5No72KXZOyekAxv0ao1',
-			technicianId: 'x5wC5QUT0mQuGFyXc4iLRYHEf5A3',
-			salonId: 'ZgsmBp7Rt3RIEMcazi3n'
-		});
-	 */
 }
