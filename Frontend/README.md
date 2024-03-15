@@ -4,6 +4,8 @@ Everything you need to build a Svelte project, powered by [`create-svelte`](http
 
 ## Creating a project
 
+Node version v18.12.1
+
 If you're seeing this, you've probably already done this step. Congrats!
 
 ```bash
