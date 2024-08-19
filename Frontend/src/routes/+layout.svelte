@@ -19,6 +19,7 @@
 	const nonAuthRoutes = ['/', '/aboutUs', '/registration', '/termsOfUse', '/forgot-password']
 
 	let user
+
 	let userId
 
 	authStore.subscribe((curr) => {
