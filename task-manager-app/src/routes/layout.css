@@ -1,0 +1,115 @@
+/* FrontendOriginal palette (see FrontendOriginal/tailwind.config.cjs) */
+:root {
+	--palette-dark: #041955;
+	--palette-medium: #3450a1;
+	--palette-lightgray: #97b4ff;
+	--palette-gray: #46598c;
+	--palette-checked: #183588;
+	--palette-blueglow: #1d68df;
+	--palette-pinkglow: #eb06ff;
+	--category-cyan: #06fffc;
+	--category-pink: #eb06ff;
+	--category-blue: #1d68df;
+	--category-green: #29ff06;
+	--category-yellow: #fffc06;
+	--category-orange: #ffa406;
+	--category-purple: #a406ff;
+	--adamas-blue: #bcceff;
+	--adamas-blue-hover: #aec3fc;
+	--text-on-light: #0f172a;
+	--text-on-dark: #ffffff;
+	--text-muted: #97b4ff;
+	--danger: #f87171;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	font-family:
+		Inter,
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		Segoe UI,
+		Roboto,
+		Helvetica,
+		Arial,
+		sans-serif;
+	background: var(--palette-dark);
+	color: var(--text-on-dark);
+}
+
+a {
+	color: var(--palette-lightgray);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
+
+input,
+select,
+textarea {
+	background: rgba(255, 255, 255, 0.95);
+	color: var(--text-on-light);
+	border: 1px solid var(--palette-gray);
+	border-radius: 0.5rem;
+	padding: 0.55rem 0.65rem;
+}
+
+/* Default primary button — original “adamas blue” */
+button {
+	border: none;
+	border-radius: 0.75rem;
+	padding: 0.55rem 0.85rem;
+	background: var(--adamas-blue);
+	color: var(--text-on-light);
+	font-weight: 700;
+	cursor: pointer;
+	transition: transform 0.2s ease, background 0.2s ease;
+}
+
+button:hover {
+	transform: scale(1.02);
+	background: var(--adamas-blue-hover);
+}
+
+button.secondary {
+	background: var(--palette-gray);
+	color: var(--text-on-dark);
+}
+
+button.secondary:hover {
+	background: var(--palette-checked);
+}
+
+button.danger {
+	background: #dc2626;
+	color: #fff;
+}
+
+button.danger:hover {
+	background: #b91c1c;
+}
+
+.card {
+	background: var(--palette-dark);
+	border: 1px solid var(--palette-checked);
+	border-radius: 1rem;
+	padding: 1rem;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
